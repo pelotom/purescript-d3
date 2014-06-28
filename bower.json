@@ -1,0 +1,6 @@
+{ "name"            : "purescript-d3"
+, "private"         : true
+, "ignore"          : []
+, "dependencies"    :
+  {}
+}
