@@ -1,4 +1,6 @@
-# purescript-d3 : PureScript bindings for D3
+# purescript-d3 : PureScript bindings for [D3](http://d3js.org/)
+
+This aims to be a thin wrapper around (eventually) the full D3 API.
 
 ### Development
 
