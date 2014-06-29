@@ -1,11 +1,10 @@
-{
-  "name": "purescript-d3",
-  "version": "0.0.0",
-  "description": "PureScript bindings for D3",
-  "license": "MIT",
-  "devDependencies": {
-    "gulp": "^3.8.1",
-    "gulp-purescript": "0.0.8",
-    "gulp-concat": "^2.2.0"
+{ "name": "purescript-d3"
+, "version": "0.0.0"
+, "description": "PureScript bindings for D3"
+, "license": "MIT"
+, "devDependencies": 
+  { "gulp": "^3.8.1"
+  , "gulp-purescript": "0.0.8"
+  , "gulp-concat": "^2.2.0"
   }
 }
