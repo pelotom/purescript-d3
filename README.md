@@ -55,6 +55,8 @@ gulp           # compile the code
 
     selectAll :: forall e a. String -> D3Eff e a -> D3Eff e a
 
+    transition :: forall e a. D3Eff e a -> D3Eff e a
+
 
 ## Module Graphics.D3.Raw.Selection
 
@@ -84,6 +86,8 @@ gulp           # compile the code
     d3SetAttr :: forall a e. String -> a -> Selection -> D3Eff e Unit
 
     d3SetData :: forall d e. [d] -> Selection -> D3Eff e Selection
+
+    d3Transition :: forall e. Selection -> D3Eff e Selection
 
 
 

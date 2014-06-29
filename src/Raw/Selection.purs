@@ -7,6 +7,7 @@ module Graphics.D3.Raw.Selection
   , d3SetData
   , d3Enter
   , d3Exit
+  , d3Transition
   , d3Append
   , d3Remove
   , d3SetAttr
@@ -75,6 +76,14 @@ foreign import d3Exit
   "function d3Exit(selection) {\
   \  return function () {\
   \    return selection.exit();\
+  \  };\
+  \}"
+  :: forall e. Selection -> D3Eff e Selection
+
+foreign import d3Transition
+  "function d3Transition(selection) {\
+  \  return function () {\
+  \    return selection.transition();\
   \  };\
   \}"
   :: forall e. Selection -> D3Eff e Selection

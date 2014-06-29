@@ -4,6 +4,7 @@ module Graphics.D3.Selection
   , bind
   , enter
   , exit
+  , transition
   , append
   , remove
   , attr
@@ -45,6 +46,9 @@ enter = withSel d3Enter
 
 exit :: forall e a. D3Eff e a -> D3Eff e a
 exit = withSel d3Exit
+
+transition :: forall e a. D3Eff e a -> D3Eff e a
+transition = withSel d3Transition
 
 append :: forall e a. String -> D3Eff e a -> D3Eff e a
 append = withSel <<< d3Append
