@@ -1,4 +1,4 @@
-module Graphics.D3
+module Graphics.D3.Selection
   ( select
   , selectAll
   , enter
@@ -8,7 +8,7 @@ module Graphics.D3
   ) where
 
 import Graphics.D3.Base
-import Graphics.D3.Raw
+import Graphics.D3.Raw.Selection
 
 import Control.Monad.Eff
 

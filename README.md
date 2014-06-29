@@ -19,23 +19,6 @@ gulp           # compile the code
 
 # Module Documentation
 
-## Module Graphics.D3
-
-### Values
-
-    append :: forall e a. String -> D3Eff e a -> D3Eff e a
-
-    attr :: forall e a. String -> a -> Eff (dom :: DOM | e) Unit
-
-    bind :: forall d e a. [d] -> D3Eff e a -> D3Eff e a
-
-    enter :: forall e a. D3Eff e a -> D3Eff e a
-
-    select :: forall e a. String -> D3Eff e a -> D3Eff e a
-
-    selectAll :: forall e a. String -> D3Eff e a -> D3Eff e a
-
-
 ## Module Graphics.D3.Base
 
 ### Types
@@ -48,6 +31,23 @@ gulp           # compile the code
 ### Values
 
     void :: forall f a. (Functor f) => f a -> f Unit
+
+
+## Module Graphics.D3
+
+### Values
+
+    append :: forall e a. String -> D3Eff e a -> D3Eff e a
+
+    attr :: forall e a. String -> a -> D3Eff e Unit
+
+    bind :: forall d e a. [d] -> D3Eff e a -> D3Eff e a
+
+    enter :: forall e a. D3Eff e a -> D3Eff e a
+
+    select :: forall e a. String -> D3Eff e a -> D3Eff e a
+
+    selectAll :: forall e a. String -> D3Eff e a -> D3Eff e a
 
 
 ## Module Graphics.D3.Raw

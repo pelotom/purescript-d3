@@ -1,4 +1,4 @@
-module Graphics.D3.Raw
+module Graphics.D3.Raw.Selection
   ( Selection()
   , d3Select
   , d3SelectAll
