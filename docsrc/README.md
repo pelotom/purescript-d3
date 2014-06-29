@@ -1,6 +1,6 @@
-# purescript-d3 : PureScript bindings for [D3](http://d3js.org/)
+# purescript-d3
 
-The main idea of this library, beyond providing raw bindings, is to mimic the "fluent interface" of D3 by threading the current selection through the `Eff` monad. This makes it very straightforward to port existing D3 visualizations (and knowledge of how to write D3 code) to PureScript.
+The main idea of this library, beyond providing raw bindings for [D3](http://d3js.org/), is to mimic its [fluent interface](http://en.wikipedia.org/wiki/Fluent_interface) by threading the current selection through the `Eff` monad. This makes it very straightforward to port existing D3 visualizations (and knowledge of how to write D3 code) to PureScript.
 
 ### Example
 
@@ -41,6 +41,8 @@ drawRects array =
 
 main = drawRects [1,2,3,4,5,6,7]
 ```
+
+More examples can be found [here](https://github.com/pelotom/purescript-d3-examples/tree/master/src).
 
 ### Development
 

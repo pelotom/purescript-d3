@@ -42,6 +42,8 @@ drawRects array =
 main = drawRects [1,2,3,4,5,6,7]
 ```
 
+More examples can be found [here](https://github.com/pelotom/purescript-d3-examples/tree/master/src).
+
 ### Development
 
 You will need the following pre-requisites installed:
