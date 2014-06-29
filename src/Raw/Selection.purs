@@ -101,7 +101,7 @@ foreign import d3Append
 foreign import d3Remove
   "function d3Remove(selection) {\
   \  return function () {\
-  \    return selection.remove();\
+  \    selection.remove();\
   \  };\
   \}"
   :: forall e. Selection -> D3Eff e Unit
