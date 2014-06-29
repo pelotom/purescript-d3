@@ -1,9 +1,11 @@
 module Graphics.D3.Selection
   ( select
   , selectAll
-  , enter
-  , append
   , bind
+  , enter
+  , exit
+  , append
+  , remove
   , attr
   ) where
 
@@ -41,8 +43,14 @@ selectAll = withSel <<< d3SelectAllFrom
 enter :: forall e a. D3Eff e a -> D3Eff e a
 enter = withSel d3Enter
 
+exit :: forall e a. D3Eff e a -> D3Eff e a
+exit = withSel d3Exit
+
 append :: forall e a. String -> D3Eff e a -> D3Eff e a
-append = withSel <<< d3AppendTo
+append = withSel <<< d3Append
+
+remove :: forall e. D3Eff e Unit
+remove = getSel >>= d3Remove
 
 bind :: forall d e a. [d] -> D3Eff e a -> D3Eff e a
 bind array = withSel (d3SetData array)

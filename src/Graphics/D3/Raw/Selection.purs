@@ -4,9 +4,11 @@ module Graphics.D3.Raw.Selection
   , d3SelectAll
   , d3SelectFrom
   , d3SelectAllFrom
-  , d3Enter
   , d3SetData
-  , d3AppendTo
+  , d3Enter
+  , d3Exit
+  , d3Append
+  , d3Remove
   , d3SetAttr
   ) where
 
@@ -59,8 +61,16 @@ foreign import d3Enter
   \}"
   :: forall e. Selection -> D3Eff e Selection
 
-foreign import d3AppendTo
-  "function d3AppendTo(tag) {\
+foreign import d3Exit
+  "function d3Exit(selection) {\
+  \  return function () {\
+  \    return selection.exit();\
+  \  };\
+  \}"
+  :: forall e. Selection -> D3Eff e Selection
+
+foreign import d3Append
+  "function d3Append(tag) {\
   \  return function (selection) {\
   \    return function () {\
   \      return selection.append(tag);\
@@ -68,6 +78,14 @@ foreign import d3AppendTo
   \  };\
   \}"
   :: forall e. String -> Selection -> D3Eff e Selection
+
+foreign import d3Remove
+  "function d3Remove(selection) {\
+  \  return function () {\
+  \    return selection.remove();\
+  \  };\
+  \}"
+  :: forall e. Selection -> D3Eff e Unit
 
 foreign import d3SetData
   "function d3SetData(data) {\

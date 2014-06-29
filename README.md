@@ -33,7 +33,7 @@ gulp           # compile the code
     void :: forall f a. (Functor f) => f a -> f Unit
 
 
-## Module Graphics.D3
+## Module Graphics.D3.Selection
 
 ### Values
 
@@ -45,12 +45,16 @@ gulp           # compile the code
 
     enter :: forall e a. D3Eff e a -> D3Eff e a
 
+    exit :: forall e a. D3Eff e a -> D3Eff e a
+
+    remove :: forall e. D3Eff e Unit
+
     select :: forall e a. String -> D3Eff e a -> D3Eff e a
 
     selectAll :: forall e a. String -> D3Eff e a -> D3Eff e a
 
 
-## Module Graphics.D3.Raw
+## Module Graphics.D3.Raw.Selection
 
 ### Types
 
@@ -59,9 +63,13 @@ gulp           # compile the code
 
 ### Values
 
-    d3AppendTo :: forall e. String -> Selection -> D3Eff e Selection
+    d3Append :: forall e. String -> Selection -> D3Eff e Selection
 
     d3Enter :: forall e. Selection -> D3Eff e Selection
+
+    d3Exit :: forall e. Selection -> D3Eff e Selection
+
+    d3Remove :: forall e. Selection -> D3Eff e Unit
 
     d3Select :: forall e. String -> D3Eff e Selection
 
