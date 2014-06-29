@@ -53,6 +53,16 @@ foreign import d3SelectAllFrom
   \}"
   :: forall e. String -> Selection -> D3Eff e Selection
 
+foreign import d3SetData
+  "function d3SetData(data) {\
+  \  return function (selection) {\
+  \    return function () {\
+  \      return selection.data(data);\
+  \    };\
+  \  };\
+  \}"
+  :: forall d e. [d] -> Selection -> D3Eff e Selection
+
 foreign import d3Enter
   "function d3Enter(selection) {\
   \  return function () {\
@@ -86,16 +96,6 @@ foreign import d3Remove
   \  };\
   \}"
   :: forall e. Selection -> D3Eff e Unit
-
-foreign import d3SetData
-  "function d3SetData(data) {\
-  \  return function (selection) {\
-  \    return function () {\
-  \      return selection.data(data);\
-  \    };\
-  \  };\
-  \}"
-  :: forall d e. [d] -> Selection -> D3Eff e Selection
 
 foreign import d3SetAttr
   "function d3SetAttr(key) {\
