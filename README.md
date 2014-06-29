@@ -1,4 +1,6 @@
-# purescript-d3 : PureScript bindings for [D3](http://d3js.org/)
+# purescript-d3
+
+## PureScript bindings for [D3](http://d3js.org/)
 
 The main idea of this library, beyond providing raw bindings, is to mimic the "fluent interface" of D3 by threading the current selection through the `Eff` monad. This makes it very straightforward to port existing D3 visualizations (and knowledge of how to write D3 code) to PureScript.
 
