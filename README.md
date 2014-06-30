@@ -77,6 +77,24 @@ gulp           # compile the code
     void :: forall f a. (Functor f) => f a -> f Unit
 
 
+## Module Graphics.D3.Scale
+
+### Types
+
+    data LinearScale :: *
+
+
+### Values
+
+    domain :: forall e. Number -> Number -> LinearScale -> D3Eff e LinearScale
+
+    freeze :: forall e. LinearScale -> D3Eff e (Number -> Number)
+
+    linearScale :: forall e. D3Eff e LinearScale
+
+    range :: forall e. Number -> Number -> LinearScale -> D3Eff e LinearScale
+
+
 ## Module Graphics.D3.Selection
 
 ### Values
@@ -97,7 +115,18 @@ gulp           # compile the code
 
     selectAll :: forall e a. String -> D3Eff e a -> D3Eff e a
 
+    text :: forall e. String -> D3Eff e Unit
+
     transition :: forall e a. D3Eff e a -> D3Eff e a
+
+
+## Module Graphics.D3.Util
+
+### Values
+
+    max :: [Number] -> Number
+
+    min :: [Number] -> Number
 
 
 ## Module Graphics.D3.Raw.Selection
@@ -128,6 +157,8 @@ gulp           # compile the code
     d3SetAttr :: forall a e. String -> a -> Selection -> D3Eff e Unit
 
     d3SetData :: forall d e. [d] -> Selection -> D3Eff e Selection
+
+    d3SetText :: forall a e. a -> Selection -> D3Eff e Unit
 
     d3Transition :: forall e. Selection -> D3Eff e Selection
 
