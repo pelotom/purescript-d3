@@ -22,17 +22,17 @@ d3.select(".chart")
 And here is the PureScript code which accomplishes the same:
 
 ```haskell
-do
-  let table = [4, 8, 15, 16, 23, 42]
+array = [4, 8, 15, 16, 23, 42]
 
+do
   x <- linearScale
-    .. domain [0, max table]
+    .. domain [0, max array]
     .. range [0, 420]
     .. freeze
 
   rootSelect ".chart"
     .. selectAll "div"
-      .. bind table
+      .. bind array
     .. enter .. append "div"
       .. style "width" (\d -> show (x d) ++ "px")
       .. text (\d -> d)
