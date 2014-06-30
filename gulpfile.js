@@ -41,7 +41,7 @@ gulp.task('generateDocs', ['clean'], function() {
 	  ;
 });
 
-gulp.task('concatDocs', function () {
+gulp.task('concatDocs', ['generateDocs'], function () {
 	return gulp.src([paths.manualReadme, paths.apiDest])
 		.pipe(concat(paths.readmeDest))
 		.pipe(gulp.dest(''))
