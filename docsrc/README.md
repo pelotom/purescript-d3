@@ -24,7 +24,7 @@ And here is the PureScript code which accomplishes the same:
 ```haskell
 array = [4, 8, 15, 16, 23, 42]
 
-do
+barChart = do
   x <- linearScale
     .. domain [0, max array]
     .. range [0, 420]
