@@ -65,9 +65,11 @@ gulp           # compile the code
 
 ### Types
 
-    type D3Eff e a = Eff (dom :: DOM | e) a
+    type Change a = a -> Effect a
 
     data DOM :: !
+
+    type Effect a = forall e. Eff (dom :: DOM | e) a
 
 
 ### Values
@@ -92,13 +94,13 @@ gulp           # compile the code
 
 ### Values
 
-    domain :: forall s a e. (Scale s) => [a] -> s -> D3Eff e LinearScale
+    domain :: forall s a. (Scale s) => [a] -> Change s
 
-    freeze :: forall s e. (Scale s) => s -> D3Eff e (Number -> Number)
+    freeze :: forall s. (Scale s) => s -> Effect (Number -> Number)
 
-    linearScale :: forall e. D3Eff e LinearScale
+    linearScale :: Effect LinearScale
 
-    range :: forall s a e. (Scale s) => [a] -> s -> D3Eff e LinearScale
+    range :: forall s a. (Scale s) => [a] -> Change s
 
 
 ## Module Graphics.D3.Selection
@@ -110,31 +112,31 @@ gulp           # compile the code
 
 ### Values
 
-    append :: forall e. String -> Selection -> D3Eff e Selection
+    append :: String -> Change Selection
 
-    attr :: forall a e. String -> a -> Selection -> D3Eff e Selection
+    attr :: forall a. String -> a -> Change Selection
 
-    bind :: forall d e. [d] -> Selection -> D3Eff e Selection
+    bind :: forall d. [d] -> Change Selection
 
-    enter :: forall e. Selection -> D3Eff e Selection
+    enter :: Change Selection
 
-    exit :: forall e. Selection -> D3Eff e Selection
+    exit :: Change Selection
 
-    remove :: forall e. Selection -> D3Eff e Unit
+    remove :: Selection -> Effect Unit
 
-    rootSelect :: forall e. String -> D3Eff e Selection
+    rootSelect :: String -> Effect Selection
 
-    rootSelectAll :: forall e. String -> D3Eff e Selection
+    rootSelectAll :: String -> Effect Selection
 
-    select :: forall e. String -> Selection -> D3Eff e Selection
+    select :: String -> Change Selection
 
-    selectAll :: forall e. String -> Selection -> D3Eff e Selection
+    selectAll :: String -> Change Selection
 
-    style :: forall a e. String -> a -> Selection -> D3Eff e Selection
+    style :: forall a. String -> a -> Change Selection
 
-    text :: forall a e. a -> Selection -> D3Eff e Selection
+    text :: forall a. a -> Change Selection
 
-    transition :: forall e. Selection -> D3Eff e Selection
+    transition :: Change Selection
 
 
 ## Module Graphics.D3.Util

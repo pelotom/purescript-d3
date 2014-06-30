@@ -26,7 +26,7 @@ foreign import rootSelect
   \    return d3.select(selector);\
   \  };\
   \}"
-  :: forall e. String -> D3Eff e Selection
+  :: String -> Effect Selection
 
 foreign import rootSelectAll
   "function rootSelectAll(selector) {\
@@ -34,7 +34,7 @@ foreign import rootSelectAll
   \    return d3.selectAll(selector);\
   \  };\
   \}"
-  :: forall e. String -> D3Eff e Selection
+  :: String -> Effect Selection
 
 foreign import select
   "function select(selector) {\
@@ -44,7 +44,7 @@ foreign import select
   \    };\
   \  };\
   \}"
-  :: forall e. String -> Selection -> D3Eff e Selection
+  :: String -> Change Selection
 
 foreign import selectAll
   "function selectAll(selector) {\
@@ -54,7 +54,7 @@ foreign import selectAll
   \    };\
   \  };\
   \}"
-  :: forall e. String -> Selection -> D3Eff e Selection
+  :: String -> Change Selection
 
 foreign import bind
   "function bind(data) {\
@@ -64,7 +64,7 @@ foreign import bind
   \    };\
   \  };\
   \}"
-  :: forall d e. [d] -> Selection -> D3Eff e Selection
+  :: forall d. [d] -> Change Selection
 
 foreign import enter
   "function enter(selection) {\
@@ -72,7 +72,7 @@ foreign import enter
   \    return selection.enter();\
   \  };\
   \}"
-  :: forall e. Selection -> D3Eff e Selection
+  :: Change Selection
 
 foreign import exit
   "function exit(selection) {\
@@ -80,7 +80,7 @@ foreign import exit
   \    return selection.exit();\
   \  };\
   \}"
-  :: forall e. Selection -> D3Eff e Selection
+  :: Change Selection
 
 foreign import transition
   "function transition(selection) {\
@@ -88,7 +88,7 @@ foreign import transition
   \    return selection.transition();\
   \  };\
   \}"
-  :: forall e. Selection -> D3Eff e Selection
+  :: Change Selection
 
 foreign import append
   "function append(tag) {\
@@ -98,7 +98,7 @@ foreign import append
   \    };\
   \  };\
   \}"
-  :: forall e. String -> Selection -> D3Eff e Selection
+  :: String -> Change Selection
 
 foreign import remove
   "function remove(selection) {\
@@ -106,7 +106,7 @@ foreign import remove
   \    selection.remove();\
   \  };\
   \}"
-  :: forall e. Selection -> D3Eff e Unit
+  :: Selection -> Effect Unit
 
 foreign import attr
   "function attr(key) {\
@@ -118,7 +118,7 @@ foreign import attr
   \    };\
   \  };\
   \}"
-  :: forall a e. String -> a -> Selection -> D3Eff e Selection
+  :: forall a. String -> a -> Change Selection
 
 foreign import style
   "function style(key) {\
@@ -130,7 +130,7 @@ foreign import style
   \    };\
   \  };\
   \}"
-  :: forall a e. String -> a -> Selection -> D3Eff e Selection
+  :: forall a. String -> a -> Change Selection
 
 foreign import text
   "function text(text) {\
@@ -140,4 +140,4 @@ foreign import text
   \    };\
   \  };\
   \}"
-  :: forall a e. a -> Selection -> D3Eff e Selection
+  :: forall a. a -> Change Selection

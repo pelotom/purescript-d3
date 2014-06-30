@@ -15,7 +15,7 @@ class Scale s
 foreign import data LinearScale :: *
 foreign import linearScale
   "var linearScale = d3.scale.linear"
-  :: forall e. D3Eff e LinearScale
+  :: Effect LinearScale
 instance scaleLinear :: Scale LinearScale
 
 foreign import domain
@@ -28,7 +28,7 @@ foreign import domain
   \    };\
   \  };\
   \}"
-  :: forall s a e. (Scale s) => [a] -> s -> D3Eff e LinearScale
+  :: forall s a. (Scale s) => [a] -> Change s
 
 foreign import range
   "function range(dict) {\
@@ -40,7 +40,7 @@ foreign import range
   \    };\
   \  };\
   \}"
-  :: forall s a e. (Scale s) => [a] -> s -> D3Eff e LinearScale
+  :: forall s a. (Scale s) => [a] -> Change s
 
 foreign import freeze
   "function freeze(dict) {\
@@ -50,5 +50,5 @@ foreign import freeze
   \    };\
   \  };\
   \}"
-  :: forall s e. (Scale s) => s -> D3Eff e (Number -> Number)
+  :: forall s. (Scale s) => s -> Effect (Number -> Number)
 
