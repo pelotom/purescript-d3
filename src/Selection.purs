@@ -8,6 +8,7 @@ module Graphics.D3.Selection
   , append
   , remove
   , attr
+  , text
   ) where
 
 import Graphics.D3.Base
@@ -61,3 +62,6 @@ bind array = withSel (d3SetData array)
 
 attr :: forall e a. String -> a -> D3Eff e Unit
 attr key val = getSel >>= d3SetAttr key val >>> void
+
+text :: forall a e. a -> D3Eff e Unit
+text val = getSel >>= d3SetText val >>> void

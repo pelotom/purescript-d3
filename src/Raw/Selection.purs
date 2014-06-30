@@ -11,6 +11,7 @@ module Graphics.D3.Raw.Selection
   , d3Append
   , d3Remove
   , d3SetAttr
+  , d3SetText
   ) where
 
 import Graphics.D3.Base
@@ -117,3 +118,13 @@ foreign import d3SetAttr
   \  };\
   \}"
   :: forall a e. String -> a -> Selection -> D3Eff e Unit
+
+foreign import d3SetText
+  "function d3SetText(text) {\
+  \  return function (selection) {\
+  \    return function () {\
+  \      selection.text(text);\
+  \    };\
+  \  };\
+  \}"
+  :: forall a e. a -> Selection -> D3Eff e Unit
