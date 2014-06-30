@@ -1,48 +1,46 @@
 # purescript-d3
 
-The main idea of this library, beyond providing raw bindings for [D3](http://d3js.org/), is to mimic its [fluent interface](http://en.wikipedia.org/wiki/Fluent_interface) by threading the current selection through the `Eff` monad. This makes it very straightforward to port existing D3 visualizations (and knowledge of how to write D3 code) to PureScript.
-
 ### Example
 
-Here's a (fairly silly) example that draws a bunch of rectangles and circles, animating their entry and exit from the scene.
+Here is the javascript from part 1 of Mike Bostock's [Let's Make a Bar Chart](http://bost.ocks.org/mike/bar/) series of tutorials for D3:
 
-```purescript
-module Graphics.D3.Examples.Rectangles where
+```javascript
+var data = [4, 8, 15, 16, 23, 42];
 
-import Graphics.D3
+var x = d3.scale.linear()
+  .domain([0, d3.max(data)])
+  .range([0, 420]);
 
-drawRects array =
-  selectAll "svg" $ bind [1] do
-    enter $ append "svg" $ append "rect" do
-      attr "width" 500
-      attr "height" 500
-      attr "fill" "gray"
-    selectAll ".others" $ bind array do
-      enter $ append "g" do
-        attr "opacity" 0
-        append "rect" do
-          attr "class" "others"
-          attr "fill" \d -> if d > 4 then "blue" else "red"
-          attr "stroke" "black"
-          attr "x" \d -> d * 13
-          attr "y" \d -> d * 20
-          attr "opacity" 1
-          attr "width" \d -> d * 60
-          attr "height" \d -> d * 50
-        append "circle" do
-          attr "cx" \d -> d * 13
-          attr "cy" \d -> d * 20
-          attr "r" 10
-          attr "fill" "green"
-        transition $ attr "opacity" 1
-      exit $ transition do
-        attr "opacity" 0
-        remove
-
-main = drawRects [1,2,3,4,5,6,7]
+d3.select(".chart")
+  .selectAll("div")
+    .data(data)
+  .enter().append("div")
+    .style("width", function(d) { return x(d) + "px"; })
+    .text(function(d) { return d; });
 ```
 
-More examples can be found [here](https://github.com/pelotom/purescript-d3-examples/tree/master/src).
+And here is the PureScript code which accomplishes the same:
+
+```purescript
+do
+  let table = [4, 8, 15, 16, 23, 42]
+
+  x <- linearScale
+    .. domain [0, max table]
+    .. range [0, 420]
+    .. freeze
+
+  rootSelect ".chart"
+    .. selectAll "div"
+      .. bind table
+    .. enter .. append "div"
+      .. style "width" (\d -> show (x d) ++ "px")
+      .. text (\d -> d)
+```
+
+Note that `..` is just an alias for `>>=`. The good old [programmable semicolon](http://en.wikipedia.org/wiki/Monad_(functional_programming)) works great for making a [fluent interface](http://en.wikipedia.org/wiki/Fluent_interface)!
+
+This and other examples can be found [here](https://github.com/pelotom/purescript-d3-examples/tree/master/src).
 
 ### Development
 
