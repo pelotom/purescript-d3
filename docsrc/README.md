@@ -40,8 +40,6 @@ barChart = do
 
 Note that `..` is an alias for `>>=`. The [fluent interface](http://en.wikipedia.org/wiki/Fluent_interface) is just a poor man's [programmable semicolon](http://en.wikipedia.org/wiki/Monad_(functional_programming))!
 
-This and other examples can be found [here](https://github.com/pelotom/purescript-d3-examples/tree/master/src).
-
 ### Development
 
 You will need the following pre-requisites installed:
