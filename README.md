@@ -84,15 +84,23 @@ gulp           # compile the code
     data LinearScale :: *
 
 
+### Type Classes
+
+
+### Type Class Instances
+
+    instance scaleLinear :: Scale LinearScale
+
+
 ### Values
 
-    domain :: forall e. Number -> Number -> LinearScale -> D3Eff e LinearScale
+    domain :: forall s a e. (Scale s) => [a] -> s -> D3Eff e LinearScale
 
-    freeze :: forall e. LinearScale -> D3Eff e (Number -> Number)
+    freeze :: forall s e. (Scale s) => s -> D3Eff e (Number -> Number)
 
     linearScale :: forall e. D3Eff e LinearScale
 
-    range :: forall e. Number -> Number -> LinearScale -> D3Eff e LinearScale
+    range :: forall s a e. (Scale s) => [a] -> s -> D3Eff e LinearScale
 
 
 ## Module Graphics.D3.Selection
