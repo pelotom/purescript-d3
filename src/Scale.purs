@@ -1,5 +1,6 @@
 module Graphics.D3.Scale
-  ( LinearScale()
+  ( Scale
+  , LinearScale()
   , linearScale
   , domain
   , range
