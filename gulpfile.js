@@ -3,6 +3,7 @@
 var gulp      	= require('gulp')
   , purescript 	= require('gulp-purescript')
   , concat 		 	= require('gulp-concat')
+	, rimraf 			= require('rimraf')
   ;
 
 var paths = {
@@ -16,7 +17,11 @@ var paths = {
 	readmeDest: 'README.md'
 };
 
-gulp.task('compile', function() {
+gulp.task('clean', function (cb) {
+  return rimraf('build/', cb);
+});
+
+gulp.task('compile', ['clean'], function() {
 	var psc = purescript.pscMake({
 		// Compiler options
 		output: paths.dest
@@ -29,7 +34,7 @@ gulp.task('compile', function() {
 		.pipe(psc)
 });
 
-gulp.task('generateDocs', function() {
+gulp.task('generateDocs', ['clean'], function() {
 	return gulp.src(paths.src)
 	  .pipe(purescript.docgen())
 	  .pipe(gulp.dest(paths.apiDest))
