@@ -21,7 +21,7 @@ d3.select(".chart")
 
 And here is the PureScript code which accomplishes the same:
 
-```purescript
+```haskell
 do
   let table = [4, 8, 15, 16, 23, 42]
 
