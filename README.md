@@ -2,7 +2,7 @@
 
 ### Example
 
-Here is the javascript from [part 1](http://bl.ocks.org/mbostock/7322386) of Mike Bostock's [Let's Make a Bar Chart](http://bost.ocks.org/mike/bar/) series of tutorials for D3:
+Here is the JavaScript code from [part 1](http://bl.ocks.org/mbostock/7322386) of Mike Bostock's [Let's Make a Bar Chart](http://bost.ocks.org/mike/bar/) series of tutorials for D3:
 
 ```javascript
 var data = [4, 8, 15, 16, 23, 42];
@@ -58,94 +58,3 @@ npm install    # install dependencies from package.json
 bower update   # install dependencies from bower.json
 gulp           # compile the code
 ```
-
-# Module Documentation
-
-## Module Graphics.D3.Base
-
-### Types
-
-    type Change a = a -> Effect a
-
-    data DOM :: !
-
-    type Effect a = forall e. Eff (dom :: DOM | e) a
-
-
-### Values
-
-    void :: forall f a. (Functor f) => f a -> f Unit
-
-
-## Module Graphics.D3.Scale
-
-### Types
-
-    data LinearScale :: *
-
-
-### Type Classes
-
-
-### Type Class Instances
-
-    instance scaleLinear :: Scale LinearScale
-
-
-### Values
-
-    domain :: forall s a. (Scale s) => [a] -> Change s
-
-    freeze :: forall s. (Scale s) => s -> Effect (Number -> Number)
-
-    linearScale :: Effect LinearScale
-
-    range :: forall s a. (Scale s) => [a] -> Change s
-
-
-## Module Graphics.D3.Selection
-
-### Types
-
-    data Selection :: *
-
-
-### Values
-
-    append :: String -> Change Selection
-
-    attr :: forall a. String -> a -> Change Selection
-
-    bind :: forall d. [d] -> Change Selection
-
-    enter :: Change Selection
-
-    exit :: Change Selection
-
-    remove :: Selection -> Effect Unit
-
-    rootSelect :: String -> Effect Selection
-
-    rootSelectAll :: String -> Effect Selection
-
-    select :: String -> Change Selection
-
-    selectAll :: String -> Change Selection
-
-    style :: forall a. String -> a -> Change Selection
-
-    text :: forall a. a -> Change Selection
-
-    transition :: Change Selection
-
-
-## Module Graphics.D3.Util
-
-### Values
-
-    max :: [Number] -> Number
-
-    min :: [Number] -> Number
-
-
-
