@@ -1,7 +1,6 @@
 module Graphics.D3.Base
   ( DOM()
-  , Effect()
-  , Change()
+  , D3Eff()
   , void
   ) where
 
@@ -11,10 +10,7 @@ import Control.Monad.Eff
 foreign import data DOM :: !
 
 -- An action which may observe or modify the DOM
-type Effect a = forall e. Eff (dom :: DOM | e) a
-
--- A state transition which may have an effect
-type Change a = a -> Effect a
+type D3Eff a = forall e. Eff (dom :: DOM | e) a
 
 -- Remove this once it's available in Prelude
 void :: forall f a. (Functor f) => f a -> f Unit

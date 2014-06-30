@@ -18,7 +18,7 @@ module Graphics.D3.Selection
 import Graphics.D3.Base
 import Control.Monad.Eff
 
-foreign import data Selection :: *
+foreign import data Selection :: # * -> *
 
 foreign import rootSelect
   "function rootSelect(selector) {\
@@ -26,7 +26,7 @@ foreign import rootSelect
   \    return d3.select(selector);\
   \  };\
   \}"
-  :: String -> Effect Selection
+  :: String -> D3Eff (Selection (exists :: Unit))
 
 foreign import rootSelectAll
   "function rootSelectAll(selector) {\
@@ -34,7 +34,7 @@ foreign import rootSelectAll
   \    return d3.selectAll(selector);\
   \  };\
   \}"
-  :: String -> Effect Selection
+  :: String -> D3Eff (Selection (exists :: Unit))
 
 foreign import select
   "function select(selector) {\
@@ -44,7 +44,7 @@ foreign import select
   \    };\
   \  };\
   \}"
-  :: String -> Change Selection
+  :: forall r. String -> Selection (exists :: Unit | r) -> D3Eff (Selection (exists :: Unit | r))
 
 foreign import selectAll
   "function selectAll(selector) {\
@@ -54,7 +54,7 @@ foreign import selectAll
   \    };\
   \  };\
   \}"
-  :: String -> Change Selection
+  :: forall r. String -> Selection (exists :: Unit | r) -> D3Eff (Selection (exists :: Unit | r))
 
 foreign import bind
   "function bind(data) {\
@@ -64,7 +64,7 @@ foreign import bind
   \    };\
   \  };\
   \}"
-  :: forall d. [d] -> Change Selection
+  :: forall d r. [d] -> Selection (exists :: Unit | r) -> D3Eff (Selection (exists :: Unit, hasData :: d, isJoin :: Unit | r))
 
 foreign import enter
   "function enter(selection) {\
@@ -72,7 +72,7 @@ foreign import enter
   \    return selection.enter();\
   \  };\
   \}"
-  :: Change Selection
+  :: forall r. Selection (isJoin :: Unit, exists :: Unit | r) -> D3Eff (Selection r)
 
 foreign import exit
   "function exit(selection) {\
@@ -80,7 +80,7 @@ foreign import exit
   \    return selection.exit();\
   \  };\
   \}"
-  :: Change Selection
+  :: forall r. Selection (isJoin :: Unit | r) -> D3Eff (Selection r)
 
 foreign import transition
   "function transition(selection) {\
@@ -88,7 +88,7 @@ foreign import transition
   \    return selection.transition();\
   \  };\
   \}"
-  :: Change Selection
+  :: forall r. Selection r -> D3Eff (Selection r)
 
 foreign import append
   "function append(tag) {\
@@ -98,7 +98,7 @@ foreign import append
   \    };\
   \  };\
   \}"
-  :: String -> Change Selection
+  :: forall r. String -> Selection r -> D3Eff (Selection (exists :: Unit | r))
 
 foreign import remove
   "function remove(selection) {\
@@ -106,7 +106,7 @@ foreign import remove
   \    selection.remove();\
   \  };\
   \}"
-  :: Selection -> Effect Unit
+  :: forall r. Selection r -> D3Eff Unit
 
 foreign import attr
   "function attr(key) {\
@@ -118,7 +118,7 @@ foreign import attr
   \    };\
   \  };\
   \}"
-  :: forall a. String -> a -> Change Selection
+  :: forall d v r. String -> (d -> v) -> Selection (hasData :: d | r) -> D3Eff (Selection (hasData :: d | r))
 
 foreign import style
   "function style(key) {\
@@ -130,7 +130,7 @@ foreign import style
   \    };\
   \  };\
   \}"
-  :: forall a. String -> a -> Change Selection
+  :: forall d v r. String -> (d -> v) -> Selection (hasData :: d | r) -> D3Eff (Selection (hasData :: d | r))
 
 foreign import text
   "function text(text) {\
@@ -140,4 +140,4 @@ foreign import text
   \    };\
   \  };\
   \}"
-  :: forall a. a -> Change Selection
+  :: forall d r. (d -> String) -> Selection (hasData :: d | r) -> D3Eff (Selection (hasData :: d | r))

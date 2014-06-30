@@ -63,11 +63,9 @@ gulp           # compile the code
 
 ### Types
 
-    type Change a = a -> Effect a
+    type D3Eff a = forall e. Eff (dom :: DOM | e) a
 
     data DOM :: !
-
-    type Effect a = forall e. Eff (dom :: DOM | e) a
 
 
 ### Values
@@ -94,49 +92,49 @@ gulp           # compile the code
 
 ### Values
 
-    domain :: forall s a. (Scale s) => [a] -> Change s
+    domain :: forall s a. (Scale s) => [a] -> s -> D3Eff s
 
-    freeze :: forall s. (Scale s) => s -> Effect (Number -> Number)
+    freeze :: forall s. (Scale s) => s -> D3Eff (Number -> Number)
 
-    linearScale :: Effect LinearScale
+    linearScale :: D3Eff LinearScale
 
-    range :: forall s a. (Scale s) => [a] -> Change s
+    range :: forall s a. (Scale s) => [a] -> s -> D3Eff s
 
 
 ## Module Graphics.D3.Selection
 
 ### Types
 
-    data Selection :: *
+    data Selection :: # * -> *
 
 
 ### Values
 
-    append :: String -> Change Selection
+    append :: forall r. String -> Selection r -> D3Eff (Selection (exists :: Unit | r))
 
-    attr :: forall a. String -> a -> Change Selection
+    attr :: forall d v r. String -> (d -> v) -> Selection (hasData :: d | r) -> D3Eff (Selection (hasData :: d | r))
 
-    bind :: forall d. [d] -> Change Selection
+    bind :: forall d r. [d] -> Selection (exists :: Unit | r) -> D3Eff (Selection (isJoin :: Unit, hasData :: d, exists :: Unit | r))
 
-    enter :: Change Selection
+    enter :: forall r. Selection (exists :: Unit, isJoin :: Unit | r) -> D3Eff (Selection r)
 
-    exit :: Change Selection
+    exit :: forall r. Selection (isJoin :: Unit | r) -> D3Eff (Selection r)
 
-    remove :: Selection -> Effect Unit
+    remove :: forall r. Selection r -> D3Eff Unit
 
-    rootSelect :: String -> Effect Selection
+    rootSelect :: String -> D3Eff (Selection (exists :: Unit))
 
-    rootSelectAll :: String -> Effect Selection
+    rootSelectAll :: String -> D3Eff (Selection (exists :: Unit))
 
-    select :: String -> Change Selection
+    select :: forall r. String -> Selection (exists :: Unit | r) -> D3Eff (Selection (exists :: Unit | r))
 
-    selectAll :: String -> Change Selection
+    selectAll :: forall r. String -> Selection (exists :: Unit | r) -> D3Eff (Selection (exists :: Unit | r))
 
-    style :: forall a. String -> a -> Change Selection
+    style :: forall d v r. String -> (d -> v) -> Selection (hasData :: d | r) -> D3Eff (Selection (hasData :: d | r))
 
-    text :: forall a. a -> Change Selection
+    text :: forall d r. (d -> String) -> Selection (hasData :: d | r) -> D3Eff (Selection (hasData :: d | r))
 
-    transition :: Change Selection
+    transition :: forall r. Selection r -> D3Eff (Selection r)
 
 
 ## Module Graphics.D3.Util
