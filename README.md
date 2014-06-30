@@ -97,27 +97,38 @@ gulp           # compile the code
 
 ## Module Graphics.D3.Selection
 
+### Types
+
+    data Selection :: *
+
+
 ### Values
 
-    append :: forall e a. String -> D3Eff e a -> D3Eff e a
+    append :: forall e. String -> Selection -> D3Eff e Selection
 
-    attr :: forall e a. String -> a -> D3Eff e Unit
+    attr :: forall a e. String -> a -> Selection -> D3Eff e Selection
 
-    bind :: forall d e a. [d] -> D3Eff e a -> D3Eff e a
+    bind :: forall d e. [d] -> Selection -> D3Eff e Selection
 
-    enter :: forall e a. D3Eff e a -> D3Eff e a
+    enter :: forall e. Selection -> D3Eff e Selection
 
-    exit :: forall e a. D3Eff e a -> D3Eff e a
+    exit :: forall e. Selection -> D3Eff e Selection
 
-    remove :: forall e. D3Eff e Unit
+    remove :: forall e. Selection -> D3Eff e Unit
 
-    select :: forall e a. String -> D3Eff e a -> D3Eff e a
+    rootSelect :: forall e. String -> D3Eff e Selection
 
-    selectAll :: forall e a. String -> D3Eff e a -> D3Eff e a
+    rootSelectAll :: forall e. String -> D3Eff e Selection
 
-    text :: forall e. String -> D3Eff e Unit
+    select :: forall e. String -> Selection -> D3Eff e Selection
 
-    transition :: forall e a. D3Eff e a -> D3Eff e a
+    selectAll :: forall e. String -> Selection -> D3Eff e Selection
+
+    style :: forall a e. String -> a -> Selection -> D3Eff e Selection
+
+    text :: forall a e. a -> Selection -> D3Eff e Selection
+
+    transition :: forall e. Selection -> D3Eff e Selection
 
 
 ## Module Graphics.D3.Util
@@ -127,40 +138,6 @@ gulp           # compile the code
     max :: [Number] -> Number
 
     min :: [Number] -> Number
-
-
-## Module Graphics.D3.Raw.Selection
-
-### Types
-
-    data Selection :: *
-
-
-### Values
-
-    d3Append :: forall e. String -> Selection -> D3Eff e Selection
-
-    d3Enter :: forall e. Selection -> D3Eff e Selection
-
-    d3Exit :: forall e. Selection -> D3Eff e Selection
-
-    d3Remove :: forall e. Selection -> D3Eff e Unit
-
-    d3Select :: forall e. String -> D3Eff e Selection
-
-    d3SelectAll :: forall e. String -> D3Eff e Selection
-
-    d3SelectAllFrom :: forall e. String -> Selection -> D3Eff e Selection
-
-    d3SelectFrom :: forall e. String -> Selection -> D3Eff e Selection
-
-    d3SetAttr :: forall a e. String -> a -> Selection -> D3Eff e Unit
-
-    d3SetData :: forall d e. [d] -> Selection -> D3Eff e Selection
-
-    d3SetText :: forall a e. a -> Selection -> D3Eff e Unit
-
-    d3Transition :: forall e. Selection -> D3Eff e Selection
 
 
 

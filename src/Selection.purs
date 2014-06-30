@@ -1,5 +1,8 @@
 module Graphics.D3.Selection
-  ( select
+  ( Selection()
+  , rootSelect
+  , rootSelectAll
+  , select
   , selectAll
   , bind
   , enter
@@ -8,60 +11,133 @@ module Graphics.D3.Selection
   , append
   , remove
   , attr
+  , style
   , text
   ) where
 
 import Graphics.D3.Base
-import Graphics.D3.Raw.Selection
-
 import Control.Monad.Eff
 
-foreign import getSel
-  "function getSel() { return window.__current_d3_sel || d3.select('body'); }"
-  :: forall e. Eff (dom :: DOM | e) Selection
+foreign import data Selection :: *
 
-foreign import setSel
-  "function setSel(sel) { return function () { window.__current_d3_sel = sel; } }"
-  :: forall e. Selection -> Eff (dom :: DOM | e) Unit
+foreign import rootSelect
+  "function rootSelect(selector) {\
+  \  return function () {\
+  \    return d3.select(selector);\
+  \  };\
+  \}"
+  :: forall e. String -> D3Eff e Selection
 
-withSel :: forall e a.
-  (Selection -> D3Eff e Selection) ->
-  D3Eff e a ->
-  D3Eff e a
-withSel mkSel action = do
-  oldSel <- getSel
-  newSel <- mkSel oldSel
-  setSel newSel
-  result <- action
-  setSel oldSel
-  return result
+foreign import rootSelectAll
+  "function rootSelectAll(selector) {\
+  \  return function () {\
+  \    return d3.selectAll(selector);\
+  \  };\
+  \}"
+  :: forall e. String -> D3Eff e Selection
 
-select :: forall e a. String -> D3Eff e a -> D3Eff e a
-select = withSel <<< d3SelectFrom
+foreign import select
+  "function select(selector) {\
+  \  return function (selection) {\
+  \    return function () {\
+  \      return selection.select(selector);\
+  \    };\
+  \  };\
+  \}"
+  :: forall e. String -> Selection -> D3Eff e Selection
 
-selectAll :: forall e a. String -> D3Eff e a -> D3Eff e a
-selectAll = withSel <<< d3SelectAllFrom
+foreign import selectAll
+  "function selectAll(selector) {\
+  \  return function (selection) {\
+  \    return function () {\
+  \      return selection.selectAll(selector);\
+  \    };\
+  \  };\
+  \}"
+  :: forall e. String -> Selection -> D3Eff e Selection
 
-enter :: forall e a. D3Eff e a -> D3Eff e a
-enter = withSel d3Enter
+foreign import bind
+  "function bind(data) {\
+  \  return function (selection) {\
+  \    return function () {\
+  \      return selection.data(data);\
+  \    };\
+  \  };\
+  \}"
+  :: forall d e. [d] -> Selection -> D3Eff e Selection
 
-exit :: forall e a. D3Eff e a -> D3Eff e a
-exit = withSel d3Exit
+foreign import enter
+  "function enter(selection) {\
+  \  return function () {\
+  \    return selection.enter();\
+  \  };\
+  \}"
+  :: forall e. Selection -> D3Eff e Selection
 
-transition :: forall e a. D3Eff e a -> D3Eff e a
-transition = withSel d3Transition
+foreign import exit
+  "function exit(selection) {\
+  \  return function () {\
+  \    return selection.exit();\
+  \  };\
+  \}"
+  :: forall e. Selection -> D3Eff e Selection
 
-append :: forall e a. String -> D3Eff e a -> D3Eff e a
-append = withSel <<< d3Append
+foreign import transition
+  "function transition(selection) {\
+  \  return function () {\
+  \    return selection.transition();\
+  \  };\
+  \}"
+  :: forall e. Selection -> D3Eff e Selection
 
-remove :: forall e. D3Eff e Unit
-remove = getSel >>= d3Remove
+foreign import append
+  "function append(tag) {\
+  \  return function (selection) {\
+  \    return function () {\
+  \      return selection.append(tag);\
+  \    };\
+  \  };\
+  \}"
+  :: forall e. String -> Selection -> D3Eff e Selection
 
-bind :: forall d e a. [d] -> D3Eff e a -> D3Eff e a
-bind array = withSel (d3SetData array)
+foreign import remove
+  "function remove(selection) {\
+  \  return function () {\
+  \    selection.remove();\
+  \  };\
+  \}"
+  :: forall e. Selection -> D3Eff e Unit
 
-attr :: forall e a. String -> a -> D3Eff e Unit
-attr key val = getSel >>= d3SetAttr key val >>> void
+foreign import attr
+  "function attr(key) {\
+  \  return function (val) {\
+  \    return function (selection) {\
+  \      return function () {\
+  \        return selection.attr(key, val);\
+  \      };\
+  \    };\
+  \  };\
+  \}"
+  :: forall a e. String -> a -> Selection -> D3Eff e Selection
 
-text :: forall a e. a -> D3Eff e Unit
-text val = getSel >>= d3SetText val >>> void
+foreign import style
+  "function style(key) {\
+  \  return function (val) {\
+  \    return function (selection) {\
+  \      return function () {\
+  \        return selection.style(key, val);\
+  \      };\
+  \    };\
+  \  };\
+  \}"
+  :: forall a e. String -> a -> Selection -> D3Eff e Selection
+
+foreign import text
+  "function text(text) {\
+  \  return function (selection) {\
+  \    return function () {\
+  \      return selection.text(text);\
+  \    };\
+  \  };\
+  \}"
+  :: forall a e. a -> Selection -> D3Eff e Selection
