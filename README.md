@@ -35,7 +35,7 @@ barChart = do
       .. bind array
     .. enter .. append "div"
       .. style "width" (\d -> show (x d) ++ "px")
-      .. text (\d -> d)
+      .. text show
 ```
 
 Note that `..` is an alias for `>>=`. The [fluent interface](http://en.wikipedia.org/wiki/Fluent_interface) is just a poor man's [programmable semicolon](http://en.wikipedia.org/wiki/Monad_(functional_programming))!
