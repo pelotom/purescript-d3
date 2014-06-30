@@ -19,7 +19,7 @@ d3.select(".chart")
     .text(function(d) { return d; });
 ```
 
-And here is the PureScript code which accomplishes the same:
+And here is the PureScript equivalent:
 
 ```haskell
 array = [4, 8, 15, 16, 23, 42]
