@@ -68,11 +68,6 @@ gulp           # compile the code
     data DOM :: !
 
 
-### Values
-
-    void :: forall f a. (Functor f) => f a -> f Unit
-
-
 ## Module Graphics.D3.Scale
 
 ### Types
