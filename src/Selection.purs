@@ -1,24 +1,50 @@
-module Graphics.D3.Selection
-  ( Selection()
-  , rootSelect
-  , rootSelectAll
-  , select
-  , selectAll
-  , bind
-  , enter
-  , exit
-  , transition
-  , append
-  , remove
-  , attr
-  , style
-  , text
-  ) where
+module Graphics.D3.Selection where
+  -- ( Selection()
+  -- , rootSelect
+  -- , rootSelectAll
+  -- , select
+  -- , selectAll
+  -- , bind
+  -- , enter
+  -- , exit
+  -- , transition
+  -- , append
+  -- , remove
+  -- , attr
+  -- , style
+  -- , text
+  -- ) where
 
 import Graphics.D3.Base
 import Control.Monad.Eff
 
-foreign import data Selection :: # * -> *
+foreign import data Selection :: * -> *
+foreign import data Enter :: * -> *
+foreign import data Transition :: * -> *
+
+-- The (uninhabited) type of an unbound selection's data
+data NoData
+
+-- Class for things that both selections and transitions can do
+class SelectionOrTransition s
+instance selOrTransSelection  :: SelectionOrTransition (Selection d)
+instance selOrTransTransition :: SelectionOrTransition (Transition d)
+
+-- Class for things which can be appended to / inserted into
+class SelectionOrEnter s where
+  append :: forall d. String -> s d -> D3Eff (Selection d)
+
+instance selOrEnterSelection  :: SelectionOrEnter Selection where
+  append = appendToSelection
+
+instance selOrEnterEnter      :: SelectionOrEnter Enter where
+  append = appendToEnter
+
+type DataJoin d = {
+    enter   :: Enter d,
+    update  :: Selection d,
+    exit    :: Selection d
+  }
 
 foreign import rootSelect
   "function rootSelect(selector) {\
@@ -26,7 +52,7 @@ foreign import rootSelect
   \    return d3.select(selector);\
   \  };\
   \}"
-  :: String -> D3Eff (Selection (exists :: Unit))
+  :: String -> D3Eff (Selection NoData)
 
 foreign import rootSelectAll
   "function rootSelectAll(selector) {\
@@ -34,7 +60,7 @@ foreign import rootSelectAll
   \    return d3.selectAll(selector);\
   \  };\
   \}"
-  :: String -> D3Eff (Selection (exists :: Unit))
+  :: String -> D3Eff (Selection NoData)
 
 foreign import select
   "function select(selector) {\
@@ -44,7 +70,7 @@ foreign import select
   \    };\
   \  };\
   \}"
-  :: forall r. String -> Selection (exists :: Unit | r) -> D3Eff (Selection (exists :: Unit | r))
+  :: forall d. String -> Selection d -> D3Eff (Selection d)
 
 foreign import selectAll
   "function selectAll(selector) {\
@@ -54,33 +80,18 @@ foreign import selectAll
   \    };\
   \  };\
   \}"
-  :: forall r. String -> Selection (exists :: Unit | r) -> D3Eff (Selection (exists :: Unit | r))
+  :: forall d. String -> Selection d -> D3Eff (Selection NoData)
 
 foreign import bind
   "function bind(data) {\
   \  return function (selection) {\
   \    return function () {\
-  \      return selection.data(data);\
+  \      var update = selection.data(data);\
+  \      return { enter: update.enter(), update: update, exit: update.exit() }\
   \    };\
   \  };\
   \}"
-  :: forall d r. [d] -> Selection (exists :: Unit | r) -> D3Eff (Selection (exists :: Unit, hasData :: d, isJoin :: Unit | r))
-
-foreign import enter
-  "function enter(selection) {\
-  \  return function () {\
-  \    return selection.enter();\
-  \  };\
-  \}"
-  :: forall r. Selection (isJoin :: Unit, exists :: Unit | r) -> D3Eff (Selection r)
-
-foreign import exit
-  "function exit(selection) {\
-  \  return function () {\
-  \    return selection.exit();\
-  \  };\
-  \}"
-  :: forall r. Selection (isJoin :: Unit | r) -> D3Eff (Selection r)
+  :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (DataJoin newData)
 
 foreign import transition
   "function transition(selection) {\
@@ -88,17 +99,27 @@ foreign import transition
   \    return selection.transition();\
   \  };\
   \}"
-  :: forall r. Selection r -> D3Eff (Selection r)
+  :: forall d. Selection d -> D3Eff (Transition d)
 
-foreign import append
-  "function append(tag) {\
+foreign import appendToSelection
+  "function appendToSelection(tag) {\
   \  return function (selection) {\
   \    return function () {\
   \      return selection.append(tag);\
   \    };\
   \  };\
   \}"
-  :: forall r. String -> Selection r -> D3Eff (Selection (exists :: Unit | r))
+  :: forall d. String -> Selection d -> D3Eff (Selection d)
+
+foreign import appendToEnter
+  "function appendToEnter(tag) {\
+  \  return function (selection) {\
+  \    return function () {\
+  \      return selection.append(tag);\
+  \    };\
+  \  };\
+  \}"
+  :: forall d. String -> Enter d -> D3Eff (Selection d)
 
 foreign import remove
   "function remove(selection) {\
@@ -106,7 +127,7 @@ foreign import remove
   \    selection.remove();\
   \  };\
   \}"
-  :: forall r. Selection r -> D3Eff Unit
+  :: forall s. (SelectionOrTransition s) => s -> D3Eff Unit
 
 foreign import attr
   "function attr(key) {\
@@ -118,26 +139,30 @@ foreign import attr
   \    };\
   \  };\
   \}"
-  :: forall d v r. String -> (d -> v) -> Selection (hasData :: d | r) -> D3Eff (Selection (hasData :: d | r))
+  :: forall d v s. (SelectionOrTransition s) => String -> (d -> v) -> s -> D3Eff s
 
 foreign import style
-  "function style(key) {\
-  \  return function (val) {\
-  \    return function (selection) {\
-  \      return function () {\
-  \        return selection.style(key, val);\
+  "function style(dict) {\
+  \  return function (key) {\
+  \    return function (val) {\
+  \      return function (selection) {\
+  \        return function () {\
+  \          return selection.style(key, val);\
+  \        };\
   \      };\
   \    };\
   \  };\
   \}"
-  :: forall d v r. String -> (d -> v) -> Selection (hasData :: d | r) -> D3Eff (Selection (hasData :: d | r))
+  :: forall d v s. (SelectionOrTransition s) => String -> (d -> v) -> s -> D3Eff s
 
 foreign import text
-  "function text(text) {\
-  \  return function (selection) {\
-  \    return function () {\
-  \      return selection.text(text);\
+  "function text(dict) {\
+  \  return function (text) {\
+  \    return function (selection) {\
+  \      return function () {\
+  \        return selection.text(text);\
+  \      };\
   \    };\
   \  };\
   \}"
-  :: forall d r. (d -> String) -> Selection (hasData :: d | r) -> D3Eff (Selection (hasData :: d | r))
+  :: forall d s. (SelectionOrTransition s) => (d -> String) -> s -> D3Eff s
