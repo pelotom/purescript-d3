@@ -100,59 +100,52 @@ gulp           # compile the code
 
 ### Types
 
-    type DataJoin d = { exit :: Selection d, update :: Selection d, enter :: Enter d }
-
     data Enter :: * -> *
 
-    data NoData
+    type Exit d = Selection d
 
     data Selection :: * -> *
 
     data Transition :: * -> *
 
+    data Update :: * -> *
+
+    data Void
+
 
 ### Type Classes
-
-    class SelectionOrEnter s where
-      append :: forall d. String -> s d -> D3Eff (Selection d)
-
-    class SelectionOrTransition s where
 
 
 ### Type Class Instances
 
-    instance selOrEnterEnter :: SelectionOrEnter Enter
+    instance appendableEnter :: Appendable Enter
 
-    instance selOrEnterSelection :: SelectionOrEnter Selection
+    instance appendableSelection :: Appendable Selection
 
-    instance selOrTransSelection :: SelectionOrTransition (Selection d)
+    instance appendableUpdate :: Appendable Update
 
-    instance selOrTransTransition :: SelectionOrTransition (Transition d)
+    instance existingSelection :: Existing Selection
+
+    instance existingTransition :: Existing Transition
+
+    instance existingUpdate :: Existing Update
 
 
 ### Values
 
-    appendToEnter :: forall d. String -> Enter d -> D3Eff (Selection d)
+    bind :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (Update newData)
 
-    appendToSelection :: forall d. String -> Selection d -> D3Eff (Selection d)
+    enter :: forall d. Update d -> D3Eff (Enter d)
 
-    attr :: forall d v s. (SelectionOrTransition s) => String -> (d -> v) -> s -> D3Eff s
+    exit :: forall d. Update d -> D3Eff (Exit d)
 
-    bind :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (DataJoin newData)
+    rootSelect :: String -> D3Eff (Selection Void)
 
-    remove :: forall s. (SelectionOrTransition s) => s -> D3Eff Unit
-
-    rootSelect :: String -> D3Eff (Selection NoData)
-
-    rootSelectAll :: String -> D3Eff (Selection NoData)
+    rootSelectAll :: String -> D3Eff (Selection Void)
 
     select :: forall d. String -> Selection d -> D3Eff (Selection d)
 
-    selectAll :: forall d. String -> Selection d -> D3Eff (Selection NoData)
-
-    style :: forall d v s. (SelectionOrTransition s) => String -> (d -> v) -> s -> D3Eff s
-
-    text :: forall d s. (SelectionOrTransition s) => (d -> String) -> s -> D3Eff s
+    selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
 
     transition :: forall d. Selection d -> D3Eff (Transition d)
 
