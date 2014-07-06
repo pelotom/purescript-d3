@@ -40,7 +40,7 @@ barChart = do
 
 Note that `..` is an alias for `>>=`. The [fluent interface](http://en.wikipedia.org/wiki/Fluent_interface) is just a poor man's [programmable semicolon](http://en.wikipedia.org/wiki/Monad_(functional_programming))!
 
-The PureScript D3 bindings statically enforce several properties of D3's selection semantics; for instance, if you were to remove the `.. append "div"` above you would get a type error, because the following code would be attemting to set things on the unrealized nodes of an enter selection. In JavaScript you would have to wait until runtime to see that error.
+The PureScript D3 bindings statically enforce several properties of D3's selection semantics; for instance, if you were to remove the `.. append "div"` above you would get a type error, because the following code would be attempting to set things on the unrealized nodes of an enter selection. In JavaScript you would have to wait until runtime to see that error.
 
 PureScript selections also carry information about the type of data bound to them (if any). Until data is bound to a selection it is only possible to set constant attributes on it; afterwards you can use well-typed functions of the data.
 
