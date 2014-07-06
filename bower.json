@@ -12,5 +12,6 @@
     "purescript-easy-ffi": "^1.0.0",
     "d3": "^3.4.9"
   },
+  "main": "src/**/*.purs",
   "private": false
 }
