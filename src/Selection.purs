@@ -22,6 +22,7 @@ module Graphics.D3.Selection
 
 import Graphics.D3.Base
 import Control.Monad.Eff
+import Data.Foreign.EasyFFI
 
 -- The "selection-y" types, parameterized by the type of their bound data
 foreign import data Selection :: * -> *
@@ -74,124 +75,41 @@ instance appendableUpdate     :: Appendable Update where
 instance appendableEnter      :: Appendable Enter where
   append = unsafeAppend
 
-foreign import rootSelect
-  "function rootSelect(selector) {\
-  \  return function () {\
-  \    return d3.select(selector);\
-  \  };\
-  \}"
-  :: String -> D3Eff (Selection Void)
+rootSelect :: String -> D3Eff (Selection Void)
+rootSelect = unsafeForeignFunction ["selector", ""] "d3.select(selector)"
 
-foreign import rootSelectAll
-  "function rootSelectAll(selector) {\
-  \  return function () {\
-  \    return d3.selectAll(selector);\
-  \  };\
-  \}"
-  :: String -> D3Eff (Selection Void)
+rootSelectAll :: String -> D3Eff (Selection Void)
+rootSelectAll = unsafeForeignFunction ["selector", ""] "d3.selectAll(selector)"
 
-foreign import select
-  "function select(selector) {\
-  \  return function (selection) {\
-  \    return function () {\
-  \      return selection.select(selector);\
-  \    };\
-  \  };\
-  \}"
-  :: forall d. String -> Selection d -> D3Eff (Selection d)
+select :: forall d. String -> Selection d -> D3Eff (Selection d)
+select = unsafeForeignFunction ["selector", "selection", ""] "selection.select(selector)"
 
-foreign import selectAll
-  "function selectAll(selector) {\
-  \  return function (selection) {\
-  \    return function () {\
-  \      return selection.selectAll(selector);\
-  \    };\
-  \  };\
-  \}"
-  :: forall d. String -> Selection d -> D3Eff (Selection Void)
+selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
+selectAll = unsafeForeignFunction ["selector", "selection", ""] "selection.selectAll(selector)"
 
-foreign import bind
-  "function bind(data) {\
-  \  return function (selection) {\
-  \    return function () {\
-  \      return selection.data(data);\
-  \    };\
-  \  };\
-  \}"
-  :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (Update newData)
+bind :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (Update newData)
+bind = unsafeForeignFunction ["array", "selection", ""] "selection.data(array)"
 
-foreign import enter
-  "function enter(selection) {\
-  \  return function () {\
-  \    return selection.enter();\
-  \  };\
-  \}"
-  :: forall d. Update d -> D3Eff (Enter d)
+enter :: forall d. Update d -> D3Eff (Enter d)
+enter = unsafeForeignFunction ["update", ""] "update.enter()"
 
-foreign import exit
-  "function exit(selection) {\
-  \  return function () {\
-  \    return selection.exit();\
-  \  };\
-  \}"
-  :: forall d. Update d -> D3Eff (Exit d)
+exit :: forall d. Update d -> D3Eff (Exit d)
+exit = unsafeForeignFunction ["update", ""] "update.exit()"
 
-foreign import transition
-  "function transition(selection) {\
-  \  return function () {\
-  \    return selection.transition();\
-  \  };\
-  \}"
-  :: forall d. Selection d -> D3Eff (Transition d)
+transition :: forall d. Selection d -> D3Eff (Transition d)
+transition = unsafeForeignFunction ["selection", ""] "selection.transition()"
 
-foreign import unsafeAppend
-  "function unsafeAppend(tag) {\
-  \  return function (selection) {\
-  \    return function () {\
-  \      return selection.append(tag);\
-  \    };\
-  \  };\
-  \};"
-  :: forall x y. String -> x -> D3Eff y
+unsafeAppend :: forall x y. String -> x -> D3Eff y
+unsafeAppend = unsafeForeignFunction ["tag", "selection", ""] "selection.append(tag)"
 
-foreign import unsafeRemove
-  "function unsafeRemove(selection) {\
-  \  return function () {\
-  \    selection.remove();\
-  \  };\
-  \}"
-  :: forall s. s -> D3Eff Unit
+unsafeRemove :: forall s. s -> D3Eff Unit
+unsafeRemove = unsafeForeignProcedure ["selection", ""] "selection.remove();"
 
-foreign import unsafeAttr
-  "function unsafeAttr(key) {\
-  \  return function (val) {\
-  \    return function (selection) {\
-  \      return function () {\
-  \        return selection.attr(key, val);\
-  \      };\
-  \    };\
-  \  };\
-  \}"
-  :: forall d v s. String -> (d -> v) -> s -> D3Eff s
+unsafeAttr :: forall d v s. String -> (d -> v) -> s -> D3Eff s
+unsafeAttr = unsafeForeignFunction ["key", "val", "selection", ""] "selection.attr(key, val)"
 
-foreign import unsafeStyle
-  "function unsafeStyle(key) {\
-  \  return function (val) {\
-  \    return function (selection) {\
-  \      return function () {\
-  \        return selection.style(key, val);\
-  \      };\
-  \    };\
-  \  };\
-  \}"
-  :: forall d v s. String -> (d -> v) -> s -> D3Eff s
+unsafeStyle :: forall d v s. String -> (d -> v) -> s -> D3Eff s
+unsafeStyle = unsafeForeignFunction ["key", "val", "selection", ""] "selection.style(key, val)"
 
-foreign import unsafeText
-  "function unsafeText(text) {\
-  \  return function (selection) {\
-  \    return function () {\
-  \      return selection.text(text);\
-  \    };\
-  \  };\
-  \}"
-  :: forall d s. (d -> String) -> s -> D3Eff s
+unsafeText :: forall d s. (d -> String) -> s -> D3Eff s
+unsafeText = unsafeForeignFunction ["text", "selection", ""] "selection.text(text)"

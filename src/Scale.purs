@@ -8,6 +8,7 @@ module Graphics.D3.Scale
   ) where
 
 import Graphics.D3.Base
+import Data.Foreign.EasyFFI
 
 -- A base class for all scale types
 class Scale s
@@ -19,37 +20,12 @@ foreign import linearScale
   :: D3Eff LinearScale
 instance scaleLinear :: Scale LinearScale
 
-foreign import domain
-  "function domain(dict) {\
-  \  return function (array) {\
-  \    return function (scale) {\
-  \      return function () {\
-  \        return scale.domain(array);\
-  \      };\
-  \    };\
-  \  };\
-  \}"
-  :: forall s a. (Scale s) => [a] -> s -> D3Eff s
+domain :: forall s a. (Scale s) => [a] -> s -> D3Eff s
+domain = unsafeForeignFunction ["domain", "scale", ""] "scale.domain(domain)"
 
-foreign import range
-  "function range(dict) {\
-  \  return function (array) {\
-  \    return function (scale) {\
-  \      return function () {\
-  \        return scale.range(array);\
-  \      };\
-  \    };\
-  \  };\
-  \}"
-  :: forall s a. (Scale s) => [a] -> s -> D3Eff s
+range :: forall s a. (Scale s) => [a] -> s -> D3Eff s
+range = unsafeForeignFunction ["range", "scale", ""] "scale.range(range)"
 
-foreign import freeze
-  "function freeze(dict) {\
-  \  return function (scale) {\
-  \    return function () {\
-  \      return scale.copy();\
-  \    };\
-  \  };\
-  \}"
-  :: forall s. (Scale s) => s -> D3Eff (Number -> Number)
+freeze :: forall s. (Scale s) => s -> D3Eff (Number -> Number)
+freeze = unsafeForeignFunction ["scale", ""] "scale.copy()"
 
