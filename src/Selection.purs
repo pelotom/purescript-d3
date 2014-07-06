@@ -36,45 +36,6 @@ type Exit d = Selection d
 -- The (uninhabited) type of an unbound selection's data
 data Void
 
--- Class for things that contain existing DOM elements (most selection-y
--- things except for Enter)
-class Existing s where
-  attr :: forall d v. String -> (d -> v) -> s d -> D3Eff (s d)
-  style :: forall d v. String -> (d -> v) -> s d -> D3Eff (s d)
-  text :: forall d. (d -> String) -> s d -> D3Eff (s d)
-  remove :: forall d. s d -> D3Eff Unit
-
-instance existingSelection  :: Existing Selection where
-  attr = unsafeAttr
-  style = unsafeStyle
-  text = unsafeText
-  remove = unsafeRemove
-
-instance existingUpdate     :: Existing Update where
-  attr = unsafeAttr
-  style = unsafeStyle
-  text = unsafeText
-  remove = unsafeRemove
-
-instance existingTransition :: Existing Transition where
-  attr = unsafeAttr
-  style = unsafeStyle
-  text = unsafeText
-  remove = unsafeRemove
-
--- Selection-y things which can be appended to / inserted into
-class Appendable s where
-  append :: forall d. String -> s d -> D3Eff (Selection d)
-
-instance appendableSelection  :: Appendable Selection where
-  append = unsafeAppend
-
-instance appendableUpdate     :: Appendable Update where
-  append = unsafeAppend
-
-instance appendableEnter      :: Appendable Enter where
-  append = unsafeAppend
-
 rootSelect :: String -> D3Eff (Selection Void)
 rootSelect = unsafeForeignFunction ["selector", ""] "d3.select(selector)"
 
@@ -113,3 +74,41 @@ unsafeStyle = unsafeForeignFunction ["key", "val", "selection", ""] "selection.s
 
 unsafeText :: forall d s. (d -> String) -> s -> D3Eff s
 unsafeText = unsafeForeignFunction ["text", "selection", ""] "selection.text(text)"
+
+-- Selection-y things which can be appended to / inserted into
+class Appendable s where
+  append :: forall d. String -> s d -> D3Eff (Selection d)
+
+instance appendableSelection  :: Appendable Selection where
+  append = unsafeAppend
+
+instance appendableUpdate     :: Appendable Update where
+  append = unsafeAppend
+
+instance appendableEnter      :: Appendable Enter where
+  append = unsafeAppend
+
+-- Selection-y things that contain existing DOM elements
+class Existing s where
+  attr :: forall d v. String -> (d -> v) -> s d -> D3Eff (s d)
+  style :: forall d v. String -> (d -> v) -> s d -> D3Eff (s d)
+  text :: forall d. (d -> String) -> s d -> D3Eff (s d)
+  remove :: forall d. s d -> D3Eff Unit
+
+instance existingSelection  :: Existing Selection where
+  attr = unsafeAttr
+  style = unsafeStyle
+  text = unsafeText
+  remove = unsafeRemove
+
+instance existingUpdate     :: Existing Update where
+  attr = unsafeAttr
+  style = unsafeStyle
+  text = unsafeText
+  remove = unsafeRemove
+
+instance existingTransition :: Existing Transition where
+  attr = unsafeAttr
+  style = unsafeStyle
+  text = unsafeText
+  remove = unsafeRemove
