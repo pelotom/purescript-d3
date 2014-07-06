@@ -1,6 +1,16 @@
-{ "name"            : "purescript-d3"
-, "private"         : true
-, "ignore"          : []
-, "dependencies"    :
-  { "purescript-easy-ffi" : "git@github.com:pelotom/purescript-easy-ffi.git#master" }
+{
+  "name": "purescript-d3",
+  "description": "PureScript bindings for D3",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "docsrc",
+    "gulpfile.js",
+    "package.json"
+  ],
+  "dependencies": {
+    "purescript-easy-ffi": "^1.0.0",
+    "d3": "^3.4.9"
+  },
+  "private": false
 }
