@@ -1,7 +1,7 @@
 {
   "name": "purescript-d3",
   "description": "PureScript bindings for D3",
-  "repository": "git@github.com:pelotom/purescript-d3.git",
+  "repository": "git://github.com/pelotom/purescript-d3.git",
   "license": "MIT",
   "devDependencies": {
     "gulp": "^3.8.1",
