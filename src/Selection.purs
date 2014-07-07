@@ -95,13 +95,13 @@ unsafeAttr'' = ffi
   ["key", "val", "selection", ""]
   "selection.attr(key, function (d, i) { return val(d)(i); })"
 
-unsafeStyle :: forall d v s. (AttrValue v) => String -> v -> s -> D3Eff s
+unsafeStyle :: forall d s. String -> String -> s -> D3Eff s
 unsafeStyle = ffi ["key", "val", "selection", ""] "selection.style(key, val)"
 
-unsafeStyle' :: forall d v s. (AttrValue v) => String -> (d -> v) -> s -> D3Eff s
+unsafeStyle' :: forall d s. String -> (d -> String) -> s -> D3Eff s
 unsafeStyle' = ffi ["key", "val", "selection", ""] "selection.style(key, val)"
 
-unsafeStyle'' :: forall d v s. (AttrValue v) => String -> (d -> Number -> v) -> s -> D3Eff s
+unsafeStyle'' :: forall d s. String -> (d -> Number -> String) -> s -> D3Eff s
 unsafeStyle'' = ffi
   ["key", "val", "selection", ""]
   "selection.style(key, function (d, i) { return val(d)(i); })"
@@ -135,9 +135,9 @@ class Existing s where
   attr :: forall d v. (AttrValue v) => String -> v -> s d -> D3Eff (s d)
   attr' :: forall d v. (AttrValue v) => String -> (d -> v) -> s d -> D3Eff (s d)
   attr'' :: forall d v. (AttrValue v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
-  style :: forall d v. (AttrValue v) => String -> v -> s d -> D3Eff (s d)
-  style' :: forall d v. (AttrValue v) => String -> (d -> v) -> s d -> D3Eff (s d)
-  style'' :: forall d v. (AttrValue v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+  style :: forall d. String -> String -> s d -> D3Eff (s d)
+  style' :: forall d. String -> (d -> String) -> s d -> D3Eff (s d)
+  style'' :: forall d. String -> (d -> Number -> String) -> s d -> D3Eff (s d)
   text :: forall d. String -> s d -> D3Eff (s d)
   text' :: forall d. (d -> String) -> s d -> D3Eff (s d)
   text'' :: forall d. (d -> Number -> String) -> s d -> D3Eff (s d)
