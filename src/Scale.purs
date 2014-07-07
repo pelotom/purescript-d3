@@ -6,7 +6,7 @@ module Graphics.D3.Scale
   , ordinalScale
   , domain
   , range
-  , freeze
+  , toFunction
   , rangeRoundBands
   , rangeBand
   ) where
@@ -28,8 +28,8 @@ domain = ffi ["domain", "scale", ""] "scale.domain(domain)"
 range :: forall s a. (Scale s) => [a] -> s -> D3Eff s
 range = ffi ["range", "scale", ""] "scale.range(range)"
 
-freeze :: forall s a. (Scale s) => s -> D3Eff (a -> Number)
-freeze = ffi ["scale"] "scale.copy"
+toFunction :: forall s a. (Scale s) => s -> D3Eff (a -> Number)
+toFunction = ffi ["scale"] "scale.copy"
 
 -- Specific scale types
 

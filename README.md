@@ -29,7 +29,7 @@ main = do
   x <- linearScale
     .. domain [0, max array]
     .. range [0, 420]
-    .. freeze
+    .. toFunction
 
   rootSelect ".chart"
     .. selectAll "div"
@@ -134,8 +134,6 @@ gulp           # compile the code
 
     domain :: forall s a. (Scale s) => [a] -> s -> D3Eff s
 
-    freeze :: forall s a. (Scale s) => s -> D3Eff (a -> Number)
-
     linearScale :: D3Eff LinearScale
 
     ordinalScale :: D3Eff OrdinalScale
@@ -145,6 +143,8 @@ gulp           # compile the code
     rangeBand :: OrdinalScale -> D3Eff Number
 
     rangeRoundBands :: Number -> Number -> Number -> Number -> OrdinalScale -> D3Eff OrdinalScale
+
+    toFunction :: forall s a. (Scale s) => s -> D3Eff (a -> Number)
 
 
 ## Module Graphics.D3.Selection

@@ -29,7 +29,7 @@ main = do
   x <- linearScale
     .. domain [0, max array]
     .. range [0, 420]
-    .. freeze
+    .. toFunction
 
   rootSelect ".chart"
     .. selectAll "div"
