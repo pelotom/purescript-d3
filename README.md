@@ -22,20 +22,21 @@ d3.select(".chart")
 And here is the PureScript equivalent:
 
 ```haskell
-array = [4, 8, 15, 16, 23, 42]
+table = [4, 8, 15, 16, 23, 42]
 
-barChart = do
+main = do
+
   x <- linearScale
-    .. domain [0, max array]
+    .. domain [0, max table]
     .. range [0, 420]
     .. freeze
 
   rootSelect ".chart"
     .. selectAll "div"
-      .. bind array
+      .. bind table
     .. enter .. append "div"
-      .. style "width" (\d -> show (x d) ++ "px")
-      .. text show
+      .. style' "width" (\d -> show (x d) ++ "px")
+      .. text' show
 ```
 
 Note that `..` is an alias for `>>=`. The [fluent interface](http://en.wikipedia.org/wiki/Fluent_interface) is just a poor man's [programmable semicolon](http://en.wikipedia.org/wiki/Monad_(functional_programming))!
@@ -94,6 +95,18 @@ gulp           # compile the code
     data D3 :: !
 
     type D3Eff a = forall e. Eff (d3 :: D3 | e) a
+
+
+### Type Classes
+
+    class Primitive a where
+
+
+### Type Class Instances
+
+    instance primNumber :: Primitive Prim.Number
+
+    instance primString :: Primitive Prim.String
 
 
 ## Module Graphics.D3.Request
@@ -169,10 +182,15 @@ gulp           # compile the code
       append :: forall d. String -> s d -> D3Eff (Selection d)
 
     class Existing s where
-      attr :: forall d v. String -> (d -> v) -> s d -> D3Eff (s d)
-      attr' :: forall d v. String -> (d -> Number -> v) -> s d -> D3Eff (s d)
-      style :: forall d v. String -> (d -> v) -> s d -> D3Eff (s d)
-      text :: forall d. (d -> String) -> s d -> D3Eff (s d)
+      attr :: forall d v. (Primitive v) => String -> v -> s d -> D3Eff (s d)
+      attr' :: forall d v. (Primitive v) => String -> (d -> v) -> s d -> D3Eff (s d)
+      attr'' :: forall d v. (Primitive v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+      style :: forall d v. (Primitive v) => String -> v -> s d -> D3Eff (s d)
+      style' :: forall d v. (Primitive v) => String -> (d -> v) -> s d -> D3Eff (s d)
+      style'' :: forall d v. (Primitive v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+      text :: forall d. String -> s d -> D3Eff (s d)
+      text' :: forall d. (d -> String) -> s d -> D3Eff (s d)
+      text'' :: forall d. (d -> Number -> String) -> s d -> D3Eff (s d)
       remove :: forall d. s d -> D3Eff Unit
 
 

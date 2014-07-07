@@ -22,20 +22,21 @@ d3.select(".chart")
 And here is the PureScript equivalent:
 
 ```haskell
-array = [4, 8, 15, 16, 23, 42]
+table = [4, 8, 15, 16, 23, 42]
 
-barChart = do
+main = do
+
   x <- linearScale
-    .. domain [0, max array]
+    .. domain [0, max table]
     .. range [0, 420]
     .. freeze
 
   rootSelect ".chart"
     .. selectAll "div"
-      .. bind array
+      .. bind table
     .. enter .. append "div"
-      .. style "width" (\d -> show (x d) ++ "px")
-      .. text show
+      .. style' "width" (\d -> show (x d) ++ "px")
+      .. text' show
 ```
 
 Note that `..` is an alias for `>>=`. The [fluent interface](http://en.wikipedia.org/wiki/Fluent_interface) is just a poor man's [programmable semicolon](http://en.wikipedia.org/wiki/Monad_(functional_programming))!

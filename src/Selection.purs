@@ -19,8 +19,13 @@ module Graphics.D3.Selection
   , remove
   , attr
   , attr'
+  , attr''
   , style
+  , style'
+  , style''
   , text
+  , text'
+  , text''
   ) where
 
 import Graphics.D3.Base
@@ -72,19 +77,38 @@ unsafeAppend = ffi ["tag", "selection", ""] "selection.append(tag)"
 unsafeRemove :: forall s. s -> D3Eff Unit
 unsafeRemove = ffi ["selection"] "selection.remove"
 
-unsafeAttr :: forall d v s. String -> (d -> v) -> s -> D3Eff s
+unsafeAttr :: forall d v s. (Primitive v) => String -> v -> s -> D3Eff s
 unsafeAttr = ffi ["key", "val", "selection", ""] "selection.attr(key, val)"
 
-unsafeAttr' :: forall d v s. String -> (d -> Number -> v) -> s -> D3Eff s
-unsafeAttr' = ffi
+unsafeAttr' :: forall d v s. (Primitive v) => String -> (d -> v) -> s -> D3Eff s
+unsafeAttr' = ffi ["key", "val", "selection", ""] "selection.attr(key, val)"
+
+unsafeAttr'' :: forall d v s. (Primitive v) => String -> (d -> Number -> v) -> s -> D3Eff s
+unsafeAttr'' = ffi
   ["key", "val", "selection", ""]
   "selection.attr(key, function (d, i) { return val(d)(i); })"
 
-unsafeStyle :: forall d v s. String -> (d -> v) -> s -> D3Eff s
+unsafeStyle :: forall d v s. (Primitive v) => String -> v -> s -> D3Eff s
 unsafeStyle = ffi ["key", "val", "selection", ""] "selection.style(key, val)"
 
-unsafeText :: forall d s. (d -> String) -> s -> D3Eff s
+unsafeStyle' :: forall d v s. (Primitive v) => String -> (d -> v) -> s -> D3Eff s
+unsafeStyle' = ffi ["key", "val", "selection", ""] "selection.style(key, val)"
+
+unsafeStyle'' :: forall d v s. (Primitive v) => String -> (d -> Number -> v) -> s -> D3Eff s
+unsafeStyle'' = ffi
+  ["key", "val", "selection", ""]
+  "selection.style(key, function (d, i) { return val(d)(i); })"
+
+unsafeText :: forall d s. String -> s -> D3Eff s
 unsafeText = ffi ["text", "selection", ""] "selection.text(text)"
+
+unsafeText' :: forall d s. (d -> String) -> s -> D3Eff s
+unsafeText' = ffi ["text", "selection", ""] "selection.text(text)"
+
+unsafeText'' :: forall d s. (d -> Number -> String) -> s -> D3Eff s
+unsafeText'' = ffi
+  ["text", "selection", ""] 
+  "selection.text(function (d, i) { return text(d)(i); })"
 
 -- Selection-y things which can be appended to / inserted into
 class Appendable s where
@@ -101,29 +125,49 @@ instance appendableEnter      :: Appendable Enter where
 
 -- Selection-y things that contain existing DOM elements
 class Existing s where
-  attr :: forall d v. String -> (d -> v) -> s d -> D3Eff (s d)
-  attr' :: forall d v. String -> (d -> Number -> v) -> s d -> D3Eff (s d)
-  style :: forall d v. String -> (d -> v) -> s d -> D3Eff (s d)
-  text :: forall d. (d -> String) -> s d -> D3Eff (s d)
+  attr :: forall d v. (Primitive v) => String -> v -> s d -> D3Eff (s d)
+  attr' :: forall d v. (Primitive v) => String -> (d -> v) -> s d -> D3Eff (s d)
+  attr'' :: forall d v. (Primitive v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+  style :: forall d v. (Primitive v) => String -> v -> s d -> D3Eff (s d)
+  style' :: forall d v. (Primitive v) => String -> (d -> v) -> s d -> D3Eff (s d)
+  style'' :: forall d v. (Primitive v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+  text :: forall d. String -> s d -> D3Eff (s d)
+  text' :: forall d. (d -> String) -> s d -> D3Eff (s d)
+  text'' :: forall d. (d -> Number -> String) -> s d -> D3Eff (s d)
   remove :: forall d. s d -> D3Eff Unit
 
 instance existingSelection  :: Existing Selection where
   attr = unsafeAttr
   attr' = unsafeAttr'
+  attr'' = unsafeAttr''
   style = unsafeStyle
+  style' = unsafeStyle'
+  style'' = unsafeStyle''
   text = unsafeText
+  text' = unsafeText'
+  text'' = unsafeText''
   remove = unsafeRemove
 
 instance existingUpdate     :: Existing Update where
   attr = unsafeAttr
   attr' = unsafeAttr'
+  attr'' = unsafeAttr''
   style = unsafeStyle
+  style' = unsafeStyle'
+  style'' = unsafeStyle''
   text = unsafeText
+  text' = unsafeText'
+  text'' = unsafeText''
   remove = unsafeRemove
 
 instance existingTransition :: Existing Transition where
   attr = unsafeAttr
   attr' = unsafeAttr'
+  attr'' = unsafeAttr''
   style = unsafeStyle
+  style' = unsafeStyle'
+  style'' = unsafeStyle''
   text = unsafeText
+  text' = unsafeText'
+  text'' = unsafeText''
   remove = unsafeRemove
