@@ -27,7 +27,7 @@ array = [4, 8, 15, 16, 23, 42]
 main = do
 
   x <- linearScale
-    .. domain [0, max array]
+    .. domain [0, max id array]
     .. range [0, 420]
     .. toFunction
 
@@ -226,13 +226,9 @@ gulp           # compile the code
 
 ### Values
 
-    max :: [Number] -> Number
+    max :: forall d. (d -> Number) -> [d] -> Number
 
-    maxBy :: forall d. (d -> Number) -> [d] -> Number
-
-    min :: [Number] -> Number
-
-    minBy :: forall d. (d -> Number) -> [d] -> Number
+    min :: forall d. (d -> Number) -> [d] -> Number
 
 
 
