@@ -67,9 +67,21 @@ gulp           # compile the code
 
 ### Types
 
-    type D3Eff a = forall e. Eff (dom :: DOM | e) a
+    data D3 :: !
 
-    data DOM :: !
+    type D3Eff a = forall e. Eff (d3 :: D3 | e) a
+
+
+## Module Graphics.D3.Request
+
+### Types
+
+    type RequestError  = { statusText :: String, status :: Number }
+
+
+### Values
+
+    tsv :: forall e a. String -> (Either RequestError [Foreign] -> Eff e a) -> Eff (d3 :: D3 | e) Unit
 
 
 ## Module Graphics.D3.Scale
@@ -159,6 +171,8 @@ gulp           # compile the code
 ### Values
 
     max :: [Number] -> Number
+
+    maxBy :: forall d. (d -> Number) -> [d] -> Number
 
     min :: [Number] -> Number
 

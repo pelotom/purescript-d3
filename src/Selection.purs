@@ -16,6 +16,7 @@ module Graphics.D3.Selection
   , append
   , remove
   , attr
+  , attr'
   , style
   , text
   ) where
@@ -69,6 +70,11 @@ unsafeRemove = unsafeForeignProcedure ["selection", ""] "selection.remove();"
 unsafeAttr :: forall d v s. String -> (d -> v) -> s -> D3Eff s
 unsafeAttr = unsafeForeignFunction ["key", "val", "selection", ""] "selection.attr(key, val)"
 
+unsafeAttr' :: forall d v s. String -> (d -> Number -> v) -> s -> D3Eff s
+unsafeAttr' = unsafeForeignFunction
+  ["key", "val", "selection", ""]
+  "selection.attr(key, function (d, i) { return val(d)(i); })"
+
 unsafeStyle :: forall d v s. String -> (d -> v) -> s -> D3Eff s
 unsafeStyle = unsafeForeignFunction ["key", "val", "selection", ""] "selection.style(key, val)"
 
@@ -91,24 +97,28 @@ instance appendableEnter      :: Appendable Enter where
 -- Selection-y things that contain existing DOM elements
 class Existing s where
   attr :: forall d v. String -> (d -> v) -> s d -> D3Eff (s d)
+  attr' :: forall d v. String -> (d -> Number -> v) -> s d -> D3Eff (s d)
   style :: forall d v. String -> (d -> v) -> s d -> D3Eff (s d)
   text :: forall d. (d -> String) -> s d -> D3Eff (s d)
   remove :: forall d. s d -> D3Eff Unit
 
 instance existingSelection  :: Existing Selection where
   attr = unsafeAttr
+  attr' = unsafeAttr'
   style = unsafeStyle
   text = unsafeText
   remove = unsafeRemove
 
 instance existingUpdate     :: Existing Update where
   attr = unsafeAttr
+  attr' = unsafeAttr'
   style = unsafeStyle
   text = unsafeText
   remove = unsafeRemove
 
 instance existingTransition :: Existing Transition where
   attr = unsafeAttr
+  attr' = unsafeAttr'
   style = unsafeStyle
   text = unsafeText
   remove = unsafeRemove
