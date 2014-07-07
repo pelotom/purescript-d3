@@ -5,6 +5,8 @@ module Graphics.D3.Selection
   , Exit()
   , Transition()
   , Void()
+  , Existing
+  , Appendable
   , rootSelect
   , rootSelectAll
   , select
@@ -23,7 +25,10 @@ module Graphics.D3.Selection
 
 import Graphics.D3.Base
 import Control.Monad.Eff
+
 import Data.Foreign.EasyFFI
+
+ffi = unsafeForeignFunction
 
 -- The "selection-y" types, parameterized by the type of their bound data
 foreign import data Selection :: * -> *
@@ -38,48 +43,48 @@ type Exit d = Selection d
 data Void
 
 rootSelect :: String -> D3Eff (Selection Void)
-rootSelect = unsafeForeignFunction ["selector", ""] "d3.select(selector)"
+rootSelect = ffi ["selector", ""] "d3.select(selector)"
 
 rootSelectAll :: String -> D3Eff (Selection Void)
-rootSelectAll = unsafeForeignFunction ["selector", ""] "d3.selectAll(selector)"
+rootSelectAll = ffi ["selector", ""] "d3.selectAll(selector)"
 
 select :: forall d. String -> Selection d -> D3Eff (Selection d)
-select = unsafeForeignFunction ["selector", "selection", ""] "selection.select(selector)"
+select = ffi ["selector", "selection", ""] "selection.select(selector)"
 
 selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
-selectAll = unsafeForeignFunction ["selector", "selection", ""] "selection.selectAll(selector)"
+selectAll = ffi ["selector", "selection", ""] "selection.selectAll(selector)"
 
 bind :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (Update newData)
-bind = unsafeForeignFunction ["array", "selection", ""] "selection.data(array)"
+bind = ffi ["array", "selection", ""] "selection.data(array)"
 
 enter :: forall d. Update d -> D3Eff (Enter d)
-enter = unsafeForeignFunction ["update", ""] "update.enter()"
+enter = ffi ["update"] "update.enter"
 
 exit :: forall d. Update d -> D3Eff (Exit d)
-exit = unsafeForeignFunction ["update", ""] "update.exit()"
+exit = ffi ["update"] "update.exit"
 
 transition :: forall d. Selection d -> D3Eff (Transition d)
-transition = unsafeForeignFunction ["selection", ""] "selection.transition()"
+transition = ffi ["selection"] "selection.transition"
 
 unsafeAppend :: forall x y. String -> x -> D3Eff y
-unsafeAppend = unsafeForeignFunction ["tag", "selection", ""] "selection.append(tag)"
+unsafeAppend = ffi ["tag", "selection", ""] "selection.append(tag)"
 
 unsafeRemove :: forall s. s -> D3Eff Unit
-unsafeRemove = unsafeForeignProcedure ["selection", ""] "selection.remove();"
+unsafeRemove = ffi ["selection"] "selection.remove"
 
 unsafeAttr :: forall d v s. String -> (d -> v) -> s -> D3Eff s
-unsafeAttr = unsafeForeignFunction ["key", "val", "selection", ""] "selection.attr(key, val)"
+unsafeAttr = ffi ["key", "val", "selection", ""] "selection.attr(key, val)"
 
 unsafeAttr' :: forall d v s. String -> (d -> Number -> v) -> s -> D3Eff s
-unsafeAttr' = unsafeForeignFunction
+unsafeAttr' = ffi
   ["key", "val", "selection", ""]
   "selection.attr(key, function (d, i) { return val(d)(i); })"
 
 unsafeStyle :: forall d v s. String -> (d -> v) -> s -> D3Eff s
-unsafeStyle = unsafeForeignFunction ["key", "val", "selection", ""] "selection.style(key, val)"
+unsafeStyle = ffi ["key", "val", "selection", ""] "selection.style(key, val)"
 
 unsafeText :: forall d s. (d -> String) -> s -> D3Eff s
-unsafeText = unsafeForeignFunction ["text", "selection", ""] "selection.text(text)"
+unsafeText = ffi ["text", "selection", ""] "selection.text(text)"
 
 -- Selection-y things which can be appended to / inserted into
 class Appendable s where
