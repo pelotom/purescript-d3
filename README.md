@@ -97,18 +97,6 @@ gulp           # compile the code
     type D3Eff a = forall e. Eff (d3 :: D3 | e) a
 
 
-### Type Classes
-
-    class Primitive a where
-
-
-### Type Class Instances
-
-    instance primNumber :: Primitive Prim.Number
-
-    instance primString :: Primitive Prim.String
-
-
 ## Module Graphics.D3.Request
 
 ### Types
@@ -181,13 +169,15 @@ gulp           # compile the code
     class Appendable s where
       append :: forall d. String -> s d -> D3Eff (Selection d)
 
+    class AttrValue a where
+
     class Existing s where
-      attr :: forall d v. (Primitive v) => String -> v -> s d -> D3Eff (s d)
-      attr' :: forall d v. (Primitive v) => String -> (d -> v) -> s d -> D3Eff (s d)
-      attr'' :: forall d v. (Primitive v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
-      style :: forall d v. (Primitive v) => String -> v -> s d -> D3Eff (s d)
-      style' :: forall d v. (Primitive v) => String -> (d -> v) -> s d -> D3Eff (s d)
-      style'' :: forall d v. (Primitive v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+      attr :: forall d v. (AttrValue v) => String -> v -> s d -> D3Eff (s d)
+      attr' :: forall d v. (AttrValue v) => String -> (d -> v) -> s d -> D3Eff (s d)
+      attr'' :: forall d v. (AttrValue v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+      style :: forall d v. (AttrValue v) => String -> v -> s d -> D3Eff (s d)
+      style' :: forall d v. (AttrValue v) => String -> (d -> v) -> s d -> D3Eff (s d)
+      style'' :: forall d v. (AttrValue v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
       text :: forall d. String -> s d -> D3Eff (s d)
       text' :: forall d. (d -> String) -> s d -> D3Eff (s d)
       text'' :: forall d. (d -> Number -> String) -> s d -> D3Eff (s d)
@@ -201,6 +191,10 @@ gulp           # compile the code
     instance appendableSelection :: Appendable Selection
 
     instance appendableUpdate :: Appendable Update
+
+    instance attrValNumber :: AttrValue Prim.Number
+
+    instance attrValString :: AttrValue Prim.String
 
     instance existingSelection :: Existing Selection
 

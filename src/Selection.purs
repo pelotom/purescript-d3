@@ -5,6 +5,7 @@ module Graphics.D3.Selection
   , Exit()
   , Transition()
   , Void()
+  , AttrValue
   , Existing
   , Appendable
   , rootSelect
@@ -47,6 +48,12 @@ type Exit d = Selection d
 -- The (uninhabited) type of an unbound selection's data
 data Void
 
+-- The class of types which element attribute values can have (numbers and strings)
+class AttrValue a
+
+instance attrValNumber :: AttrValue Number
+instance attrValString :: AttrValue String
+
 rootSelect :: String -> D3Eff (Selection Void)
 rootSelect = ffi ["selector", ""] "d3.select(selector)"
 
@@ -77,24 +84,24 @@ unsafeAppend = ffi ["tag", "selection", ""] "selection.append(tag)"
 unsafeRemove :: forall s. s -> D3Eff Unit
 unsafeRemove = ffi ["selection"] "selection.remove"
 
-unsafeAttr :: forall d v s. (Primitive v) => String -> v -> s -> D3Eff s
+unsafeAttr :: forall d v s. (AttrValue v) => String -> v -> s -> D3Eff s
 unsafeAttr = ffi ["key", "val", "selection", ""] "selection.attr(key, val)"
 
-unsafeAttr' :: forall d v s. (Primitive v) => String -> (d -> v) -> s -> D3Eff s
+unsafeAttr' :: forall d v s. (AttrValue v) => String -> (d -> v) -> s -> D3Eff s
 unsafeAttr' = ffi ["key", "val", "selection", ""] "selection.attr(key, val)"
 
-unsafeAttr'' :: forall d v s. (Primitive v) => String -> (d -> Number -> v) -> s -> D3Eff s
+unsafeAttr'' :: forall d v s. (AttrValue v) => String -> (d -> Number -> v) -> s -> D3Eff s
 unsafeAttr'' = ffi
   ["key", "val", "selection", ""]
   "selection.attr(key, function (d, i) { return val(d)(i); })"
 
-unsafeStyle :: forall d v s. (Primitive v) => String -> v -> s -> D3Eff s
+unsafeStyle :: forall d v s. (AttrValue v) => String -> v -> s -> D3Eff s
 unsafeStyle = ffi ["key", "val", "selection", ""] "selection.style(key, val)"
 
-unsafeStyle' :: forall d v s. (Primitive v) => String -> (d -> v) -> s -> D3Eff s
+unsafeStyle' :: forall d v s. (AttrValue v) => String -> (d -> v) -> s -> D3Eff s
 unsafeStyle' = ffi ["key", "val", "selection", ""] "selection.style(key, val)"
 
-unsafeStyle'' :: forall d v s. (Primitive v) => String -> (d -> Number -> v) -> s -> D3Eff s
+unsafeStyle'' :: forall d v s. (AttrValue v) => String -> (d -> Number -> v) -> s -> D3Eff s
 unsafeStyle'' = ffi
   ["key", "val", "selection", ""]
   "selection.style(key, function (d, i) { return val(d)(i); })"
@@ -125,18 +132,18 @@ instance appendableEnter      :: Appendable Enter where
 
 -- Selection-y things that contain existing DOM elements
 class Existing s where
-  attr :: forall d v. (Primitive v) => String -> v -> s d -> D3Eff (s d)
-  attr' :: forall d v. (Primitive v) => String -> (d -> v) -> s d -> D3Eff (s d)
-  attr'' :: forall d v. (Primitive v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
-  style :: forall d v. (Primitive v) => String -> v -> s d -> D3Eff (s d)
-  style' :: forall d v. (Primitive v) => String -> (d -> v) -> s d -> D3Eff (s d)
-  style'' :: forall d v. (Primitive v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+  attr :: forall d v. (AttrValue v) => String -> v -> s d -> D3Eff (s d)
+  attr' :: forall d v. (AttrValue v) => String -> (d -> v) -> s d -> D3Eff (s d)
+  attr'' :: forall d v. (AttrValue v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+  style :: forall d v. (AttrValue v) => String -> v -> s d -> D3Eff (s d)
+  style' :: forall d v. (AttrValue v) => String -> (d -> v) -> s d -> D3Eff (s d)
+  style'' :: forall d v. (AttrValue v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
   text :: forall d. String -> s d -> D3Eff (s d)
   text' :: forall d. (d -> String) -> s d -> D3Eff (s d)
   text'' :: forall d. (d -> Number -> String) -> s d -> D3Eff (s d)
   remove :: forall d. s d -> D3Eff Unit
 
-instance existingSelection  :: Existing Selection where
+instance existingSelection :: Existing Selection where
   attr = unsafeAttr
   attr' = unsafeAttr'
   attr'' = unsafeAttr''
@@ -148,7 +155,7 @@ instance existingSelection  :: Existing Selection where
   text'' = unsafeText''
   remove = unsafeRemove
 
-instance existingUpdate     :: Existing Update where
+instance existingUpdate :: Existing Update where
   attr = unsafeAttr
   attr' = unsafeAttr'
   attr'' = unsafeAttr''
