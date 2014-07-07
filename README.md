@@ -232,5 +232,7 @@ gulp           # compile the code
 
     min :: [Number] -> Number
 
+    minBy :: forall d. (d -> Number) -> [d] -> Number
+
 
 

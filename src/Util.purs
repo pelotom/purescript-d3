@@ -1,5 +1,6 @@
 module Graphics.D3.Util
   ( min
+  , minBy
   , max
   , maxBy
   , (..)
