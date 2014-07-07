@@ -44,6 +44,8 @@ The PureScript D3 bindings statically enforce several properties of D3's selecti
 
 PureScript selections also carry information about the type of data bound to them (if any). Until data is bound to a selection it is only possible to set constant attributes on it; afterwards you can use well-typed functions of the data.
 
+You can find more examples [here](https://github.com/pelotom/purescript-d3-examples/tree/master/src).
+
 ### Development
 
 You will need the following pre-requisites installed:
@@ -62,6 +64,28 @@ gulp           # compile the code
 ```
 
 # Module Documentation
+
+## Module Graphics.D3.SVG.Axis
+
+### Types
+
+    data Axis :: *
+
+
+### Values
+
+    axis :: D3Eff Axis
+
+    orient :: String -> Axis -> D3Eff Axis
+
+    renderAxis :: forall s d. (Existing s) => Axis -> s d -> D3Eff (Selection d)
+
+    scale :: forall s. (Scale s) => s -> Axis -> D3Eff Axis
+
+    tickFormat :: String -> Axis -> D3Eff Axis
+
+    ticks :: Number -> Axis -> D3Eff Axis
+
 
 ## Module Graphics.D3.Base
 
@@ -90,6 +114,8 @@ gulp           # compile the code
 
     data LinearScale :: *
 
+    data OrdinalScale :: *
+
 
 ### Type Classes
 
@@ -100,16 +126,24 @@ gulp           # compile the code
 
     instance scaleLinear :: Scale LinearScale
 
+    instance scaleOrdinal :: Scale OrdinalScale
+
 
 ### Values
 
     domain :: forall s a. (Scale s) => [a] -> s -> D3Eff s
 
-    freeze :: forall s. (Scale s) => s -> D3Eff (Number -> Number)
+    freeze :: forall s a. (Scale s) => s -> D3Eff (a -> Number)
 
     linearScale :: D3Eff LinearScale
 
+    ordinalScale :: D3Eff OrdinalScale
+
     range :: forall s a. (Scale s) => [a] -> s -> D3Eff s
+
+    rangeBand :: OrdinalScale -> D3Eff Number
+
+    rangeRoundBands :: Number -> Number -> Number -> Number -> OrdinalScale -> D3Eff OrdinalScale
 
 
 ## Module Graphics.D3.Selection
@@ -130,6 +164,16 @@ gulp           # compile the code
 
 
 ### Type Classes
+
+    class Appendable s where
+      append :: forall d. String -> s d -> D3Eff (Selection d)
+
+    class Existing s where
+      attr :: forall d v. String -> (d -> v) -> s d -> D3Eff (s d)
+      attr' :: forall d v. String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+      style :: forall d v. String -> (d -> v) -> s d -> D3Eff (s d)
+      text :: forall d. (d -> String) -> s d -> D3Eff (s d)
+      remove :: forall d. s d -> D3Eff Unit
 
 
 ### Type Class Instances

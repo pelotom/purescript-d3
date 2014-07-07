@@ -44,6 +44,8 @@ The PureScript D3 bindings statically enforce several properties of D3's selecti
 
 PureScript selections also carry information about the type of data bound to them (if any). Until data is bound to a selection it is only possible to set constant attributes on it; afterwards you can use well-typed functions of the data.
 
+You can find more examples [here](https://github.com/pelotom/purescript-d3-examples/tree/master/src).
+
 ### Development
 
 You will need the following pre-requisites installed:
