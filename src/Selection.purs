@@ -27,6 +27,12 @@ module Graphics.D3.Selection
   , text
   , text'
   , text''
+  , delay
+  , delay'
+  , delay''
+  , duration
+  , duration'
+  , duration''
   ) where
 
 import Graphics.D3.Base
@@ -116,6 +122,29 @@ unsafeText'' :: forall d s. (d -> Number -> String) -> s -> D3Eff s
 unsafeText'' = ffi
   ["text", "selection", ""] 
   "selection.text(function (d, i) { return text(d)(i); })"
+
+-- Transition-only stuff
+delay :: forall d. Number -> Transition d -> D3Eff (Transition d)
+delay = ffi ["delay", "transition", ""] "transition.delay(delay)"
+
+delay' :: forall d. (d -> Number) -> Transition d -> D3Eff (Transition d)
+delay' = ffi ["delay", "transition", ""] "transition.delay(delay)"
+
+delay'' :: forall d. (d -> Number -> Number) -> Transition d -> D3Eff (Transition d)
+delay'' = ffi
+  ["delay", "transition", ""]
+  "transition.delay(function (d, i) { return delay(d)(i); })"
+
+duration :: forall d. Number -> Transition d -> D3Eff (Transition d)
+duration = ffi ["duration", "transition", ""] "transition.duration(duration)"
+
+duration' :: forall d. (d -> Number) -> Transition d -> D3Eff (Transition d)
+duration' = ffi ["duration", "transition", ""] "transition.duration(duration)"
+
+duration'' :: forall d. (d -> Number -> Number) -> Transition d -> D3Eff (Transition d)
+duration'' = ffi
+  ["duration", "transition", ""]
+  "transition.duration(function (d, i) { return duration(d)(i); })"
 
 -- Selection-y things which can be appended to / inserted into
 class Appendable s where
