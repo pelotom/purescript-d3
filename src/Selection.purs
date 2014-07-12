@@ -81,7 +81,7 @@ enter = ffi ["update", ""] "update.enter()"
 exit :: forall d. Update d -> D3Eff (Exit d)
 exit = ffi ["update", ""] "update.exit()"
 
-transition :: forall d. Selection d -> D3Eff (Transition d)
+transition :: forall s d. (Existing s) => s d -> D3Eff (Transition d)
 transition = ffi ["selection", ""] "selection.transition()"
 
 unsafeAppend :: forall x y. String -> x -> D3Eff y
