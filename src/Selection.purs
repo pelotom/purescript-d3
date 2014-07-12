@@ -70,19 +70,19 @@ bind :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (Update 
 bind = ffi ["array", "selection", ""] "selection.data(array)"
 
 enter :: forall d. Update d -> D3Eff (Enter d)
-enter = ffi ["update"] "update.enter"
+enter = ffi ["update", ""] "update.enter()"
 
 exit :: forall d. Update d -> D3Eff (Exit d)
-exit = ffi ["update"] "update.exit"
+exit = ffi ["update", ""] "update.exit()"
 
 transition :: forall d. Selection d -> D3Eff (Transition d)
-transition = ffi ["selection"] "selection.transition"
+transition = ffi ["selection", ""] "selection.transition()"
 
 unsafeAppend :: forall x y. String -> x -> D3Eff y
 unsafeAppend = ffi ["tag", "selection", ""] "selection.append(tag)"
 
 unsafeRemove :: forall s. s -> D3Eff Unit
-unsafeRemove = ffi ["selection"] "selection.remove"
+unsafeRemove = ffi ["selection", ""] "selection.remove()"
 
 unsafeAttr :: forall d v s. (AttrValue v) => String -> v -> s -> D3Eff s
 unsafeAttr = ffi ["key", "val", "selection", ""] "selection.attr(key, val)"
