@@ -6,57 +6,84 @@ module Graphics.D3.Scale
   , ordinalScale
   , domain
   , range
+  , copy
   , toFunction
+  , rangePoints
+  , rangeBands
   , rangeRoundBands
   , rangeBand
+  , rangeExtent
   ) where
 
 import Graphics.D3.Base
+
+import Data.Tuple
 
 import Data.Foreign.EasyFFI
 
 ffi = unsafeForeignFunction
 
 -- A base class for all scale types
-class Scale s
+class Scale s where
+  domain :: forall d r. [d] -> s d r -> D3Eff (s d r)
+  range :: forall d r. [r] -> s d r -> D3Eff (s d r)
+  copy :: forall d r. s d r -> D3Eff (s d r)
+  toFunction :: forall d r. s d r -> D3Eff (d -> r)
 
--- Methods common to all scales
-
-domain :: forall s a. (Scale s) => [a] -> s -> D3Eff s
-domain = ffi ["domain", "scale", ""] "scale.domain(domain)"
-
-range :: forall s a. (Scale s) => [a] -> s -> D3Eff s
-range = ffi ["range", "scale", ""] "scale.range(range)"
-
-toFunction :: forall s a. (Scale s) => s -> D3Eff (a -> Number)
-toFunction = ffi ["scale"] "scale.copy"
+unsafeDomain = ffi ["domain", "scale", ""] "scale.domain(domain)"
+unsafeRange = ffi ["range", "scale", ""] "scale.range(range)"
+unsafeCopy = ffi ["scale", ""] "scale.copy()"
+unsafeToFunction = ffi ["scale", ""] "scale.copy()"
 
 -- Specific scale types
 
 -- Linear scale
-foreign import data LinearScale :: *
+foreign import data LinearScale :: * -> * -> *
 
-instance scaleLinear :: Scale LinearScale
+instance scaleLinear :: Scale LinearScale where
+  domain = unsafeDomain
+  range = unsafeRange
+  copy = unsafeCopy
+  toFunction = unsafeToFunction
 
 -- Linear scale constructor
 foreign import linearScale
   "var linearScale = d3.scale.linear"
-  :: D3Eff LinearScale
+  :: forall r. D3Eff (LinearScale Number r)
 
 -- Ordinal scale
-foreign import data OrdinalScale :: *
+foreign import data OrdinalScale :: * -> * -> *
 
-instance scaleOrdinal :: Scale OrdinalScale
+instance scaleOrdinal :: Scale OrdinalScale where
+  domain = unsafeDomain
+  range = unsafeRange
+  copy = unsafeCopy
+  toFunction = unsafeToFunction
 
 -- Ordinal scale constructor
 foreign import ordinalScale
   "var ordinalScale = d3.scale.ordinal"
-  :: D3Eff OrdinalScale
+  :: forall d r. D3Eff (OrdinalScale d r)
 
-rangeRoundBands :: Number -> Number -> Number -> Number -> OrdinalScale -> D3Eff OrdinalScale
+rangePoints :: forall d. Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
+rangePoints = ffi
+  ["min", "max", "padding", "scale", ""]
+  "scale.rangePoints([min, max], padding)"
+
+rangeBands :: forall d. Number -> Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
+rangeBands = ffi
+  ["min", "max", "padding", "outerPadding", "scale", ""]
+  "scale.rangeBands([min, max], padding, outerPadding)"
+
+rangeRoundBands :: forall d. Number -> Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
 rangeRoundBands = ffi
   ["min", "max", "padding", "outerPadding", "scale", ""]
   "scale.rangeRoundBands([min, max], padding, outerPadding)"
 
-rangeBand :: OrdinalScale -> D3Eff Number
+rangeBand :: forall d r. OrdinalScale d Number -> D3Eff Number
 rangeBand = ffi ["scale"] "scale.rangeBand"
+
+rangeExtent :: forall d r. OrdinalScale d Number -> D3Eff (Tuple Number Number)
+rangeExtent scale = do
+  [min, max] <- ffi ["scale"] "scale.rangeExtent" scale
+  return $ Tuple min max

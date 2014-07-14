@@ -22,7 +22,7 @@ foreign import axis
   "var axis = d3.svg.axis"
   :: D3Eff Axis
 
-scale :: forall s. (Scale s) => s -> Axis -> D3Eff Axis
+scale :: forall s d. (Scale s) => s d Number -> Axis -> D3Eff Axis
 scale = ffi ["scale", "axis", ""] "axis.scale(scale)"
 
 orient :: String -> Axis -> D3Eff Axis
