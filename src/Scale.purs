@@ -1,5 +1,6 @@
 module Graphics.D3.Scale
   ( Scale
+  , Quantitative
   , LinearScale()
   , OrdinalScale()
   , linearScale
@@ -8,6 +9,11 @@ module Graphics.D3.Scale
   , range
   , copy
   , toFunction
+  , invert
+  , rangeRound
+  , interpolate
+  , clamp
+  , nice
   , rangePoints
   , rangeBands
   , rangeRoundBands
@@ -16,6 +22,7 @@ module Graphics.D3.Scale
   ) where
 
 import Graphics.D3.Base
+import Graphics.D3.Interpolate
 
 import Data.Tuple
 
@@ -30,10 +37,22 @@ class Scale s where
   copy :: forall d r. s d r -> D3Eff (s d r)
   toFunction :: forall d r. s d r -> D3Eff (d -> r)
 
+class Quantitative s where
+  invert :: s Number Number -> D3Eff (Number -> Number)
+  rangeRound :: [Number] -> s Number Number -> D3Eff (s Number Number)
+  interpolate :: forall r. Interpolator r -> s Number r -> D3Eff (s Number r)
+  clamp :: forall r. Boolean -> s Number r -> D3Eff (s Number r)
+  nice :: forall r. s Number Number -> D3Eff (s Number Number)
+
 unsafeDomain = ffi ["domain", "scale", ""] "scale.domain(domain)"
-unsafeRange = ffi ["range", "scale", ""] "scale.range(range)"
+unsafeRange = ffi ["values", "scale", ""] "scale.range(values)"
 unsafeCopy = ffi ["scale", ""] "scale.copy()"
 unsafeToFunction = ffi ["scale", ""] "scale.copy()"
+unsafeInvert = ffi ["scale", ""] "scale.copy().invert"
+unsafeRangeRound = ffi ["values", "scale", ""] "scale.rangeRound(values)"
+unsafeInterpolate = ffi ["factory", "scale", ""] "scale.interpolate(factory)"
+unsafeClamp = ffi ["bool", "scale", ""] "scale.clamp(bool)"
+unsafeNice = ffi ["scale", ""] "scale.nice()"
 
 -- Specific scale types
 
@@ -45,6 +64,13 @@ instance scaleLinear :: Scale LinearScale where
   range = unsafeRange
   copy = unsafeCopy
   toFunction = unsafeToFunction
+
+instance quantitativeLinear :: Quantitative LinearScale where
+  invert = unsafeInvert
+  rangeRound = unsafeRangeRound
+  interpolate = unsafeInterpolate
+  clamp = unsafeClamp
+  nice = unsafeNice
 
 -- Linear scale constructor
 foreign import linearScale
