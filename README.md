@@ -81,7 +81,7 @@ gulp           # compile the code
 
     renderAxis :: forall s d. (Existing s) => Axis -> s d -> D3Eff (Selection d)
 
-    scale :: forall s. (Scale s) => s -> Axis -> D3Eff Axis
+    scale :: forall s d. (Scale s) => s d Number -> Axis -> D3Eff Axis
 
     tickFormat :: String -> Axis -> D3Eff Axis
 
@@ -95,6 +95,18 @@ gulp           # compile the code
     data D3 :: !
 
     type D3Eff a = forall e. Eff (d3 :: D3 | e) a
+
+
+## Module Graphics.D3.Interpolate
+
+### Types
+
+    data Interpolator :: * -> *
+
+
+### Values
+
+    makeInterpolator :: forall a. (a -> a -> Number -> a) -> Interpolator a
 
 
 ## Module Graphics.D3.Request
@@ -113,38 +125,75 @@ gulp           # compile the code
 
 ### Types
 
-    data LinearScale :: *
+    data LinearScale :: * -> * -> *
 
-    data OrdinalScale :: *
+    data LogScale :: * -> * -> *
+
+    data OrdinalScale :: * -> * -> *
+
+    data PowerScale :: * -> * -> *
 
 
 ### Type Classes
 
+    class Quantitative s where
+      invert :: s Number Number -> D3Eff (Number -> Number)
+      rangeRound :: [Number] -> s Number Number -> D3Eff (s Number Number)
+      interpolate :: forall r. Interpolator r -> s Number r -> D3Eff (s Number r)
+      clamp :: forall r. Boolean -> s Number r -> D3Eff (s Number r)
+      nice :: forall r. Maybe Number -> s Number r -> D3Eff (s Number r)
+      getTicks :: forall r. Maybe Number -> s Number r -> D3Eff [Number]
+      getTickFormat :: forall r. Number -> Maybe String -> s Number r -> D3Eff (Number -> String)
+
     class Scale s where
+      domain :: forall d r. [d] -> s d r -> D3Eff (s d r)
+      range :: forall d r. [r] -> s d r -> D3Eff (s d r)
+      copy :: forall d r. s d r -> D3Eff (s d r)
+      toFunction :: forall d r. s d r -> D3Eff (d -> r)
 
 
 ### Type Class Instances
 
+    instance quantitativeLinear :: Quantitative LinearScale
+
+    instance quantitativeLog :: Quantitative LogScale
+
+    instance quantitativePower :: Quantitative PowerScale
+
     instance scaleLinear :: Scale LinearScale
 
+    instance scaleLog :: Scale LogScale
+
     instance scaleOrdinal :: Scale OrdinalScale
+
+    instance scalePower :: Scale PowerScale
 
 
 ### Values
 
-    domain :: forall s a. (Scale s) => [a] -> s -> D3Eff s
+    base :: forall r. Number -> LogScale Number r -> D3Eff (LogScale Number r)
 
-    linearScale :: D3Eff LinearScale
+    exponent :: forall r. Number -> PowerScale Number r -> D3Eff (PowerScale Number r)
 
-    ordinalScale :: D3Eff OrdinalScale
+    linearScale :: forall r. D3Eff (LinearScale Number r)
 
-    range :: forall s a. (Scale s) => [a] -> s -> D3Eff s
+    logScale :: forall r. D3Eff (LogScale Number r)
 
-    rangeBand :: OrdinalScale -> D3Eff Number
+    ordinalScale :: forall d r. D3Eff (OrdinalScale d r)
 
-    rangeRoundBands :: Number -> Number -> Number -> Number -> OrdinalScale -> D3Eff OrdinalScale
+    powerScale :: forall r. D3Eff (PowerScale Number r)
 
-    toFunction :: forall s a. (Scale s) => s -> D3Eff (a -> Number)
+    rangeBand :: forall d r. OrdinalScale d Number -> D3Eff Number
+
+    rangeBands :: forall d. Number -> Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
+
+    rangeExtent :: forall d r. OrdinalScale d Number -> D3Eff (Tuple Number Number)
+
+    rangePoints :: forall d. Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
+
+    rangeRoundBands :: forall d. Number -> Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
+
+    sqrtScale :: forall r. D3Eff (PowerScale Number r)
 
 
 ## Module Graphics.D3.Selection
@@ -207,6 +256,18 @@ gulp           # compile the code
 
     bind :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (Update newData)
 
+    delay :: forall d. Number -> Transition d -> D3Eff (Transition d)
+
+    delay' :: forall d. (d -> Number) -> Transition d -> D3Eff (Transition d)
+
+    delay'' :: forall d. (d -> Number -> Number) -> Transition d -> D3Eff (Transition d)
+
+    duration :: forall d. Number -> Transition d -> D3Eff (Transition d)
+
+    duration' :: forall d. (d -> Number) -> Transition d -> D3Eff (Transition d)
+
+    duration'' :: forall d. (d -> Number -> Number) -> Transition d -> D3Eff (Transition d)
+
     enter :: forall d. Update d -> D3Eff (Enter d)
 
     exit :: forall d. Update d -> D3Eff (Exit d)
@@ -219,7 +280,7 @@ gulp           # compile the code
 
     selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
 
-    transition :: forall d. Selection d -> D3Eff (Transition d)
+    transition :: forall s d. (Existing s) => s d -> D3Eff (Transition d)
 
 
 ## Module Graphics.D3.Util
