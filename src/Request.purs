@@ -12,7 +12,7 @@ import Graphics.D3.Base
 
 type RequestError = { status :: Number, statusText :: String }
 
-tsv :: forall e a. String -> (Either RequestError [Foreign] -> Eff e a) -> Eff (d3 :: D3 | e) Unit
+tsv :: forall e a. String -> (Either RequestError [Foreign] -> Eff (d3 :: D3 | e) a) -> Eff (d3 :: D3 | e) Unit
 tsv = ff (\d -> d) Left Right
   where
   ff = unsafeForeignFunction
