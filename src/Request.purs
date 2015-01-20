@@ -1,6 +1,7 @@
 module Graphics.D3.Request
   ( RequestError ()
   , tsv
+  , json
   ) where
 
 import Data.Either
@@ -19,3 +20,9 @@ tsv = ff (\d -> d) Left Right
     ["acc", "Left", "Right", "url", "handle", ""]
     "d3.tsv(url, acc, function(error, data) { if (error) handle(Left(error))(); else handle(Right(data))(); })"
 
+json :: forall e a. String -> (Either RequestError Foreign -> Eff (d3 :: D3 | e) a) -> Eff (d3 :: D3 | e) Unit
+json = ff Left Right
+  where
+  ff = unsafeForeignFunction
+    ["Left", "Right", "url", "handle", ""]
+    "d3.json(url, function (error, data) { if (error) handle(Left(error))(); else handle(Right(data))(); })"
