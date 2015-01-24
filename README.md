@@ -118,9 +118,9 @@ gulp           # compile the code
 
 ### Values
 
-    tsv :: forall e a. String -> (Either RequestError [Foreign] -> Eff (d3 :: D3 | e) a) -> Eff (d3 :: D3 | e) Unit
-
     json :: forall e a. String -> (Either RequestError Foreign -> Eff (d3 :: D3 | e) a) -> Eff (d3 :: D3 | e) Unit
+
+    tsv :: forall e a. String -> (Either RequestError [Foreign] -> Eff (d3 :: D3 | e) a) -> Eff (d3 :: D3 | e) Unit
 
 
 ## Module Graphics.D3.Scale
