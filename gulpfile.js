@@ -36,7 +36,7 @@ gulp.task('compile', ['clean'], function() {
 
 gulp.task('generateDocs', ['compile'], function() {
 	return gulp.src(paths.src)
-	  .pipe(purescript.docgen())
+	  .pipe(purescript.pscDocs())
 	  .pipe(gulp.dest(paths.apiDest))
 	  ;
 });

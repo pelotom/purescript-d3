@@ -5,7 +5,7 @@
   "license": "MIT",
   "devDependencies": {
     "gulp": "^3.8.1",
-    "gulp-purescript": "0.0.9",
+    "gulp-purescript": "~0.1.2",
     "gulp-concat": "^2.2.0",
     "rimraf": "^2.2.8"
   }
