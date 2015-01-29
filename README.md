@@ -113,14 +113,14 @@ gulp           # compile the code
 
 ### Types
 
-    type RequestError  = { statusText :: String, status :: Number }
+    type RequestError = { statusText :: String, status :: Number }
 
 
 ### Values
 
-    json :: forall a. String -> (Either RequestError Foreign -> D3Eff a) -> D3Eff Unit
+    json :: forall e a. String -> (Either RequestError Foreign -> Eff (d3 :: D3 | e) a) -> D3Eff Unit
 
-    tsv :: forall a. String -> (Either RequestError [Foreign] -> D3Eff a) -> D3Eff Unit
+    tsv :: forall e a. String -> (Either RequestError [Foreign] -> Eff (d3 :: D3 | e) a) -> D3Eff Unit
 
 
 ## Module Graphics.D3.Scale
