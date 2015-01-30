@@ -8,6 +8,7 @@ module Graphics.D3.Selection
   , AttrValue
   , Existing
   , Appendable
+  , Clickable
   , rootSelect
   , rootSelectAll
   , select
@@ -33,11 +34,14 @@ module Graphics.D3.Selection
   , duration
   , duration'
   , duration''
+  , onClick
+  , onDoubleClick
   ) where
 
 import Graphics.D3.Base
 import Control.Monad.Eff
 
+import Data.Foreign
 import Data.Foreign.EasyFFI
 
 ffi = unsafeForeignFunction
@@ -120,8 +124,14 @@ unsafeText' = ffi ["text", "selection", ""] "selection.text(text)"
 
 unsafeText'' :: forall d s. (d -> Number -> String) -> s -> D3Eff s
 unsafeText'' = ffi
-  ["text", "selection", ""] 
+  ["text", "selection", ""]
   "selection.text(function (d, i) { return text(d)(i); })"
+
+unsafeOnClick :: forall eff c i r. (Clickable c) => (i -> Eff eff r) -> c -> D3Eff c
+unsafeOnClick = ffi ["callback", "clickable", ""] "clickable.on(\"click\", callback)"
+
+unsafeOnDoubleClick :: forall eff c i r. (Clickable c) => (i -> Eff eff r) -> c -> D3Eff c
+unsafeOnDoubleClick = ffi ["callback", "clickable", ""] "clickable.on(\"dblclick\", callback)"
 
 -- Transition-only stuff
 delay :: forall d. Number -> Transition d -> D3Eff (Transition d)
@@ -207,3 +217,11 @@ instance existingTransition :: Existing Transition where
   text' = unsafeText'
   text'' = unsafeText''
   remove = unsafeRemove
+
+class Clickable c where
+  onClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
+  onDoubleClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
+
+instance clickableSelection :: Clickable (Selection a) where
+  onClick = unsafeOnClick
+  onDoubleClick = unsafeOnDoubleClick
