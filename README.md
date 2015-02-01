@@ -261,6 +261,10 @@ gulp           # compile the code
 
     class AttrValue a where
 
+    class Clickable c where
+      onClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
+      onDoubleClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
+
     class Existing s where
       attr :: forall d v. (AttrValue v) => String -> v -> s d -> D3Eff (s d)
       attr' :: forall d v. (AttrValue v) => String -> (d -> v) -> s d -> D3Eff (s d)
@@ -285,6 +289,8 @@ gulp           # compile the code
     instance attrValNumber :: AttrValue Number
 
     instance attrValString :: AttrValue String
+
+    instance clickableSelection :: Clickable (Selection a)
 
     instance existingSelection :: Existing Selection
 
