@@ -2,13 +2,22 @@ module Graphics.D3.Layout.Force
   ( ForceLayout(..)
   , forceLayout
   , size
-  , charge
   , linkDistance
+  , linkStrength
+  , friction
+  , charge
+  , chargeDistance
+  , theta
+  , gravity
   , nodes
   , links
+  , start
+  , alpha
+  , resume
+  , stop
+  , tick
   , drag
   , onDragStart
-  , start
   , onTick
   , createDrag
   ) where
@@ -29,33 +38,60 @@ foreign import forceLayout "var forceLayout = d3.layout.force" :: D3Eff ForceLay
 
 size :: forall d. { width :: Number, height :: Number | d } -> ForceLayout -> D3Eff ForceLayout
 size dimensions = f dimensions.width dimensions.height
-  where f = ffi ["width", "height", "layout", ""] "layout.size([width, height])"
-
-nodes :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
-nodes = ffi ["nodes", "graph", ""] "graph.nodes(nodes)"
-
-links :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
-links = ffi ["links", "graph", ""] "graph.links(links)"
-
-charge :: Number -> ForceLayout -> D3Eff ForceLayout
-charge = ffi ["charge", "forced", ""] "forced.charge(charge)"
+  where f = ffi ["width", "height", "force", ""] "force.size([width, height])"
 
 linkDistance :: Number -> ForceLayout -> D3Eff ForceLayout
-linkDistance = ffi ["distance", "forced", ""] "forced.linkDistance(distance)"
+linkDistance = ffi ["distance", "force", ""] "force.linkDistance(distance)"
 
-onTick :: forall eff r. (Foreign -> Eff eff r) -> ForceLayout -> D3Eff ForceLayout
-onTick = ffi
-  ["callback", "ticking", ""]
-  "ticking.on('tick', function (d) { return callback(d)(); })"
+linkStrength :: Number -> ForceLayout -> D3Eff ForceLayout
+linkStrength = ffi ["strength", "force", ""] "force.linkStrength(strength)"
 
-drag :: ForceLayout -> D3Eff ForceLayout
-drag = ffi ["draggable", ""] "draggable.drag()"
+friction :: Number -> ForceLayout -> D3Eff ForceLayout
+friction = ffi ["friction", "force", ""] "force.friction(friction)" 
 
-onDragStart :: forall eff r. (Foreign -> Eff eff r) -> ForceLayout -> D3Eff ForceLayout
-onDragStart = ffi ["callback", "draggable", ""] "draggable.on(\"dragstart\", callback)"
+charge :: Number -> ForceLayout -> D3Eff ForceLayout
+charge = ffi ["charge", "force", ""] "force.charge(charge)"
+
+chargeDistance :: Number -> ForceLayout -> D3Eff ForceLayout
+chargeDistance = ffi ["distance", "force", ""] "force.chargeDistance(distance)"
+
+theta :: Number -> ForceLayout -> D3Eff ForceLayout
+theta = ffi ["theta", "force", ""] "force.theta(theta)"
+
+gravity :: Number -> ForceLayout -> D3Eff ForceLayout
+gravity = ffi ["gravity", "force", ""] "force.gravity(gravity)"
+
+nodes :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
+nodes = ffi ["nodes", "force", ""] "force.nodes(nodes)"
+
+links :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
+links = ffi ["links", "force", ""] "force.links(links)"
 
 start :: ForceLayout -> D3Eff ForceLayout
-start = ffi ["draggable", ""] "draggable.start()"
+start = ffi ["force", ""] "force.start()"
+
+alpha :: Number -> ForceLayout -> D3Eff ForceLayout
+alpha = ffi ["alpha", "force", ""] "force.alpha(alpha)"
+
+resume :: ForceLayout -> D3Eff ForceLayout
+resume = ffi ["force", ""] "force.resume()"
+
+stop :: ForceLayout -> D3Eff ForceLayout
+stop = ffi ["force", ""] "force.stop()"
+
+tick :: ForceLayout -> D3Eff ForceLayout
+tick = ffi ["force", ""] "force.tick()"
+
+onTick :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
+onTick = ffi
+  ["callback", "force", ""]
+  "force.on('tick', function (d) { return callback(d)(); })"
+
+onDragStart :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
+onDragStart = ffi ["callback", "force", ""] "force.on('dragstart', callback)"
+
+drag :: ForceLayout -> D3Eff ForceLayout
+drag = ffi ["force", ""] "force.drag()"
 
 createDrag :: forall s. ForceLayout -> Selection s -> D3Eff (Selection s)
 createDrag = ffi ["obj", "callable", ""] "callable.call(obj);"
