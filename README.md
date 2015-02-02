@@ -109,45 +109,6 @@ gulp           # compile the code
     makeInterpolator :: forall a. (a -> a -> Number -> a) -> Interpolator a
 
 
-## Module Graphics.D3.Layout
-
-### Types
-
-    data ForceLayout :: *
-
-
-### Type Classes
-
-    class Layout l where
-      size :: forall d. { height :: Number, width :: Number | d } -> l -> D3Eff l
-      nodes :: forall a. [a] -> l -> D3Eff l
-      links :: forall a. [a] -> l -> D3Eff l
-
-
-### Type Class Instances
-
-    instance layoutForceLayout :: Layout ForceLayout
-
-
-### Values
-
-    charge :: Number -> ForceLayout -> D3Eff ForceLayout
-
-    createDrag :: forall s. ForceLayout -> Selection s -> D3Eff (Selection s)
-
-    drag :: ForceLayout -> D3Eff ForceLayout
-
-    forceLayout :: D3Eff ForceLayout
-
-    linkDistance :: Number -> ForceLayout -> D3Eff ForceLayout
-
-    onDragStart :: forall eff r. (Foreign -> Eff eff r) -> ForceLayout -> D3Eff ForceLayout
-
-    onTick :: forall eff r. (Foreign -> Eff eff r) -> ForceLayout -> D3Eff ForceLayout
-
-    start :: ForceLayout -> D3Eff ForceLayout
-
-
 ## Module Graphics.D3.Request
 
 ### Types
@@ -337,6 +298,38 @@ gulp           # compile the code
     max :: forall d. (d -> Number) -> [d] -> Number
 
     min :: forall d. (d -> Number) -> [d] -> Number
+
+
+## Module Graphics.D3.Layout.Force
+
+### Types
+
+    data ForceLayout :: *
+
+
+### Values
+
+    charge :: Number -> ForceLayout -> D3Eff ForceLayout
+
+    createDrag :: forall s. ForceLayout -> Selection s -> D3Eff (Selection s)
+
+    drag :: ForceLayout -> D3Eff ForceLayout
+
+    forceLayout :: D3Eff ForceLayout
+
+    linkDistance :: Number -> ForceLayout -> D3Eff ForceLayout
+
+    links :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
+
+    nodes :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
+
+    onDragStart :: forall eff r. (Foreign -> Eff eff r) -> ForceLayout -> D3Eff ForceLayout
+
+    onTick :: forall eff r. (Foreign -> Eff eff r) -> ForceLayout -> D3Eff ForceLayout
+
+    size :: forall d. { height :: Number, width :: Number | d } -> ForceLayout -> D3Eff ForceLayout
+
+    start :: ForceLayout -> D3Eff ForceLayout
 
 
 

@@ -1,6 +1,5 @@
-module Graphics.D3.Layout
+module Graphics.D3.Layout.Force
   ( ForceLayout(..)
-  , Layout
   , forceLayout
   , size
   , charge
@@ -28,25 +27,15 @@ foreign import data ForceLayout :: *
 
 foreign import forceLayout "var forceLayout = d3.layout.force" :: D3Eff ForceLayout
 
-class Layout l where
-  size :: forall d. { width :: Number, height :: Number | d } -> l -> D3Eff l
-  nodes :: forall a. [a] -> l -> D3Eff l
-  links :: forall a. [a] -> l -> D3Eff l
-
-instance layoutForceLayout :: Layout ForceLayout where
-  size = unsafeSize
-  nodes = unsafeNodes
-  links = unsafeLinks
-
-unsafeSize :: forall d l. (Layout l) => { width :: Number, height :: Number | d } -> l -> D3Eff l
-unsafeSize dimensions = f dimensions.width dimensions.height
+size :: forall d. { width :: Number, height :: Number | d } -> ForceLayout -> D3Eff ForceLayout
+size dimensions = f dimensions.width dimensions.height
   where f = ffi ["width", "height", "layout", ""] "layout.size([width, height])"
 
-unsafeNodes :: forall a l. (Layout l) => [a] -> l -> D3Eff l
-unsafeNodes = ffi ["nodes", "graph", ""] "graph.nodes(nodes)"
+nodes :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
+nodes = ffi ["nodes", "graph", ""] "graph.nodes(nodes)"
 
-unsafeLinks :: forall a l. (Layout l) => [a] -> l -> D3Eff l
-unsafeLinks = ffi ["links", "graph", ""] "graph.links(links)"
+links :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
+links = ffi ["links", "graph", ""] "graph.links(links)"
 
 charge :: Number -> ForceLayout -> D3Eff ForceLayout
 charge = ffi ["charge", "forced", ""] "forced.charge(charge)"
@@ -57,7 +46,7 @@ linkDistance = ffi ["distance", "forced", ""] "forced.linkDistance(distance)"
 onTick :: forall eff r. (Foreign -> Eff eff r) -> ForceLayout -> D3Eff ForceLayout
 onTick = ffi
   ["callback", "ticking", ""]
-  "ticking.on(\"tick\", function (d) { return callback(d)(); })"
+  "ticking.on('tick', function (d) { return callback(d)(); })"
 
 drag :: ForceLayout -> D3Eff ForceLayout
 drag = ffi ["draggable", ""] "draggable.drag()"
