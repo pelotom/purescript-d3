@@ -128,10 +128,10 @@ unsafeText'' = ffi
   "selection.text(function (d, i) { return text(d)(i); })"
 
 unsafeOnClick :: forall eff c i r. (Clickable c) => (i -> Eff eff r) -> c -> D3Eff c
-unsafeOnClick = ffi ["callback", "clickable", ""] "clickable.on(\"click\", callback)"
+unsafeOnClick = ffi ["callback", "clickable", ""] "clickable.on('click', callback)"
 
 unsafeOnDoubleClick :: forall eff c i r. (Clickable c) => (i -> Eff eff r) -> c -> D3Eff c
-unsafeOnDoubleClick = ffi ["callback", "clickable", ""] "clickable.on(\"dblclick\", callback)"
+unsafeOnDoubleClick = ffi ["callback", "clickable", ""] "clickable.on('dblclick', callback)"
 
 -- Transition-only stuff
 delay :: forall d. Number -> Transition d -> D3Eff (Transition d)
