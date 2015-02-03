@@ -309,7 +309,11 @@ gulp           # compile the code
 
 ### Values
 
+    alpha :: Number -> ForceLayout -> D3Eff ForceLayout
+
     charge :: Number -> ForceLayout -> D3Eff ForceLayout
+
+    chargeDistance :: Number -> ForceLayout -> D3Eff ForceLayout
 
     createDrag :: forall s. ForceLayout -> Selection s -> D3Eff (Selection s)
 
@@ -317,19 +321,33 @@ gulp           # compile the code
 
     forceLayout :: D3Eff ForceLayout
 
+    friction :: Number -> ForceLayout -> D3Eff ForceLayout
+
+    gravity :: Number -> ForceLayout -> D3Eff ForceLayout
+
     linkDistance :: Number -> ForceLayout -> D3Eff ForceLayout
+
+    linkStrength :: Number -> ForceLayout -> D3Eff ForceLayout
 
     links :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
 
     nodes :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
 
-    onDragStart :: forall eff r. (Foreign -> Eff eff r) -> ForceLayout -> D3Eff ForceLayout
+    onDragStart :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
 
-    onTick :: forall eff r. (Foreign -> Eff eff r) -> ForceLayout -> D3Eff ForceLayout
+    onTick :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
+
+    resume :: ForceLayout -> D3Eff ForceLayout
 
     size :: forall d. { height :: Number, width :: Number | d } -> ForceLayout -> D3Eff ForceLayout
 
     start :: ForceLayout -> D3Eff ForceLayout
+
+    stop :: ForceLayout -> D3Eff ForceLayout
+
+    theta :: Number -> ForceLayout -> D3Eff ForceLayout
+
+    tick :: ForceLayout -> D3Eff ForceLayout
 
 
 
