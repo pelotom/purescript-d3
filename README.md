@@ -300,11 +300,26 @@ gulp           # compile the code
     min :: forall d. (d -> Number) -> [d] -> Number
 
 
+## Module Graphics.D3.Layout.Base
+
+### Type Classes
+
+    class GraphLayout l where
+      nodes :: forall a. [a] -> l -> D3Eff l
+      links :: forall a. [a] -> l -> D3Eff l
+      size :: forall d. { height :: Number, width :: Number | d } -> l -> D3Eff l
+
+
 ## Module Graphics.D3.Layout.Force
 
 ### Types
 
     data ForceLayout :: *
+
+
+### Type Class Instances
+
+    instance forceGraphLayout :: GraphLayout ForceLayout
 
 
 ### Values
@@ -329,17 +344,11 @@ gulp           # compile the code
 
     linkStrength :: Number -> ForceLayout -> D3Eff ForceLayout
 
-    links :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
-
-    nodes :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
-
     onDragStart :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
 
     onTick :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
 
     resume :: ForceLayout -> D3Eff ForceLayout
-
-    size :: forall d. { height :: Number, width :: Number | d } -> ForceLayout -> D3Eff ForceLayout
 
     start :: ForceLayout -> D3Eff ForceLayout
 

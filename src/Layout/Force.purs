@@ -1,7 +1,6 @@
 module Graphics.D3.Layout.Force
   ( ForceLayout(..)
   , forceLayout
-  , size
   , linkDistance
   , linkStrength
   , friction
@@ -9,8 +8,6 @@ module Graphics.D3.Layout.Force
   , chargeDistance
   , theta
   , gravity
-  , nodes
-  , links
   , start
   , alpha
   , resume
@@ -29,6 +26,7 @@ import Data.Foreign.EasyFFI
 import Graphics.D3.Base
 import Graphics.D3.Selection
 import Graphics.D3.Util
+import Graphics.D3.Layout.Base
 
 ffi = unsafeForeignFunction
 
@@ -36,9 +34,10 @@ foreign import data ForceLayout :: *
 
 foreign import forceLayout "var forceLayout = d3.layout.force" :: D3Eff ForceLayout
 
-size :: forall d. { width :: Number, height :: Number | d } -> ForceLayout -> D3Eff ForceLayout
-size dimensions = f dimensions.width dimensions.height
-  where f = ffi ["width", "height", "force", ""] "force.size([width, height])"
+instance forceGraphLayout :: GraphLayout ForceLayout where
+  size dims = ffi ["w", "h", "force", ""] "force.size([w, h])" dims.width dims.height
+  nodes = ffi ["nodes", "force", ""] "force.nodes(nodes)"
+  links = ffi ["links", "force", ""] "force.links(links)"
 
 linkDistance :: Number -> ForceLayout -> D3Eff ForceLayout
 linkDistance = ffi ["distance", "force", ""] "force.linkDistance(distance)"
@@ -60,12 +59,6 @@ theta = ffi ["theta", "force", ""] "force.theta(theta)"
 
 gravity :: Number -> ForceLayout -> D3Eff ForceLayout
 gravity = ffi ["gravity", "force", ""] "force.gravity(gravity)"
-
-nodes :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
-nodes = ffi ["nodes", "force", ""] "force.nodes(nodes)"
-
-links :: forall a. [a] -> ForceLayout -> D3Eff ForceLayout
-links = ffi ["links", "force", ""] "force.links(links)"
 
 start :: ForceLayout -> D3Eff ForceLayout
 start = ffi ["force", ""] "force.start()"
