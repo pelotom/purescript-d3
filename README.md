@@ -70,20 +70,27 @@ gulp           # compile the code
 
 ### Types
 
+
     data Axis :: *
 
 
 ### Values
 
+
     axis :: D3Eff Axis
+
 
     orient :: String -> Axis -> D3Eff Axis
 
+
     renderAxis :: forall s d. (Existing s) => Axis -> s d -> D3Eff (Selection d)
+
 
     scale :: forall s d. (Scale s) => s d Number -> Axis -> D3Eff Axis
 
+
     tickFormat :: String -> Axis -> D3Eff Axis
+
 
     ticks :: Number -> Axis -> D3Eff Axis
 
@@ -92,7 +99,9 @@ gulp           # compile the code
 
 ### Types
 
+
     data D3 :: !
+
 
     type D3Eff a = forall e. Eff (d3 :: D3 | e) a
 
@@ -101,10 +110,12 @@ gulp           # compile the code
 
 ### Types
 
+
     data Interpolator :: * -> *
 
 
 ### Values
+
 
     makeInterpolator :: forall a. (a -> a -> Number -> a) -> Interpolator a
 
@@ -113,12 +124,15 @@ gulp           # compile the code
 
 ### Types
 
+
     type RequestError = { statusText :: String, status :: Number }
 
 
 ### Values
 
+
     json :: forall e a. String -> (Either RequestError Foreign -> Eff (d3 :: D3 | e) a) -> D3Eff Unit
+
 
     tsv :: forall e a. String -> (Either RequestError [Foreign] -> Eff (d3 :: D3 | e) a) -> D3Eff Unit
 
@@ -127,73 +141,117 @@ gulp           # compile the code
 
 ### Types
 
+     Scale types
+
     data LinearScale :: * -> * -> *
+
 
     data LogScale :: * -> * -> *
 
+
     data OrdinalScale :: * -> * -> *
+
 
     data PowerScale :: * -> * -> *
 
 
 ### Type Classes
 
+     Quantitative (numeric domain) scales
+
     class Quantitative s where
+
       invert :: s Number Number -> D3Eff (Number -> Number)
+
       rangeRound :: [Number] -> s Number Number -> D3Eff (s Number Number)
+
       interpolate :: forall r. Interpolator r -> s Number r -> D3Eff (s Number r)
+
       clamp :: forall r. Boolean -> s Number r -> D3Eff (s Number r)
+
       nice :: forall r. Maybe Number -> s Number r -> D3Eff (s Number r)
+
       getTicks :: forall r. Maybe Number -> s Number r -> D3Eff [Number]
+
       getTickFormat :: forall r. Number -> Maybe String -> s Number r -> D3Eff (Number -> String)
 
+     A base class for all scale types
+
     class Scale s where
+
       domain :: forall d r. [d] -> s d r -> D3Eff (s d r)
+
       range :: forall d r. [r] -> s d r -> D3Eff (s d r)
+
       copy :: forall d r. s d r -> D3Eff (s d r)
+
       toFunction :: forall d r. s d r -> D3Eff (d -> r)
 
 
 ### Type Class Instances
 
+
     instance quantitativeLinear :: Quantitative LinearScale
+
 
     instance quantitativeLog :: Quantitative LogScale
 
+
     instance quantitativePower :: Quantitative PowerScale
+
+     Scale class instances
 
     instance scaleLinear :: Scale LinearScale
 
+
     instance scaleLog :: Scale LogScale
 
+
     instance scaleOrdinal :: Scale OrdinalScale
+
 
     instance scalePower :: Scale PowerScale
 
 
 ### Values
 
+     Log scale methods
+
     base :: forall r. Number -> LogScale Number r -> D3Eff (LogScale Number r)
+
+     Power scale methods
 
     exponent :: forall r. Number -> PowerScale Number r -> D3Eff (PowerScale Number r)
 
+     Scale constructors
+
     linearScale :: forall r. D3Eff (LinearScale Number r)
+
 
     logScale :: forall r. D3Eff (LogScale Number r)
 
+
     ordinalScale :: forall d r. D3Eff (OrdinalScale d r)
+
 
     powerScale :: forall r. D3Eff (PowerScale Number r)
 
+
     rangeBand :: forall d r. OrdinalScale d Number -> D3Eff Number
+
 
     rangeBands :: forall d. Number -> Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
 
+
     rangeExtent :: forall d r. OrdinalScale d Number -> D3Eff (Tuple Number Number)
+
+     Ordinal scale methods
 
     rangePoints :: forall d. Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
 
+
     rangeRoundBands :: forall d. Number -> Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
+
 
     sqrtScale :: forall r. D3Eff (PowerScale Number r)
 
@@ -202,91 +260,144 @@ gulp           # compile the code
 
 ### Types
 
+
     data Enter :: * -> *
+
+     Exit selections have the same semantics as regular selections
 
     type Exit d = Selection d
 
+     The "selection-y" types, parameterized by the type of their bound data
+
     data Selection :: * -> *
+
 
     data Transition :: * -> *
 
+
     data Update :: * -> *
+
+     The (uninhabited) type of an unbound selection's data
 
     data Void
 
 
 ### Type Classes
 
+     Selection-y things which can be appended to / inserted into
+
     class Appendable s where
+
       append :: forall d. String -> s d -> D3Eff (Selection d)
+
+     The class of types which element attribute values can have (numbers and strings)
 
     class AttrValue a where
 
+
     class Clickable c where
+
       onClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
+
       onDoubleClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
 
+     Selection-y things that contain existing DOM elements
+
     class Existing s where
+
       attr :: forall d v. (AttrValue v) => String -> v -> s d -> D3Eff (s d)
+
       attr' :: forall d v. (AttrValue v) => String -> (d -> v) -> s d -> D3Eff (s d)
+
       attr'' :: forall d v. (AttrValue v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+
       style :: forall d. String -> String -> s d -> D3Eff (s d)
+
       style' :: forall d. String -> (d -> String) -> s d -> D3Eff (s d)
+
       style'' :: forall d. String -> (d -> Number -> String) -> s d -> D3Eff (s d)
+
       text :: forall d. String -> s d -> D3Eff (s d)
+
       text' :: forall d. (d -> String) -> s d -> D3Eff (s d)
+
       text'' :: forall d. (d -> Number -> String) -> s d -> D3Eff (s d)
+
       remove :: forall d. s d -> D3Eff Unit
 
 
 ### Type Class Instances
 
+
     instance appendableEnter :: Appendable Enter
+
 
     instance appendableSelection :: Appendable Selection
 
+
     instance appendableUpdate :: Appendable Update
+
 
     instance attrValNumber :: AttrValue Number
 
+
     instance attrValString :: AttrValue String
+
 
     instance clickableSelection :: Clickable (Selection a)
 
+
     instance existingSelection :: Existing Selection
 
+
     instance existingTransition :: Existing Transition
+
 
     instance existingUpdate :: Existing Update
 
 
 ### Values
 
+
     bind :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (Update newData)
+
+     Transition-only stuff
 
     delay :: forall d. Number -> Transition d -> D3Eff (Transition d)
 
+
     delay' :: forall d. (d -> Number) -> Transition d -> D3Eff (Transition d)
+
 
     delay'' :: forall d. (d -> Number -> Number) -> Transition d -> D3Eff (Transition d)
 
+
     duration :: forall d. Number -> Transition d -> D3Eff (Transition d)
+
 
     duration' :: forall d. (d -> Number) -> Transition d -> D3Eff (Transition d)
 
+
     duration'' :: forall d. (d -> Number -> Number) -> Transition d -> D3Eff (Transition d)
+
 
     enter :: forall d. Update d -> D3Eff (Enter d)
 
+
     exit :: forall d. Update d -> D3Eff (Exit d)
+
 
     rootSelect :: String -> D3Eff (Selection Void)
 
+
     rootSelectAll :: String -> D3Eff (Selection Void)
+
 
     select :: forall d. String -> Selection d -> D3Eff (Selection d)
 
+
     selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
+
 
     transition :: forall s d. (Existing s) => s d -> D3Eff (Transition d)
 
@@ -295,7 +406,9 @@ gulp           # compile the code
 
 ### Values
 
+
     max :: forall d. (d -> Number) -> [d] -> Number
+
 
     min :: forall d. (d -> Number) -> [d] -> Number
 
@@ -304,9 +417,13 @@ gulp           # compile the code
 
 ### Type Classes
 
+
     class GraphLayout l where
+
       nodes :: forall a. [a] -> l -> D3Eff l
+
       links :: forall a. [a] -> l -> D3Eff l
+
       size :: forall d. { height :: Number, width :: Number | d } -> l -> D3Eff l
 
 
@@ -314,47 +431,66 @@ gulp           # compile the code
 
 ### Types
 
+
     data ForceLayout :: *
 
 
 ### Type Class Instances
+
 
     instance forceGraphLayout :: GraphLayout ForceLayout
 
 
 ### Values
 
+
     alpha :: Number -> ForceLayout -> D3Eff ForceLayout
+
 
     charge :: Number -> ForceLayout -> D3Eff ForceLayout
 
+
     chargeDistance :: Number -> ForceLayout -> D3Eff ForceLayout
+
 
     createDrag :: forall s. ForceLayout -> Selection s -> D3Eff (Selection s)
 
+
     drag :: ForceLayout -> D3Eff ForceLayout
+
 
     forceLayout :: D3Eff ForceLayout
 
+
     friction :: Number -> ForceLayout -> D3Eff ForceLayout
+
 
     gravity :: Number -> ForceLayout -> D3Eff ForceLayout
 
+
     linkDistance :: Number -> ForceLayout -> D3Eff ForceLayout
+
 
     linkStrength :: Number -> ForceLayout -> D3Eff ForceLayout
 
+
     onDragStart :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
+
 
     onTick :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
 
+
     resume :: ForceLayout -> D3Eff ForceLayout
+
 
     start :: ForceLayout -> D3Eff ForceLayout
 
+
     stop :: ForceLayout -> D3Eff ForceLayout
 
+
     theta :: Number -> ForceLayout -> D3Eff ForceLayout
+
 
     tick :: ForceLayout -> D3Eff ForceLayout
 
