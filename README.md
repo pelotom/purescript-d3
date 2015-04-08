@@ -68,431 +68,706 @@ gulp           # compile the code
 
 ## Module Graphics.D3.SVG.Axis
 
-### Types
+#### `Axis`
+
+``` purescript
+data Axis :: *
+```
 
 
-    data Axis :: *
+#### `axis`
+
+``` purescript
+axis :: D3Eff Axis
+```
 
 
-### Values
+#### `scale`
+
+``` purescript
+scale :: forall s d. (Scale s) => s d Number -> Axis -> D3Eff Axis
+```
 
 
-    axis :: D3Eff Axis
+#### `orient`
+
+``` purescript
+orient :: String -> Axis -> D3Eff Axis
+```
 
 
-    orient :: String -> Axis -> D3Eff Axis
+#### `ticks`
+
+``` purescript
+ticks :: Number -> Axis -> D3Eff Axis
+```
 
 
-    renderAxis :: forall s d. (Existing s) => Axis -> s d -> D3Eff (Selection d)
+#### `tickFormat`
+
+``` purescript
+tickFormat :: String -> Axis -> D3Eff Axis
+```
 
 
-    scale :: forall s d. (Scale s) => s d Number -> Axis -> D3Eff Axis
+#### `renderAxis`
 
+``` purescript
+renderAxis :: forall s d. (Existing s) => Axis -> s d -> D3Eff (Selection d)
+```
 
-    tickFormat :: String -> Axis -> D3Eff Axis
-
-
-    ticks :: Number -> Axis -> D3Eff Axis
 
 
 ## Module Graphics.D3.Base
 
-### Types
+#### `D3`
+
+``` purescript
+data D3 :: !
+```
 
 
-    data D3 :: !
+#### `D3Eff`
 
+``` purescript
+type D3Eff a = forall e. Eff (d3 :: D3 | e) a
+```
 
-    type D3Eff a = forall e. Eff (d3 :: D3 | e) a
 
 
 ## Module Graphics.D3.Interpolate
 
-### Types
+#### `Interpolator`
+
+``` purescript
+data Interpolator :: * -> *
+```
 
 
-    data Interpolator :: * -> *
+#### `makeInterpolator`
 
+``` purescript
+makeInterpolator :: forall a. (a -> a -> Number -> a) -> Interpolator a
+```
 
-### Values
-
-
-    makeInterpolator :: forall a. (a -> a -> Number -> a) -> Interpolator a
 
 
 ## Module Graphics.D3.Request
 
-### Types
+#### `RequestError`
+
+``` purescript
+type RequestError = { statusText :: String, status :: Number }
+```
 
 
-    type RequestError = { statusText :: String, status :: Number }
+#### `csv`
+
+``` purescript
+csv :: forall e a. String -> (Either RequestError [Foreign] -> Eff (d3 :: D3 | e) a) -> D3Eff Unit
+```
 
 
-### Values
+#### `tsv`
+
+``` purescript
+tsv :: forall e a. String -> (Either RequestError [Foreign] -> Eff (d3 :: D3 | e) a) -> D3Eff Unit
+```
 
 
-    json :: forall e a. String -> (Either RequestError Foreign -> Eff (d3 :: D3 | e) a) -> D3Eff Unit
+#### `json`
 
+``` purescript
+json :: forall e a. String -> (Either RequestError Foreign -> Eff (d3 :: D3 | e) a) -> D3Eff Unit
+```
 
-    tsv :: forall e a. String -> (Either RequestError [Foreign] -> Eff (d3 :: D3 | e) a) -> D3Eff Unit
 
 
 ## Module Graphics.D3.Scale
 
-### Types
+#### `Scale`
 
-     Scale types
+``` purescript
+class Scale s where
+  domain :: forall d r. [d] -> s d r -> D3Eff (s d r)
+  range :: forall d r. [r] -> s d r -> D3Eff (s d r)
+  copy :: forall d r. s d r -> D3Eff (s d r)
+  toFunction :: forall d r. s d r -> D3Eff (d -> r)
+```
 
-    data LinearScale :: * -> * -> *
+#### `Quantitative`
 
+``` purescript
+class Quantitative s where
+  invert :: s Number Number -> D3Eff (Number -> Number)
+  rangeRound :: [Number] -> s Number Number -> D3Eff (s Number Number)
+  interpolate :: forall r. Interpolator r -> s Number r -> D3Eff (s Number r)
+  clamp :: forall r. Boolean -> s Number r -> D3Eff (s Number r)
+  nice :: forall r. Maybe Number -> s Number r -> D3Eff (s Number r)
+  getTicks :: forall r. Maybe Number -> s Number r -> D3Eff [Number]
+  getTickFormat :: forall r. Number -> Maybe String -> s Number r -> D3Eff (Number -> String)
+```
 
-    data LogScale :: * -> * -> *
+#### `LinearScale`
 
+``` purescript
+data LinearScale :: * -> * -> *
+```
 
-    data OrdinalScale :: * -> * -> *
+#### `PowerScale`
 
+``` purescript
+data PowerScale :: * -> * -> *
+```
 
-    data PowerScale :: * -> * -> *
 
+#### `LogScale`
 
-### Type Classes
+``` purescript
+data LogScale :: * -> * -> *
+```
 
-     Quantitative (numeric domain) scales
 
-    class Quantitative s where
+#### `OrdinalScale`
 
-      invert :: s Number Number -> D3Eff (Number -> Number)
+``` purescript
+data OrdinalScale :: * -> * -> *
+```
 
-      rangeRound :: [Number] -> s Number Number -> D3Eff (s Number Number)
 
-      interpolate :: forall r. Interpolator r -> s Number r -> D3Eff (s Number r)
+#### `linearScale`
 
-      clamp :: forall r. Boolean -> s Number r -> D3Eff (s Number r)
+``` purescript
+linearScale :: forall r. D3Eff (LinearScale Number r)
+```
 
-      nice :: forall r. Maybe Number -> s Number r -> D3Eff (s Number r)
+#### `powerScale`
 
-      getTicks :: forall r. Maybe Number -> s Number r -> D3Eff [Number]
+``` purescript
+powerScale :: forall r. D3Eff (PowerScale Number r)
+```
 
-      getTickFormat :: forall r. Number -> Maybe String -> s Number r -> D3Eff (Number -> String)
 
-     A base class for all scale types
+#### `sqrtScale`
 
-    class Scale s where
+``` purescript
+sqrtScale :: forall r. D3Eff (PowerScale Number r)
+```
 
-      domain :: forall d r. [d] -> s d r -> D3Eff (s d r)
 
-      range :: forall d r. [r] -> s d r -> D3Eff (s d r)
+#### `logScale`
 
-      copy :: forall d r. s d r -> D3Eff (s d r)
+``` purescript
+logScale :: forall r. D3Eff (LogScale Number r)
+```
 
-      toFunction :: forall d r. s d r -> D3Eff (d -> r)
 
+#### `ordinalScale`
 
-### Type Class Instances
+``` purescript
+ordinalScale :: forall d r. D3Eff (OrdinalScale d r)
+```
 
 
-    instance quantitativeLinear :: Quantitative LinearScale
+#### `exponent`
 
+``` purescript
+exponent :: forall r. Number -> PowerScale Number r -> D3Eff (PowerScale Number r)
+```
 
-    instance quantitativeLog :: Quantitative LogScale
+#### `base`
 
+``` purescript
+base :: forall r. Number -> LogScale Number r -> D3Eff (LogScale Number r)
+```
 
-    instance quantitativePower :: Quantitative PowerScale
+#### `rangePoints`
 
-     Scale class instances
+``` purescript
+rangePoints :: forall d. Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
+```
 
-    instance scaleLinear :: Scale LinearScale
+#### `rangeBands`
 
+``` purescript
+rangeBands :: forall d. Number -> Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
+```
 
-    instance scaleLog :: Scale LogScale
 
+#### `rangeRoundBands`
 
-    instance scaleOrdinal :: Scale OrdinalScale
+``` purescript
+rangeRoundBands :: forall d. Number -> Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
+```
 
 
-    instance scalePower :: Scale PowerScale
+#### `rangeBand`
 
+``` purescript
+rangeBand :: forall d r. OrdinalScale d Number -> D3Eff Number
+```
 
-### Values
 
-     Log scale methods
+#### `rangeExtent`
 
-    base :: forall r. Number -> LogScale Number r -> D3Eff (LogScale Number r)
+``` purescript
+rangeExtent :: forall d r. OrdinalScale d Number -> D3Eff (Tuple Number Number)
+```
 
-     Power scale methods
 
-    exponent :: forall r. Number -> PowerScale Number r -> D3Eff (PowerScale Number r)
+#### `scaleLinear`
 
-     Scale constructors
+``` purescript
+instance scaleLinear :: Scale LinearScale
+```
 
-    linearScale :: forall r. D3Eff (LinearScale Number r)
+#### `quantitativeLinear`
 
+``` purescript
+instance quantitativeLinear :: Quantitative LinearScale
+```
 
-    logScale :: forall r. D3Eff (LogScale Number r)
 
+#### `scalePower`
 
-    ordinalScale :: forall d r. D3Eff (OrdinalScale d r)
+``` purescript
+instance scalePower :: Scale PowerScale
+```
 
 
-    powerScale :: forall r. D3Eff (PowerScale Number r)
+#### `quantitativePower`
 
+``` purescript
+instance quantitativePower :: Quantitative PowerScale
+```
 
-    rangeBand :: forall d r. OrdinalScale d Number -> D3Eff Number
 
+#### `scaleLog`
 
-    rangeBands :: forall d. Number -> Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
+``` purescript
+instance scaleLog :: Scale LogScale
+```
 
 
-    rangeExtent :: forall d r. OrdinalScale d Number -> D3Eff (Tuple Number Number)
+#### `quantitativeLog`
 
-     Ordinal scale methods
+``` purescript
+instance quantitativeLog :: Quantitative LogScale
+```
 
-    rangePoints :: forall d. Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
 
+#### `scaleOrdinal`
 
-    rangeRoundBands :: forall d. Number -> Number -> Number -> Number -> OrdinalScale d Number -> D3Eff (OrdinalScale d Number)
+``` purescript
+instance scaleOrdinal :: Scale OrdinalScale
+```
 
-
-    sqrtScale :: forall r. D3Eff (PowerScale Number r)
 
 
 ## Module Graphics.D3.Selection
 
-### Types
+#### `Selection`
 
+``` purescript
+data Selection :: * -> *
+```
 
-    data Enter :: * -> *
+#### `Update`
 
-     Exit selections have the same semantics as regular selections
+``` purescript
+data Update :: * -> *
+```
 
-    type Exit d = Selection d
 
-     The "selection-y" types, parameterized by the type of their bound data
+#### `Enter`
 
-    data Selection :: * -> *
+``` purescript
+data Enter :: * -> *
+```
 
 
-    data Transition :: * -> *
+#### `Transition`
 
+``` purescript
+data Transition :: * -> *
+```
 
-    data Update :: * -> *
 
-     The (uninhabited) type of an unbound selection's data
+#### `Exit`
 
-    data Void
+``` purescript
+type Exit d = Selection d
+```
 
+#### `Void`
 
-### Type Classes
+``` purescript
+data Void
+```
 
-     Selection-y things which can be appended to / inserted into
+#### `AttrValue`
 
-    class Appendable s where
+``` purescript
+class AttrValue a where
+```
 
-      append :: forall d. String -> s d -> D3Eff (Selection d)
+#### `attrValNumber`
 
-     The class of types which element attribute values can have (numbers and strings)
+``` purescript
+instance attrValNumber :: AttrValue Number
+```
 
-    class AttrValue a where
 
+#### `attrValString`
 
-    class Clickable c where
+``` purescript
+instance attrValString :: AttrValue String
+```
 
-      onClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
 
-      onDoubleClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
+#### `rootSelect`
 
-     Selection-y things that contain existing DOM elements
+``` purescript
+rootSelect :: String -> D3Eff (Selection Void)
+```
 
-    class Existing s where
 
-      attr :: forall d v. (AttrValue v) => String -> v -> s d -> D3Eff (s d)
+#### `rootSelectAll`
 
-      attr' :: forall d v. (AttrValue v) => String -> (d -> v) -> s d -> D3Eff (s d)
+``` purescript
+rootSelectAll :: String -> D3Eff (Selection Void)
+```
 
-      attr'' :: forall d v. (AttrValue v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
 
-      style :: forall d. String -> String -> s d -> D3Eff (s d)
+#### `select`
 
-      style' :: forall d. String -> (d -> String) -> s d -> D3Eff (s d)
+``` purescript
+select :: forall d. String -> Selection d -> D3Eff (Selection d)
+```
 
-      style'' :: forall d. String -> (d -> Number -> String) -> s d -> D3Eff (s d)
 
-      text :: forall d. String -> s d -> D3Eff (s d)
+#### `selectAll`
 
-      text' :: forall d. (d -> String) -> s d -> D3Eff (s d)
+``` purescript
+selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
+```
 
-      text'' :: forall d. (d -> Number -> String) -> s d -> D3Eff (s d)
 
-      remove :: forall d. s d -> D3Eff Unit
+#### `bind`
 
+``` purescript
+bind :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (Update newData)
+```
 
-### Type Class Instances
 
+#### `enter`
 
-    instance appendableEnter :: Appendable Enter
+``` purescript
+enter :: forall d. Update d -> D3Eff (Enter d)
+```
 
 
-    instance appendableSelection :: Appendable Selection
+#### `exit`
 
+``` purescript
+exit :: forall d. Update d -> D3Eff (Exit d)
+```
 
-    instance appendableUpdate :: Appendable Update
 
+#### `transition`
 
-    instance attrValNumber :: AttrValue Number
+``` purescript
+transition :: forall s d. (Existing s) => s d -> D3Eff (Transition d)
+```
 
 
-    instance attrValString :: AttrValue String
+#### `delay`
 
+``` purescript
+delay :: forall d. Number -> Transition d -> D3Eff (Transition d)
+```
 
-    instance clickableSelection :: Clickable (Selection a)
+#### `delay'`
 
+``` purescript
+delay' :: forall d. (d -> Number) -> Transition d -> D3Eff (Transition d)
+```
 
-    instance existingSelection :: Existing Selection
 
+#### `delay''`
 
-    instance existingTransition :: Existing Transition
+``` purescript
+delay'' :: forall d. (d -> Number -> Number) -> Transition d -> D3Eff (Transition d)
+```
 
 
-    instance existingUpdate :: Existing Update
+#### `duration`
 
+``` purescript
+duration :: forall d. Number -> Transition d -> D3Eff (Transition d)
+```
 
-### Values
 
+#### `duration'`
 
-    bind :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (Update newData)
+``` purescript
+duration' :: forall d. (d -> Number) -> Transition d -> D3Eff (Transition d)
+```
 
-     Transition-only stuff
 
-    delay :: forall d. Number -> Transition d -> D3Eff (Transition d)
+#### `duration''`
 
+``` purescript
+duration'' :: forall d. (d -> Number -> Number) -> Transition d -> D3Eff (Transition d)
+```
 
-    delay' :: forall d. (d -> Number) -> Transition d -> D3Eff (Transition d)
 
+#### `Appendable`
 
-    delay'' :: forall d. (d -> Number -> Number) -> Transition d -> D3Eff (Transition d)
+``` purescript
+class Appendable s where
+  append :: forall d. String -> s d -> D3Eff (Selection d)
+```
 
+#### `appendableSelection`
 
-    duration :: forall d. Number -> Transition d -> D3Eff (Transition d)
+``` purescript
+instance appendableSelection :: Appendable Selection
+```
 
 
-    duration' :: forall d. (d -> Number) -> Transition d -> D3Eff (Transition d)
+#### `appendableUpdate`
 
+``` purescript
+instance appendableUpdate :: Appendable Update
+```
 
-    duration'' :: forall d. (d -> Number -> Number) -> Transition d -> D3Eff (Transition d)
 
+#### `appendableEnter`
 
-    enter :: forall d. Update d -> D3Eff (Enter d)
+``` purescript
+instance appendableEnter :: Appendable Enter
+```
 
 
-    exit :: forall d. Update d -> D3Eff (Exit d)
+#### `Existing`
 
+``` purescript
+class Existing s where
+  attr :: forall d v. (AttrValue v) => String -> v -> s d -> D3Eff (s d)
+  attr' :: forall d v. (AttrValue v) => String -> (d -> v) -> s d -> D3Eff (s d)
+  attr'' :: forall d v. (AttrValue v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+  style :: forall d. String -> String -> s d -> D3Eff (s d)
+  style' :: forall d. String -> (d -> String) -> s d -> D3Eff (s d)
+  style'' :: forall d. String -> (d -> Number -> String) -> s d -> D3Eff (s d)
+  text :: forall d. String -> s d -> D3Eff (s d)
+  text' :: forall d. (d -> String) -> s d -> D3Eff (s d)
+  text'' :: forall d. (d -> Number -> String) -> s d -> D3Eff (s d)
+  remove :: forall d. s d -> D3Eff Unit
+```
 
-    rootSelect :: String -> D3Eff (Selection Void)
+#### `existingSelection`
 
+``` purescript
+instance existingSelection :: Existing Selection
+```
 
-    rootSelectAll :: String -> D3Eff (Selection Void)
 
+#### `existingUpdate`
 
-    select :: forall d. String -> Selection d -> D3Eff (Selection d)
+``` purescript
+instance existingUpdate :: Existing Update
+```
 
 
-    selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
+#### `existingTransition`
 
+``` purescript
+instance existingTransition :: Existing Transition
+```
 
-    transition :: forall s d. (Existing s) => s d -> D3Eff (Transition d)
+
+#### `Clickable`
+
+``` purescript
+class Clickable c where
+  onClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
+  onDoubleClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
+```
+
+
+#### `clickableSelection`
+
+``` purescript
+instance clickableSelection :: Clickable (Selection a)
+```
+
 
 
 ## Module Graphics.D3.Util
 
-### Values
+#### `min`
+
+``` purescript
+min :: forall d. (d -> Number) -> [d] -> Number
+```
 
 
-    max :: forall d. (d -> Number) -> [d] -> Number
+#### `max`
 
+``` purescript
+max :: forall d. (d -> Number) -> [d] -> Number
+```
 
-    min :: forall d. (d -> Number) -> [d] -> Number
 
 
 ## Module Graphics.D3.Layout.Base
 
-### Type Classes
+#### `GraphLayout`
 
+``` purescript
+class GraphLayout l where
+  nodes :: forall a. [a] -> l -> D3Eff l
+  links :: forall a. [a] -> l -> D3Eff l
+  size :: forall d. { height :: Number, width :: Number | d } -> l -> D3Eff l
+```
 
-    class GraphLayout l where
-
-      nodes :: forall a. [a] -> l -> D3Eff l
-
-      links :: forall a. [a] -> l -> D3Eff l
-
-      size :: forall d. { height :: Number, width :: Number | d } -> l -> D3Eff l
 
 
 ## Module Graphics.D3.Layout.Force
 
-### Types
+#### `ForceLayout`
+
+``` purescript
+data ForceLayout :: *
+```
 
 
-    data ForceLayout :: *
+#### `forceLayout`
+
+``` purescript
+forceLayout :: D3Eff ForceLayout
+```
 
 
-### Type Class Instances
+#### `forceGraphLayout`
+
+``` purescript
+instance forceGraphLayout :: GraphLayout ForceLayout
+```
 
 
-    instance forceGraphLayout :: GraphLayout ForceLayout
+#### `linkDistance`
+
+``` purescript
+linkDistance :: Number -> ForceLayout -> D3Eff ForceLayout
+```
 
 
-### Values
+#### `linkStrength`
+
+``` purescript
+linkStrength :: Number -> ForceLayout -> D3Eff ForceLayout
+```
 
 
-    alpha :: Number -> ForceLayout -> D3Eff ForceLayout
+#### `friction`
+
+``` purescript
+friction :: Number -> ForceLayout -> D3Eff ForceLayout
+```
 
 
-    charge :: Number -> ForceLayout -> D3Eff ForceLayout
+#### `charge`
+
+``` purescript
+charge :: Number -> ForceLayout -> D3Eff ForceLayout
+```
 
 
-    chargeDistance :: Number -> ForceLayout -> D3Eff ForceLayout
+#### `chargeDistance`
+
+``` purescript
+chargeDistance :: Number -> ForceLayout -> D3Eff ForceLayout
+```
 
 
-    createDrag :: forall s. ForceLayout -> Selection s -> D3Eff (Selection s)
+#### `theta`
+
+``` purescript
+theta :: Number -> ForceLayout -> D3Eff ForceLayout
+```
 
 
-    drag :: ForceLayout -> D3Eff ForceLayout
+#### `gravity`
+
+``` purescript
+gravity :: Number -> ForceLayout -> D3Eff ForceLayout
+```
 
 
-    forceLayout :: D3Eff ForceLayout
+#### `start`
+
+``` purescript
+start :: ForceLayout -> D3Eff ForceLayout
+```
 
 
-    friction :: Number -> ForceLayout -> D3Eff ForceLayout
+#### `alpha`
+
+``` purescript
+alpha :: Number -> ForceLayout -> D3Eff ForceLayout
+```
 
 
-    gravity :: Number -> ForceLayout -> D3Eff ForceLayout
+#### `resume`
+
+``` purescript
+resume :: ForceLayout -> D3Eff ForceLayout
+```
 
 
-    linkDistance :: Number -> ForceLayout -> D3Eff ForceLayout
+#### `stop`
+
+``` purescript
+stop :: ForceLayout -> D3Eff ForceLayout
+```
 
 
-    linkStrength :: Number -> ForceLayout -> D3Eff ForceLayout
+#### `tick`
+
+``` purescript
+tick :: ForceLayout -> D3Eff ForceLayout
+```
 
 
-    onDragStart :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
+#### `onTick`
+
+``` purescript
+onTick :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
+```
 
 
-    onTick :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
+#### `onDragStart`
+
+``` purescript
+onDragStart :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
+```
 
 
-    resume :: ForceLayout -> D3Eff ForceLayout
+#### `drag`
+
+``` purescript
+drag :: ForceLayout -> D3Eff ForceLayout
+```
 
 
-    start :: ForceLayout -> D3Eff ForceLayout
+#### `createDrag`
 
+``` purescript
+createDrag :: forall s. ForceLayout -> Selection s -> D3Eff (Selection s)
+```
 
-    stop :: ForceLayout -> D3Eff ForceLayout
-
-
-    theta :: Number -> ForceLayout -> D3Eff ForceLayout
-
-
-    tick :: ForceLayout -> D3Eff ForceLayout
 
 
 
