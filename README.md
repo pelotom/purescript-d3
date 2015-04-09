@@ -604,6 +604,30 @@ instance clickableSelection :: Clickable (Selection a)
 
 
 
+## Module Graphics.D3.Time
+
+#### `TimeScale`
+
+``` purescript
+data TimeScale :: * -> * -> *
+```
+
+
+#### `timeScale`
+
+``` purescript
+timeScale :: forall r. D3Eff (TimeScale JSDate r)
+```
+
+
+#### `scaleTime`
+
+``` purescript
+instance scaleTime :: Scale TimeScale
+```
+
+
+
 ## Module Graphics.D3.Util
 
 #### `min`
@@ -619,6 +643,12 @@ min :: forall d. (d -> Number) -> [d] -> Number
 max :: forall d. (d -> Number) -> [d] -> Number
 ```
 
+
+#### `extent`
+
+``` purescript
+extent :: forall d. [d] -> [d]
+```
 
 
 ## Module Graphics.D3.Layout.Base

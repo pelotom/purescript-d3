@@ -11,8 +11,13 @@
   "dependencies": {
     "d3": "^3.4.9",
     "purescript-easy-ffi": "^1.0.0",
-    "purescript-foreign": "~0.3.0"
+    "purescript-foreign": "~0.3.0",
+    "purescript-datetime": "^0.5.1"
   },
   "main": "src/**/*.purs",
-  "private": false
+  "private": false,
+  "resolutions": {
+    "purescript-tuples": "~0.3.0",
+    "purescript-monoid": "~0.2.0"
+  }
 }
