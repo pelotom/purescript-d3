@@ -628,26 +628,50 @@ instance scaleTime :: Scale TimeScale
 
 
 
+## Module Graphics.D3.Unsafe
+
+
 ## Module Graphics.D3.Util
+
+#### `Magnitude`
+
+``` purescript
+class Magnitude n where
+```
+
+
+#### `numberMagnitude`
+
+``` purescript
+instance numberMagnitude :: Magnitude Number
+```
+
+
+#### `dateMagnitude`
+
+``` purescript
+instance dateMagnitude :: Magnitude JSDate
+```
+
 
 #### `min`
 
 ``` purescript
-min :: forall d. (d -> Number) -> [d] -> Number
+min :: forall d m. (Magnitude m) => (d -> m) -> [d] -> m
 ```
 
 
 #### `max`
 
 ``` purescript
-max :: forall d. (d -> Number) -> [d] -> Number
+max :: forall d m. (Magnitude m) => (d -> m) -> [d] -> m
 ```
 
 
 #### `extent`
 
 ``` purescript
-extent :: forall d. [d] -> [d]
+extent :: forall m. (Magnitude m) => [m] -> [m]
 ```
 
 

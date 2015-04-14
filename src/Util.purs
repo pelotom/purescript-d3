@@ -1,5 +1,6 @@
 module Graphics.D3.Util
-  ( min
+  ( Magnitude
+  , min
   , max
   , extent
   , (..)
@@ -7,16 +8,22 @@ module Graphics.D3.Util
   ) where
 
 import Data.Foreign.EasyFFI
+import Data.Date
 
-min :: forall d. (d -> Number) -> [d] -> Number
+class Magnitude n
+
+instance numberMagnitude :: Magnitude Number
+instance dateMagnitude :: Magnitude JSDate
+
+min :: forall d m. (Magnitude m) => (d -> m) -> [d] -> m
 min = unsafeForeignFunction ["fn", "data"] "d3.min(data, fn)"
 
-max :: forall d. (d -> Number) -> [d] -> Number
+max :: forall d m. (Magnitude m) => (d -> m) -> [d] -> m
 max = unsafeForeignFunction ["fn", "data"] "d3.max(data, fn)"
 
 -- extent takes a data array and returns [min,max]
 -- not restricted to Number, i.e. also works with time
-extent :: forall d. [d] -> [d]
+extent :: forall m. (Magnitude m) => [m] -> [m]
 extent = unsafeForeignFunction ["data"] "d3.extent(data)"
 
 -- Syntactic sugar to make chained monadic statements look similar to the
