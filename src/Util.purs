@@ -2,6 +2,8 @@ module Graphics.D3.Util
   ( Magnitude
   , min
   , max
+  , min'
+  , max'
   , extent
   , (..)
   , (...)
