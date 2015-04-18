@@ -34,6 +34,9 @@ max = unsafeForeignFunction ["data"] "d3.max(data)"
 extent :: forall m. (Magnitude m) => [m] -> [m]
 extent = unsafeForeignFunction ["data"] "d3.extent(data)"
 
+extent' :: forall d m. (Magnitude m) => (d->m) -> [d] -> [m]
+extent' = unsafeForeignFunction ["fn", "data"] "d3.extent(data, fn)"
+
 -- Syntactic sugar to make chained monadic statements look similar to the
 -- "fluid interface" style of chained method calls in JavaScript
 (..) = (>>=)
