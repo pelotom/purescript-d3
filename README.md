@@ -657,14 +657,14 @@ instance dateMagnitude :: Magnitude JSDate
 #### `min`
 
 ``` purescript
-min :: forall d m. (Magnitude m) => (d -> m) -> [d] -> m
+min :: forall m. (Magnitude m) => [m] -> m
 ```
 
 
 #### `max`
 
 ``` purescript
-max :: forall d m. (Magnitude m) => (d -> m) -> [d] -> m
+max :: forall d m. (Magnitude m) => [m] -> m
 ```
 
 
