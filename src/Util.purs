@@ -5,6 +5,7 @@ module Graphics.D3.Util
   , min'
   , max'
   , extent
+  , extent'
   , (..)
   , (...)
   ) where
