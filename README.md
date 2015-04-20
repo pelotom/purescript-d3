@@ -604,21 +604,89 @@ instance clickableSelection :: Clickable (Selection a)
 
 
 
+## Module Graphics.D3.Time
+
+#### `TimeScale`
+
+``` purescript
+data TimeScale :: * -> * -> *
+```
+
+
+#### `timeScale`
+
+``` purescript
+timeScale :: forall r. D3Eff (TimeScale JSDate r)
+```
+
+
+#### `scaleTime`
+
+``` purescript
+instance scaleTime :: Scale TimeScale
+```
+
+
+
+## Module Graphics.D3.Unsafe
+
+
 ## Module Graphics.D3.Util
+
+#### `Magnitude`
+
+``` purescript
+class Magnitude n where
+```
+
+
+#### `numberMagnitude`
+
+``` purescript
+instance numberMagnitude :: Magnitude Number
+```
+
+
+#### `dateMagnitude`
+
+``` purescript
+instance dateMagnitude :: Magnitude JSDate
+```
+
+
+#### `min'`
+
+``` purescript
+min' :: forall d m. (Magnitude m) => (d -> m) -> [d] -> m
+```
+
+
+#### `max'`
+
+``` purescript
+max' :: forall d m. (Magnitude m) => (d -> m) -> [d] -> m
+```
+
 
 #### `min`
 
 ``` purescript
-min :: forall d. (d -> Number) -> [d] -> Number
+min :: forall m. (Magnitude m) => [m] -> m
 ```
 
 
 #### `max`
 
 ``` purescript
-max :: forall d. (d -> Number) -> [d] -> Number
+max :: forall d m. (Magnitude m) => [m] -> m
 ```
 
+
+#### `extent`
+
+``` purescript
+extent :: forall m. (Magnitude m) => [m] -> [m]
+```
 
 
 ## Module Graphics.D3.Layout.Base

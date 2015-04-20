@@ -32,6 +32,7 @@ module Graphics.D3.Scale
 
 import Graphics.D3.Base
 import Graphics.D3.Interpolate
+import Graphics.D3.Unsafe
 
 import Data.Tuple
 import Data.Maybe
@@ -168,10 +169,6 @@ instance scaleOrdinal :: Scale OrdinalScale where
   copy = unsafeCopy
   toFunction = unsafeToFunction
 
-unsafeDomain = ffi ["domain", "scale", ""] "scale.domain(domain)"
-unsafeRange = ffi ["values", "scale", ""] "scale.range(values)"
-unsafeCopy = ffi ["scale", ""] "scale.copy()"
-unsafeToFunction = ffi ["scale", ""] "scale.copy()"
 unsafeInvert = ffi ["scale", ""] "scale.copy().invert"
 unsafeRangeRound = ffi ["values", "scale", ""] "scale.rangeRound(values)"
 unsafeInterpolate = ffi ["factory", "scale", ""] "scale.interpolate(factory)"
