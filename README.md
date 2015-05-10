@@ -228,6 +228,27 @@ data LogScale :: * -> * -> *
 ```
 
 
+#### `QuantizeScale`
+
+``` purescript
+data QuantizeScale :: * -> * -> *
+```
+
+
+#### `QuantileScale`
+
+``` purescript
+data QuantileScale :: * -> * -> *
+```
+
+
+#### `ThresholdScale`
+
+``` purescript
+data ThresholdScale :: * -> * -> *
+```
+
+
 #### `OrdinalScale`
 
 ``` purescript
@@ -259,6 +280,27 @@ sqrtScale :: forall r. D3Eff (PowerScale Number r)
 
 ``` purescript
 logScale :: forall r. D3Eff (LogScale Number r)
+```
+
+
+#### `quantizeScale`
+
+``` purescript
+quantizeScale :: forall r. D3Eff (QuantizeScale Number r)
+```
+
+
+#### `quantileScale`
+
+``` purescript
+quantileScale :: forall r. D3Eff (QuantileScale Number r)
+```
+
+
+#### `thresholdScale`
+
+``` purescript
+thresholdScale :: forall r. D3Eff (ThresholdScale Number r)
 ```
 
 
@@ -353,6 +395,27 @@ instance scaleLog :: Scale LogScale
 
 ``` purescript
 instance quantitativeLog :: Quantitative LogScale
+```
+
+
+#### `scaleQuantize`
+
+``` purescript
+instance scaleQuantize :: Scale QuantizeScale
+```
+
+
+#### `scaleQuantile`
+
+``` purescript
+instance scaleQuantile :: Scale QuantileScale
+```
+
+
+#### `scaleThreshold`
+
+``` purescript
+instance scaleThreshold :: Scale ThresholdScale
 ```
 
 
@@ -687,6 +750,13 @@ max :: forall d m. (Magnitude m) => [m] -> m
 ``` purescript
 extent :: forall m. (Magnitude m) => [m] -> [m]
 ```
+
+#### `extent'`
+
+``` purescript
+extent' :: forall d m. (Magnitude m) => (d -> m) -> [d] -> [m]
+```
+
 
 
 ## Module Graphics.D3.Layout.Base
