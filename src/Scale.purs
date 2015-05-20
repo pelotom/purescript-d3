@@ -4,11 +4,17 @@ module Graphics.D3.Scale
   , LinearScale()
   , PowerScale()
   , LogScale()
+  , QuantizeScale()
+  , QuantileScale()
+  , ThresholdScale()
   , OrdinalScale()
   , linearScale
   , powerScale
   , sqrtScale
   , logScale
+  , quantizeScale
+  , quantileScale
+  , thresholdScale
   , ordinalScale
   , domain
   , range
@@ -66,6 +72,9 @@ foreign import data LinearScale :: * -> * -> *
 foreign import data IdentityScale :: * -> * -> *
 foreign import data PowerScale :: * -> * -> *
 foreign import data LogScale :: * -> * -> *
+foreign import data QuantizeScale :: * -> * -> *
+foreign import data QuantileScale :: * -> * -> *
+foreign import data ThresholdScale :: * -> * -> *
 foreign import data OrdinalScale :: * -> * -> *
 
 -- Scale constructors
@@ -76,8 +85,14 @@ foreign import powerScale "var powerScale = d3.scale.pow"
   :: forall r. D3Eff (PowerScale Number r)
 foreign import sqrtScale "var sqrtScale = d3.scale.sqrt"
   :: forall r. D3Eff (PowerScale Number r)
-foreign import logScale "function logScale() { return d3.scale.log(); }"
+foreign import logScale "function logScale() { return d3.scale.log(); }" --"
   :: forall r. D3Eff (LogScale Number r)
+foreign import quantizeScale "var quantizeScale = d3.scale.quantize"
+  :: forall r. D3Eff (QuantizeScale Number r)
+foreign import quantileScale "var quantileScale = d3.scale.quantile"
+  :: forall r. D3Eff (QuantileScale Number r)
+foreign import thresholdScale "var thresholdScale = d3.scale.threshold"
+  :: forall r. D3Eff (ThresholdScale Number r)
 foreign import ordinalScale "var ordinalScale = d3.scale.ordinal"
   :: forall d r. D3Eff (OrdinalScale d r)
 
@@ -90,6 +105,11 @@ exponent = ffi ["k", "scale", ""] "scale.exponent(k)"
 
 base :: forall r. Number -> LogScale Number r -> D3Eff (LogScale Number r)
 base = ffi ["base", "scale", ""] "scale.base(base)"
+
+-- Quantile scale methods
+
+quantiles :: forall r. QuantileScale Number r -> D3Eff (QuantileScale Number r)
+quantiles = ffi ["scale", ""] "scale.quantiles()"
 
 -- Ordinal scale methods
 
@@ -163,6 +183,24 @@ instance quantitativeLog :: Quantitative LogScale where
   getTicks = unsafeTicks
   getTickFormat = unsafeTickFormat
 
+instance scaleQuantize :: Scale QuantizeScale where
+  domain = unsafeDomain
+  range = unsafeRange
+  copy = unsafeCopy
+  toFunction = unsafeToFunction
+
+instance scaleQuantile :: Scale QuantileScale where
+  domain = unsafeDomain
+  range = unsafeRange
+  copy = unsafeCopy
+  toFunction = unsafeToFunction
+
+instance scaleThreshold :: Scale ThresholdScale where
+  domain = unsafeDomain
+  range = unsafeRange
+  copy = unsafeCopy
+  toFunction = unsafeToFunction
+
 instance scaleOrdinal :: Scale OrdinalScale where
   domain = unsafeDomain
   range = unsafeRange
@@ -182,4 +220,3 @@ unsafeTicks count = case count of
 unsafeTickFormat count format = case format of
   Nothing -> ffi ["count", "scale", ""] "scale.tickFormat(count)" count
   Just f -> ffi ["count", "format", "scale", ""] "scale.tickFormat(count, format)" count f
-
