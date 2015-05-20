@@ -688,6 +688,13 @@ max :: forall d m. (Magnitude m) => [m] -> m
 extent :: forall m. (Magnitude m) => [m] -> [m]
 ```
 
+#### `extent'`
+
+``` purescript
+extent' :: forall d m. (Magnitude m) => (d -> m) -> [d] -> [m]
+```
+
+
 
 ## Module Graphics.D3.Layout.Base
 
