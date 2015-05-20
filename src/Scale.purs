@@ -85,7 +85,7 @@ foreign import powerScale "var powerScale = d3.scale.pow"
   :: forall r. D3Eff (PowerScale Number r)
 foreign import sqrtScale "var sqrtScale = d3.scale.sqrt"
   :: forall r. D3Eff (PowerScale Number r)
-foreign import logScale "function logScale() { return d3.scale.log(); }" --"
+foreign import logScale "function logScale() { return d3.scale.log(); }"
   :: forall r. D3Eff (LogScale Number r)
 foreign import quantizeScale "var quantizeScale = d3.scale.quantize"
   :: forall r. D3Eff (QuantizeScale Number r)
