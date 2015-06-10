@@ -10,14 +10,11 @@
   ],
   "dependencies": {
     "d3": "^3.4.9",
-    "purescript-easy-ffi": "^1.0.0",
-    "purescript-foreign": "~0.3.0",
-    "purescript-datetime": "^0.5.1"
+    "purescript-datetime": "purescript-contrib/purescript-datetime#master",
+    "purescript-easy-ffi": "freebroccolo/purescript-easy-ffi#master",
+    "purescript-foreign": "^0.5.0",
+    "purescript-prelude": "^0.1.0"
   },
   "main": "src/**/*.purs",
-  "private": false,
-  "resolutions": {
-    "purescript-tuples": "~0.3.0",
-    "purescript-monoid": "~0.2.0"
-  }
+  "private": false
 }

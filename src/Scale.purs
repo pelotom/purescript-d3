@@ -45,13 +45,15 @@ import Data.Maybe
 
 import Data.Foreign.EasyFFI
 
+import Prelude ( ($), (>>=), return )
+
 ffi = unsafeForeignFunction
 
 -- A base class for all scale types
 
 class Scale s where
-  domain :: forall d r. [d] -> s d r -> D3Eff (s d r)
-  range :: forall d r. [r] -> s d r -> D3Eff (s d r)
+  domain :: forall d r. Array d -> s d r -> D3Eff (s d r)
+  range :: forall d r. Array r -> s d r -> D3Eff (s d r)
   copy :: forall d r. s d r -> D3Eff (s d r)
   toFunction :: forall d r. s d r -> D3Eff (d -> r)
 
@@ -59,11 +61,11 @@ class Scale s where
 
 class Quantitative s where
   invert :: s Number Number -> D3Eff (Number -> Number)
-  rangeRound :: [Number] -> s Number Number -> D3Eff (s Number Number)
+  rangeRound :: Array Number -> s Number Number -> D3Eff (s Number Number)
   interpolate :: forall r. Interpolator r -> s Number r -> D3Eff (s Number r)
   clamp :: forall r. Boolean -> s Number r -> D3Eff (s Number r)
   nice :: forall r. Maybe Number -> s Number r -> D3Eff (s Number r)
-  getTicks :: forall r. Maybe Number -> s Number r -> D3Eff [Number]
+  getTicks :: forall r. Maybe Number -> s Number r -> D3Eff (Array Number)
   getTickFormat :: forall r. Number -> Maybe String -> s Number r -> D3Eff (Number -> String)
 
 -- Scale types
@@ -79,22 +81,14 @@ foreign import data OrdinalScale :: * -> * -> *
 
 -- Scale constructors
 
-foreign import linearScale "var linearScale = d3.scale.linear"
-  :: forall r. D3Eff (LinearScale Number r)
-foreign import powerScale "var powerScale = d3.scale.pow"
-  :: forall r. D3Eff (PowerScale Number r)
-foreign import sqrtScale "var sqrtScale = d3.scale.sqrt"
-  :: forall r. D3Eff (PowerScale Number r)
-foreign import logScale "function logScale() { return d3.scale.log(); }"
-  :: forall r. D3Eff (LogScale Number r)
-foreign import quantizeScale "var quantizeScale = d3.scale.quantize"
-  :: forall r. D3Eff (QuantizeScale Number r)
-foreign import quantileScale "var quantileScale = d3.scale.quantile"
-  :: forall r. D3Eff (QuantileScale Number r)
-foreign import thresholdScale "var thresholdScale = d3.scale.threshold"
-  :: forall r. D3Eff (ThresholdScale Number r)
-foreign import ordinalScale "var ordinalScale = d3.scale.ordinal"
-  :: forall d r. D3Eff (OrdinalScale d r)
+foreign import linearScale :: forall r. D3Eff (LinearScale Number r)
+foreign import powerScale :: forall r. D3Eff (PowerScale Number r)
+foreign import sqrtScale :: forall r. D3Eff (PowerScale Number r)
+foreign import logScale :: forall r. D3Eff (LogScale Number r)
+foreign import quantizeScale :: forall r. D3Eff (QuantizeScale Number r)
+foreign import quantileScale :: forall r. D3Eff (QuantileScale Number r)
+foreign import thresholdScale :: forall r. D3Eff (ThresholdScale Number r)
+foreign import ordinalScale :: forall d r. D3Eff (OrdinalScale d r)
 
 -- Power scale methods
 

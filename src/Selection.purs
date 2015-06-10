@@ -44,6 +44,8 @@ import Control.Monad.Eff
 import Data.Foreign
 import Data.Foreign.EasyFFI
 
+import Prelude ( Unit(..) )
+
 ffi = unsafeForeignFunction
 
 -- The "selection-y" types, parameterized by the type of their bound data
@@ -76,7 +78,7 @@ select = ffi ["selector", "selection", ""] "selection.select(selector)"
 selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
 selectAll = ffi ["selector", "selection", ""] "selection.selectAll(selector)"
 
-bind :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (Update newData)
+bind :: forall oldData newData. Array newData -> Selection oldData -> D3Eff (Update newData)
 bind = ffi ["array", "selection", ""] "selection.data(array)"
 
 enter :: forall d. Update d -> D3Eff (Enter d)
@@ -223,5 +225,6 @@ class Clickable c where
   onDoubleClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
 
 instance clickableSelection :: Clickable (Selection a) where
-  onClick = unsafeOnClick
-  onDoubleClick = unsafeOnDoubleClick
+  -- NOTE: psc complains about cycles unless onclick/onDoubleClick are inlined
+  onClick = ffi ["callback", "clickable", ""] "clickable.on('click', function(data) { callback(data)(); })"
+  onDoubleClick = ffi ["callback", "clickable", ""] "clickable.on('dblclick', function (data) { callback(data)(); })"
