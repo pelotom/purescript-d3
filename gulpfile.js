@@ -8,10 +8,10 @@ var gulp      	= require('gulp')
 
 var paths = {
 	src: 'src/**/*.purs',
+  ffi: 'src/**/*.js',
 	dest: 'build/output',
-	bowerSrc: [
-	  'bower_components/purescript-*/src/**/*.purs'
-	],
+	bowerSrc: 'bower_components/purescript-*/src/**/*.purs',
+  bowerFfi:  'bower_components/purescript-*/src/**/*.js',
 	manualReadme: 'docsrc/README.md',
 	apiDest: 'build/API.md',
 	readmeDest: 'README.md'
@@ -22,21 +22,23 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('compile', ['clean'], function() {
-	var psc = purescript.pscMake({
+	var psc = purescript.psc({
 		// Compiler options
+    src: [paths.src, paths.bowerSrc],
+    ffi: [paths.ffi, paths.bowerFfi],
 		output: paths.dest
 	});
 	psc.on('error', function(e) {
 		console.error(e.message);
 		psc.end();
 	});
-	return gulp.src([paths.src].concat(paths.bowerSrc))
-		.pipe(psc)
+	return psc;
 });
 
 gulp.task('generateDocs', ['compile'], function() {
-	return gulp.src(paths.src)
-	  .pipe(purescript.pscDocs())
+	return purescript.pscDocs({
+      src: [paths.src]
+    })
 	  .pipe(gulp.dest(paths.apiDest))
 	  ;
 });

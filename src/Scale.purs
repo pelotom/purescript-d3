@@ -45,7 +45,7 @@ import Data.Maybe
 
 import Data.Foreign.EasyFFI
 
-import Prelude ( ($), (>>=), return )
+import Prelude ( ($), (>>=), return, bind )
 
 ffi = unsafeForeignFunction
 
