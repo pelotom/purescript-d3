@@ -13,7 +13,7 @@ module Graphics.D3.Selection
   , rootSelectAll
   , select
   , selectAll
-  , bind
+  , bindData
   , enter
   , exit
   , transition
@@ -43,6 +43,8 @@ import Control.Monad.Eff
 
 import Data.Foreign
 import Data.Foreign.EasyFFI
+
+import Prelude ( Unit() )
 
 ffi = unsafeForeignFunction
 
@@ -76,8 +78,8 @@ select = ffi ["selector", "selection", ""] "selection.select(selector)"
 selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
 selectAll = ffi ["selector", "selection", ""] "selection.selectAll(selector)"
 
-bind :: forall oldData newData. [newData] -> Selection oldData -> D3Eff (Update newData)
-bind = ffi ["array", "selection", ""] "selection.data(array)"
+bindData :: forall oldData newData. Array newData -> Selection oldData -> D3Eff (Update newData)
+bindData = ffi ["array", "selection", ""] "selection.data(array)"
 
 enter :: forall d. Update d -> D3Eff (Enter d)
 enter = ffi ["update", ""] "update.enter()"
@@ -128,10 +130,10 @@ unsafeText'' = ffi
   "selection.text(function (d, i) { return text(d)(i); })"
 
 unsafeOnClick :: forall eff c i r. (Clickable c) => (i -> Eff eff r) -> c -> D3Eff c
-unsafeOnClick = ffi ["callback", "clickable", ""] "clickable.on('click', callback)"
+unsafeOnClick = ffi ["callback", "clickable", ""] "clickable.on('click', function(data) { callback(data)(); })"
 
 unsafeOnDoubleClick :: forall eff c i r. (Clickable c) => (i -> Eff eff r) -> c -> D3Eff c
-unsafeOnDoubleClick = ffi ["callback", "clickable", ""] "clickable.on('dblclick', callback)"
+unsafeOnDoubleClick = ffi ["callback", "clickable", ""] "clickable.on('dblclick', function (data) { callback(data)(); })"
 
 -- Transition-only stuff
 delay :: forall d. Number -> Transition d -> D3Eff (Transition d)
@@ -223,5 +225,6 @@ class Clickable c where
   onDoubleClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
 
 instance clickableSelection :: Clickable (Selection a) where
-  onClick = unsafeOnClick
-  onDoubleClick = unsafeOnDoubleClick
+  -- NOTE: psc complains about cycles unless onclick/onDoubleClick are inlined
+  onClick = ffi ["callback", "clickable", ""] "clickable.on('click', function(data) { callback(data)(); })"
+  onDoubleClick = ffi ["callback", "clickable", ""] "clickable.on('dblclick', function (data) { callback(data)(); })"

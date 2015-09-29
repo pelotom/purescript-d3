@@ -9,8 +9,7 @@ import Graphics.D3.Scale
 import Graphics.D3.Unsafe
 
 foreign import data TimeScale :: * -> * -> *
-foreign import timeScale "var timeScale = d3.time.scale"
-  :: forall r. D3Eff (TimeScale JSDate r)
+foreign import timeScale :: forall r. D3Eff (TimeScale JSDate r)
 
 instance scaleTime :: Scale TimeScale where
   domain = unsafeDomain

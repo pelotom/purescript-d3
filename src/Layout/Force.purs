@@ -32,7 +32,7 @@ ffi = unsafeForeignFunction
 
 foreign import data ForceLayout :: *
 
-foreign import forceLayout "var forceLayout = d3.layout.force" :: D3Eff ForceLayout
+foreign import forceLayout :: D3Eff ForceLayout
 
 instance forceGraphLayout :: GraphLayout ForceLayout where
   size dims = ffi ["w", "h", "force", ""] "force.size([w, h])" dims.width dims.height
