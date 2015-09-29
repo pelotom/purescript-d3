@@ -13,7 +13,7 @@ module Graphics.D3.Selection
   , rootSelectAll
   , select
   , selectAll
-  , bind_
+  , bindData
   , enter
   , exit
   , transition
@@ -78,8 +78,8 @@ select = ffi ["selector", "selection", ""] "selection.select(selector)"
 selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
 selectAll = ffi ["selector", "selection", ""] "selection.selectAll(selector)"
 
-bind_ :: forall oldData newData. Array newData -> Selection oldData -> D3Eff (Update newData)
-bind_ = ffi ["array", "selection", ""] "selection.data(array)"
+bindData :: forall oldData newData. Array newData -> Selection oldData -> D3Eff (Update newData)
+bindData = ffi ["array", "selection", ""] "selection.data(array)"
 
 enter :: forall d. Update d -> D3Eff (Enter d)
 enter = ffi ["update", ""] "update.enter()"

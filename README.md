@@ -5342,10 +5342,10 @@ select :: forall d. String -> Selection d -> D3Eff (Selection d)
 selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
 ```
 
-#### `bind_`
+#### `bindData`
 
 ``` purescript
-bind_ :: forall oldData newData. Array newData -> Selection oldData -> D3Eff (Update newData)
+bindData :: forall oldData newData. Array newData -> Selection oldData -> D3Eff (Update newData)
 ```
 
 #### `enter`
