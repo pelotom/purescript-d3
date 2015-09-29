@@ -44,7 +44,7 @@ import Control.Monad.Eff
 import Data.Foreign
 import Data.Foreign.EasyFFI
 
-import Prelude ( Unit(..) )
+import Prelude ( Unit() )
 
 ffi = unsafeForeignFunction
 

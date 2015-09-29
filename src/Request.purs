@@ -12,7 +12,7 @@ import Control.Monad.Eff
 
 import Graphics.D3.Base
 
-import Prelude ( Unit(..) )
+import Prelude ( Unit() )
 
 type RequestError = { status :: Number, statusText :: String }
 
