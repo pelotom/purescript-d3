@@ -32,7 +32,19 @@ gulp.task('compile', ['clean'], function() {
 
 gulp.task('generateDocs', ['compile'], function() {
   return purescript.pscDocs({
-      src: [paths.src, paths.bowerSrc]
+      src: [paths.src, paths.bowerSrc],
+      docgen: [
+        'Graphics.D3.Base',
+        'Graphics.D3.Interpolate',
+        'Graphics.D3.Layout.Base',
+        'Graphics.D3.Layout.Force',
+        'Graphics.D3.Request',
+        'Graphics.D3.Scale',
+        'Graphics.D3.Selection',
+        'Graphics.D3.SVG.Axis',
+        'Graphics.D3.Time',
+        'Graphics.D3.Util'
+      ]
     })
     .pipe(gulp.dest(paths.apiDest))
     ;
