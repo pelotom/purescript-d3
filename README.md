@@ -700,7 +700,7 @@ multiplication, division, and modulo (division remainder) operations.
 Instances must satisfy the following law in addition to the `Semiring`
 laws:
 
-- Remainder: `a / b * b + (a `mod` b) = a`
+- Remainder: ``a / b * b + (a `mod` b) = a``
 
 ##### Instances
 ``` purescript
@@ -902,6 +902,12 @@ _left-associative / precedence 4_
 
 Test whether one value is _non-strictly greater than_ another.
 
+#### `unsafeCompare`
+
+``` purescript
+unsafeCompare :: forall a. a -> a -> Ordering
+```
+
 #### `Bounded`
 
 ``` purescript
@@ -926,6 +932,7 @@ instance boundedBoolean :: Bounded Boolean
 instance boundedUnit :: Bounded Unit
 instance boundedOrdering :: Bounded Ordering
 instance boundedInt :: Bounded Int
+instance boundedChar :: Bounded Char
 instance boundedFn :: (Bounded b) => Bounded (a -> b)
 ```
 
@@ -947,6 +954,7 @@ instance boundedOrdBoolean :: BoundedOrd Boolean
 instance boundedOrdUnit :: BoundedOrd Unit
 instance boundedOrdOrdering :: BoundedOrd Ordering
 instance boundedOrdInt :: BoundedOrd Int
+instance boundedOrdChar :: BoundedOrd Char
 ```
 
 #### `BooleanAlgebra`
@@ -1042,6 +1050,246 @@ instance showOrdering :: Show Ordering
 ```
 
 
+## Module Math
+
+Wraps the math functions and constants from Javascript's built-in `Math` object.
+See [Math Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math).
+
+#### `Radians`
+
+``` purescript
+type Radians = Number
+```
+
+An alias to make types in this module more explicit.
+
+#### `abs`
+
+``` purescript
+abs :: Number -> Number
+```
+
+Returns the absolute value of the argument.
+
+#### `acos`
+
+``` purescript
+acos :: Number -> Radians
+```
+
+Returns the inverse cosine of the argument.
+
+#### `asin`
+
+``` purescript
+asin :: Number -> Radians
+```
+
+Returns the inverse sine of the argument.
+
+#### `atan`
+
+``` purescript
+atan :: Number -> Radians
+```
+
+Returns the inverse tangent of the argument.
+
+#### `atan2`
+
+``` purescript
+atan2 :: Number -> Number -> Radians
+```
+
+Four-quadrant tangent inverse. Given the arguments `y` and `x`, returns
+the inverse tangent of `y / x`, where the signs of both arguments are used
+to determine the sign of the result.
+If the first argument is negative, the result will be negative.
+The result is the angle between the positive x axis and  a point `(x, y)`.
+
+#### `ceil`
+
+``` purescript
+ceil :: Number -> Number
+```
+
+Returns the smallest integer not smaller than the argument.
+
+#### `cos`
+
+``` purescript
+cos :: Radians -> Number
+```
+
+Returns the cosine of the argument.
+
+#### `exp`
+
+``` purescript
+exp :: Number -> Number
+```
+
+Returns `e` exponentiated to the power of the argument.
+
+#### `floor`
+
+``` purescript
+floor :: Number -> Number
+```
+
+Returns the largest integer not larger than the argument.
+
+#### `log`
+
+``` purescript
+log :: Number -> Number
+```
+
+Returns the natural logarithm of a number.
+
+#### `max`
+
+``` purescript
+max :: Number -> Number -> Number
+```
+
+Returns the largest of two numbers.
+
+#### `min`
+
+``` purescript
+min :: Number -> Number -> Number
+```
+
+Returns the smallest of two numbers.
+
+#### `pow`
+
+``` purescript
+pow :: Number -> Number -> Number
+```
+
+Return  the first argument exponentiated to the power of the second argument.
+
+#### `round`
+
+``` purescript
+round :: Number -> Number
+```
+
+Returns the integer closest to the argument.
+
+#### `sin`
+
+``` purescript
+sin :: Radians -> Number
+```
+
+Returns the sine of the argument.
+
+#### `sqrt`
+
+``` purescript
+sqrt :: Number -> Number
+```
+
+Returns the square root of the argument.
+
+#### `tan`
+
+``` purescript
+tan :: Radians -> Number
+```
+
+Returns the tangent of the argument.
+
+#### `(%)`
+
+``` purescript
+(%) :: Number -> Number -> Number
+```
+
+_left-associative / precedence 7_
+
+Computes the remainder after division, wrapping Javascript's `%` operator.
+
+#### `e`
+
+``` purescript
+e :: Number
+```
+
+The base of natural logarithms, *e*, around 2.71828.
+
+#### `ln2`
+
+``` purescript
+ln2 :: Number
+```
+
+The natural logarithm of 2, around 0.6931.
+
+#### `ln10`
+
+``` purescript
+ln10 :: Number
+```
+
+The natural logarithm of 10, around 2.3025.
+
+#### `log2e`
+
+``` purescript
+log2e :: Number
+```
+
+The base 2 logarithm of `e`, around 1.4426.
+
+#### `log10e`
+
+``` purescript
+log10e :: Number
+```
+
+Base 10 logarithm of `e`, around 0.43429.
+
+#### `pi`
+
+``` purescript
+pi :: Number
+```
+
+The ratio of the circumference of a circle to its diameter, around 3.14159.
+
+#### `sqrt1_2`
+
+``` purescript
+sqrt1_2 :: Number
+```
+
+The Square root of one half, around 0.707107.
+
+#### `sqrt2`
+
+``` purescript
+sqrt2 :: Number
+```
+
+The square root of two, around 1.41421.
+
+
+## Module Global.Unsafe
+
+#### `unsafeStringify`
+
+``` purescript
+unsafeStringify :: forall a. a -> String
+```
+
+Uses the global JSON object to turn anything into a string. Careful! Trying
+to serialize functions returns undefined
+
+
 ## Module Global
 
 This module defines types for some global Javascript functions
@@ -1118,7 +1366,7 @@ instance ordHourOfDay :: Ord HourOfDay
 
 ``` purescript
 newtype Hours
-  = Hours Int
+  = Hours Number
 ```
 
 A quantity of hours (not necessarily a value between 0 and 23).
@@ -1156,7 +1404,7 @@ instance ordMinuteOfHour :: Ord MinuteOfHour
 
 ``` purescript
 newtype Minutes
-  = Minutes Int
+  = Minutes Number
 ```
 
 A quantity of minutes (not necessarily a value between 0 and 60).
@@ -1194,7 +1442,7 @@ instance ordSecondOfMinute :: Ord SecondOfMinute
 
 ``` purescript
 newtype Seconds
-  = Seconds Int
+  = Seconds Number
 ```
 
 A quantity of seconds (not necessarily a value between 0 and 60).
@@ -1232,7 +1480,7 @@ instance ordMillisecondOfSecond :: Ord MillisecondOfSecond
 
 ``` purescript
 newtype Milliseconds
-  = Milliseconds Int
+  = Milliseconds Number
 ```
 
 A quantity of milliseconds (not necessarily a value between 0 and 1000).
@@ -1798,6 +2046,22 @@ fromCharCode :: Int -> Char
 
 Constructs a character from the given Unicode numeric value.
 
+#### `toLower`
+
+``` purescript
+toLower :: Char -> Char
+```
+
+Converts a character to lowercase.
+
+#### `toUpper`
+
+``` purescript
+toUpper :: Char -> Char
+```
+
+Converts a character to uppercase.
+
 
 ## Module Data.String.Unsafe
 
@@ -1884,7 +2148,7 @@ data Eff :: # ! -> * -> *
 
 The `Eff` type constructor is used to represent _native_ effects.
 
-See [Handling Native Effects with the Eff Monad](https://github.com/purescript/purescript/wiki/Handling-Native-Effects-with-the-Eff-Monad) for more details.
+See [Handling Native Effects with the Eff Monad](http://www.purescript.org/learn/eff/) for more details.
 
 The first type parameter is a row of effects which represents the contexts in which a computation can be run, and the second type parameter is the return type.
 
@@ -1900,7 +2164,7 @@ instance monadEff :: Monad (Eff e)
 #### `Pure`
 
 ``` purescript
-type Pure a = forall e. Eff e a
+type Pure a = Eff () a
 ```
 
 The `Pure` type synonym represents _pure_ computations, i.e. ones in which all effects have been handled.
@@ -1914,9 +2178,6 @@ runPure :: forall a. Pure a -> a
 ```
 
 Run a pure computation and return its result.
-
-Note: since this function has a rank-2 type, it may cause problems to apply this function using the `$` operator. The recommended approach
-is to use parentheses instead.
 
 #### `untilE`
 
@@ -2071,7 +2332,7 @@ It may cause problems to apply this function using the `$` operator. The recomme
 #### `pureST`
 
 ``` purescript
-pureST :: forall a. (forall h r. Eff (st :: ST h | r) a) -> a
+pureST :: forall a. (forall h. Eff (st :: ST h) a) -> a
 ```
 
 A convenience function which combines `runST` with `runPure`, which can be used when the only required effect is `ST`.
@@ -2149,7 +2410,7 @@ be used to delay evaluation.
 #### `fix`
 
 ``` purescript
-fix :: forall l a. (Lazy l) => (l -> l) -> l
+fix :: forall l. (Lazy l) => (l -> l) -> l
 ```
 
 `fix` defines a value as the fixed point of a function.
@@ -2329,6 +2590,7 @@ instance comonadConj :: Comonad Conj
 instance showConj :: (Show a) => Show (Conj a)
 instance semigroupConj :: (BooleanAlgebra a) => Semigroup (Conj a)
 instance monoidConj :: (BooleanAlgebra a) => Monoid (Conj a)
+instance semiringConj :: (BooleanAlgebra a) => Semiring (Conj a)
 ```
 
 #### `runConj`
@@ -2369,6 +2631,7 @@ instance comonadDisj :: Comonad Disj
 instance showDisj :: (Show a) => Show (Disj a)
 instance semigroupDisj :: (BooleanAlgebra a) => Semigroup (Disj a)
 instance monoidDisj :: (BooleanAlgebra a) => Monoid (Disj a)
+instance semiringDisj :: (BooleanAlgebra a) => Semiring (Disj a)
 ```
 
 #### `runDisj`
@@ -3124,6 +3387,22 @@ maybe x f Nothing == x
 maybe x f (Just y) == f y
 ```
 
+#### `maybe'`
+
+``` purescript
+maybe' :: forall a b. (Unit -> b) -> (a -> b) -> Maybe a -> b
+```
+
+Similar to `maybe` but for use in cases where the default value may be
+expensive to compute. As PureScript is not lazy, the standard `maybe` has
+to evaluate the default value before returning the result, whereas here
+the value is only computed when the `Maybe` is known to be `Nothing`.
+
+``` purescript
+maybe' (\_ -> x) f Nothing == x
+maybe' (\_ -> x) f (Just y) == f y
+```
+
 #### `fromMaybe`
 
 ``` purescript
@@ -3137,6 +3416,22 @@ Takes a default value, and a `Maybe` value. If the `Maybe` value is
 ``` purescript
 fromMaybe x Nothing == x
 fromMaybe x (Just y) == y
+```
+
+#### `fromMaybe'`
+
+``` purescript
+fromMaybe' :: forall a. (Unit -> a) -> Maybe a -> a
+```
+
+Similar to `fromMaybe` but for use in cases where the default value may be
+expensive to compute. As PureScript is not lazy, the standard `fromMaybe`
+has to evaluate the default value before returning the result, whereas here
+the value is only computed when the `Maybe` is known to be `Nothing`.
+
+``` purescript
+fromMaybe' (\_ -> x) Nothing == x
+fromMaybe' (\_ -> x) (Just y) == y
 ```
 
 #### `isJust`
@@ -3267,64 +3562,6 @@ toAssocArray :: forall a h r. STArray h a -> Eff (st :: ST h | r) (Array (Assoc 
 
 Create an immutable copy of a mutable array, where each element
 is labelled with its index in the original array.
-
-
-## Module Data.Int
-
-#### `fromNumber`
-
-``` purescript
-fromNumber :: Number -> Maybe Int
-```
-
-Creates an `Int` from a `Number` value. The number must already be an
-integer and fall within the valid range of values for the `Int` type
-otherwise `Nothing` is returned.
-
-#### `toNumber`
-
-``` purescript
-toNumber :: Int -> Number
-```
-
-Converts an `Int` value back into a `Number`. Any `Int` is a valid `Number`
-so there is no loss of precision with this function.
-
-#### `fromString`
-
-``` purescript
-fromString :: String -> Maybe Int
-```
-
-Reads an `Int` from a `String` value. The number must parse as an integer
-and fall within the valid range of values for the `Int` type, otherwise
-`Nothing` is returned.
-
-#### `even`
-
-``` purescript
-even :: Int -> Boolean
-```
-
-Returns whether an `Int` is an even number.
-
-``` purescript
-even 0 == true
-even 1 == false
-```
-
-#### `odd`
-
-``` purescript
-odd :: Int -> Boolean
-```
-
-The negation of `even`.
-
-``` purescript
-odd 0 == false
-odd 1 == false
-```
 
 
 ## Module Data.Maybe.First
@@ -3601,6 +3838,97 @@ A partial function that extracts the value from the `Just` data
 constructor. Passing `Nothing` to `fromJust` will throw an error at
 runtime.
 
+#### `unsafeThrow`
+
+``` purescript
+unsafeThrow :: forall a. String -> a
+```
+
+
+## Module Data.Int
+
+#### `fromNumber`
+
+``` purescript
+fromNumber :: Number -> Maybe Int
+```
+
+Creates an `Int` from a `Number` value. The number must already be an
+integer and fall within the valid range of values for the `Int` type
+otherwise `Nothing` is returned.
+
+#### `floor`
+
+``` purescript
+floor :: Number -> Int
+```
+
+Convert a `Number` to an `Int`, by taking the closest integer equal to or
+less than the argument. Values outside the `Int` range are clamped.
+
+#### `ceil`
+
+``` purescript
+ceil :: Number -> Int
+```
+
+Convert a `Number` to an `Int`, by taking the closest integer equal to or
+greater than the argument. Values outside the `Int` range are clamped.
+
+#### `round`
+
+``` purescript
+round :: Number -> Int
+```
+
+Convert a `Number` to an `Int`, by taking the nearest integer to the
+argument. Values outside the `Int` range are clamped.
+
+#### `toNumber`
+
+``` purescript
+toNumber :: Int -> Number
+```
+
+Converts an `Int` value back into a `Number`. Any `Int` is a valid `Number`
+so there is no loss of precision with this function.
+
+#### `fromString`
+
+``` purescript
+fromString :: String -> Maybe Int
+```
+
+Reads an `Int` from a `String` value. The number must parse as an integer
+and fall within the valid range of values for the `Int` type, otherwise
+`Nothing` is returned.
+
+#### `even`
+
+``` purescript
+even :: Int -> Boolean
+```
+
+Returns whether an `Int` is an even number.
+
+``` purescript
+even 0 == true
+even 1 == false
+```
+
+#### `odd`
+
+``` purescript
+odd :: Int -> Boolean
+```
+
+The negation of `even`.
+
+``` purescript
+odd 0 == false
+odd 1 == false
+```
+
 
 ## Module Data.String
 
@@ -3690,8 +4018,19 @@ stripPrefix :: String -> String -> Maybe String
 
 If the string starts with the given prefix, return the portion of the
 string left after removing it, as a Just value. Otherwise, return Nothing.
-* `stripPrefix "http:" "http://purescript.org" == Just "//purescript.org"
-* `stripPrefix "http:" "https://purescript.org" == Nothing
+* `stripPrefix "http:" "http://purescript.org" == Just "//purescript.org"`
+* `stripPrefix "http:" "https://purescript.org" == Nothing`
+
+#### `stripSuffix`
+
+``` purescript
+stripSuffix :: String -> String -> Maybe String
+```
+
+If the string ends with the given suffix, return the portion of the
+string left after removing it, as a Just value. Otherwise, return Nothing.
+* `stripSuffix ".exe" "psc.exe" == Just "psc"`
+* `stripSuffix ".exe" "psc" == Nothing`
 
 #### `fromCharArray`
 
@@ -3735,7 +4074,7 @@ lastIndexOf :: String -> String -> Maybe Int
 ```
 
 Returns the index of the last occurrence of the first string in the
-second string. Returns `-1` if there is no match.
+second string. Returns `Nothing` if there is no match.
 
 #### `lastIndexOf'`
 
@@ -3802,8 +4141,9 @@ of the string for which the predicate holds.
 split :: String -> String -> Array String
 ```
 
-Returns the substrings of the first string separated along occurences
-of the second string.
+Returns the substrings of the second string separated along occurences
+of the first string.
+* `split " " "hello world" == ["hello", "world"]`
 
 #### `toCharArray`
 
@@ -3966,11 +4306,11 @@ See the [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 #### `search`
 
 ``` purescript
-search :: Regex -> String -> Int
+search :: Regex -> String -> Maybe Int
 ```
 
-Returns the index of the first match of the `Regex` in the string, or
-`-1` if there is no match.
+Returns `Just` the index of the first match of the `Regex` in the string,
+or `Nothing` if there is no match.
 
 #### `split`
 
@@ -4125,6 +4465,8 @@ instance foldableEither :: Foldable (Either a)
 instance bifoldableEither :: Bifoldable Either
 instance traversableEither :: Traversable (Either a)
 instance bitraversableEither :: Bitraversable Either
+instance semiringEither :: (Semiring b) => Semiring (Either a b)
+instance semigroupEither :: (Semigroup b) => Semigroup (Either a b)
 ```
 
 #### `either`
@@ -4766,6 +5108,14 @@ readString :: Foreign -> F String
 
 Attempt to coerce a foreign value to a `String`.
 
+#### `readChar`
+
+``` purescript
+readChar :: Foreign -> F Char
+```
+
+Attempt to coerce a foreign value to a `Char`.
+
 #### `readBoolean`
 
 ``` purescript
@@ -4781,6 +5131,14 @@ readNumber :: Foreign -> F Number
 ```
 
 Attempt to coerce a foreign value to a `Number`.
+
+#### `readInt`
+
+``` purescript
+readInt :: Foreign -> F Int
+```
+
+Attempt to coerce a foreign value to an `Int`.
 
 #### `readArray`
 
@@ -4984,10 +5342,10 @@ select :: forall d. String -> Selection d -> D3Eff (Selection d)
 selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
 ```
 
-#### `bind`
+#### `bind_`
 
 ``` purescript
-bind :: forall oldData newData. Array newData -> Selection oldData -> D3Eff (Update newData)
+bind_ :: forall oldData newData. Array newData -> Selection oldData -> D3Eff (Update newData)
 ```
 
 #### `enter`
@@ -5456,7 +5814,20 @@ Running time: `O(n)` where `n` is the length of the array
 uncons :: forall a. Array a -> Maybe { head :: a, tail :: Array a }
 ```
 
-Break an array into its first element, and the remaining elements
+Break an array into its first element and remaining elements.
+
+Using `uncons` provides a way of writing code that would use cons patterns
+in Haskell or pre-PureScript 0.7:
+``` purescript
+f (x : xs) = something
+f [] = somethingElse
+```
+Becomes:
+``` purescript
+f arr = case uncons arr of
+  Just { head: x, tail: xs } -> something
+  Nothing -> somethingElse
+```
 
 #### `index`
 
@@ -5921,8 +6292,10 @@ can be used to construct instances for new data structures.
 ``` purescript
 instance foreignIsForeign :: IsForeign Foreign
 instance stringIsForeign :: IsForeign String
+instance charIsForeign :: IsForeign Char
 instance booleanIsForeign :: IsForeign Boolean
 instance numberIsForeign :: IsForeign Number
+instance intIsForeign :: IsForeign Int
 instance arrayIsForeign :: (IsForeign a) => IsForeign (Array a)
 instance nullIsForeign :: (IsForeign a) => IsForeign (Null a)
 instance undefinedIsForeign :: (IsForeign a) => IsForeign (Undefined a)
@@ -6290,6 +6663,53 @@ The generating function `f` in `unfoldr f` in understood as follows:
 ``` purescript
 instance unfoldableArray :: Unfoldable Array
 ```
+
+#### `replicate`
+
+``` purescript
+replicate :: forall f a. (Unfoldable f) => Int -> a -> f a
+```
+
+Replicate a value some natural number of times.
+For example:
+
+~~~ purescript
+replicate 2 "foo" == ["foo", "foo"] :: Array String
+~~~
+
+#### `replicateA`
+
+``` purescript
+replicateA :: forall m f a. (Applicative m, Unfoldable f, Traversable f) => Int -> m a -> m (f a)
+```
+
+Perform an Applicative action `n` times, and accumulate all the results.
+
+#### `none`
+
+``` purescript
+none :: forall f a. (Unfoldable f) => f a
+```
+
+The container with no elements - unfolded with zero iterations.
+For example:
+
+~~~ purescript
+none == [] :: forall a. Array a
+~~~
+
+#### `singleton`
+
+``` purescript
+singleton :: forall f a. (Unfoldable f) => a -> f a
+```
+
+Contain a single value.
+For example:
+
+~~~ purescript
+singleton "foo" == ["foo"] :: Array String
+~~~
 
 
 ## Module Data.Enum

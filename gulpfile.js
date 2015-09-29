@@ -37,7 +37,7 @@ gulp.task('compile', ['clean'], function() {
 
 gulp.task('generateDocs', ['compile'], function() {
 	return purescript.pscDocs({
-      src: [paths.src]
+      src: [paths.src, paths.bowerSrc]
     })
 	  .pipe(gulp.dest(paths.apiDest))
 	  ;
