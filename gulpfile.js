@@ -22,17 +22,12 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('compile', ['clean'], function() {
-  var psc = purescript.psc({
+  return purescript.psc({
     // Compiler options
     src: [paths.src, paths.bowerSrc],
     ffi: [paths.ffi, paths.bowerFfi],
     output: paths.dest
   });
-  psc.on('error', function(e) {
-    console.error(e.message);
-    psc.end();
-  });
-  return psc;
 });
 
 gulp.task('generateDocs', ['compile'], function() {
