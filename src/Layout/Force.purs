@@ -19,16 +19,13 @@ module Graphics.D3.Layout.Force
   , createDrag
   ) where
 
-import Control.Monad.Eff
-import Data.Foreign
-import Data.Foreign.EasyFFI
+import Control.Monad.Eff (Eff)
+import Data.Foreign (Foreign)
 
-import Graphics.D3.Base
-import Graphics.D3.Selection
-import Graphics.D3.Util
-import Graphics.D3.Layout.Base
-
-ffi = unsafeForeignFunction
+import Graphics.D3.Base (D3Eff)
+import Graphics.D3.Selection (Selection)
+import Graphics.D3.Unsafe (ffi)
+import Graphics.D3.Layout.Base (class GraphLayout)
 
 foreign import data ForceLayout :: *
 
@@ -46,7 +43,7 @@ linkStrength :: Number -> ForceLayout -> D3Eff ForceLayout
 linkStrength = ffi ["strength", "force", ""] "force.linkStrength(strength)"
 
 friction :: Number -> ForceLayout -> D3Eff ForceLayout
-friction = ffi ["friction", "force", ""] "force.friction(friction)" 
+friction = ffi ["friction", "force", ""] "force.friction(friction)"
 
 charge :: Number -> ForceLayout -> D3Eff ForceLayout
 charge = ffi ["charge", "force", ""] "force.charge(charge)"

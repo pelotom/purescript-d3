@@ -3,9 +3,7 @@ module Graphics.D3.Interpolate
   , makeInterpolator
   ) where
 
-import Data.Foreign.EasyFFI
-
-ffi = unsafeForeignFunction
+import Graphics.D3.Unsafe (ffi)
 
 foreign import data Interpolator :: * -> *
 

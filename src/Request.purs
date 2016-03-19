@@ -5,12 +5,12 @@ module Graphics.D3.Request
   , json
   ) where
 
-import Data.Either
-import Data.Foreign
-import Data.Foreign.EasyFFI
-import Control.Monad.Eff
+import Data.Either (Either(Right, Left))
+import Data.Foreign (Foreign)
+import Data.Foreign.EasyFFI (unsafeForeignFunction)
+import Control.Monad.Eff (Eff)
 
-import Graphics.D3.Base
+import Graphics.D3.Base (D3Eff, D3)
 
 import Prelude ( Unit() )
 
