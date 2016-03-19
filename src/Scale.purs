@@ -1,6 +1,6 @@
 module Graphics.D3.Scale
-  ( Scale
-  , Quantitative
+  ( class Scale
+  , class Quantitative
   , LinearScale()
   , PowerScale()
   , LogScale()
@@ -36,18 +36,15 @@ module Graphics.D3.Scale
   , rangeExtent
   ) where
 
-import Graphics.D3.Base
-import Graphics.D3.Interpolate
-import Graphics.D3.Unsafe
+import Graphics.D3.Base (D3Eff)
+import Graphics.D3.Interpolate (Interpolator)
+import Graphics.D3.Unsafe (ffi, unsafeToFunction, unsafeCopy, unsafeRange, unsafeDomain)
 
-import Data.Tuple
-import Data.Maybe
+import Data.Array.Unsafe (head, tail)
+import Data.Tuple (Tuple(Tuple))
+import Data.Maybe (Maybe(Just, Nothing))
 
-import Data.Foreign.EasyFFI
-
-import Prelude ( ($), (>>=), return, bind )
-
-ffi = unsafeForeignFunction
+import Prelude ( ($), return, bind )
 
 -- A base class for all scale types
 
@@ -122,13 +119,17 @@ rangeRoundBands = ffi
   ["min", "max", "padding", "outerPadding", "scale", ""]
   "scale.rangeRoundBands([min, max], padding, outerPadding)"
 
-rangeBand :: forall d r. OrdinalScale d Number -> D3Eff Number
+rangeBand :: forall d. OrdinalScale d Number -> D3Eff Number
 rangeBand = ffi ["scale"] "scale.rangeBand"
 
-rangeExtent :: forall d r. OrdinalScale d Number -> D3Eff (Tuple Number Number)
+rangeExtent :: forall d. OrdinalScale d Number -> D3Eff (Tuple Number Number)
 rangeExtent scale = do
-  [min, max] <- ffi ["scale"] "scale.rangeExtent" scale
-  return $ Tuple min max
+  arr <- rangeExtent' scale
+  return $ Tuple (head arr) (head $ tail arr)
+
+
+rangeExtent' :: forall d. OrdinalScale d Number -> D3Eff (Array Number)
+rangeExtent' scale = ffi ["scale"] "scale.rangeExtent" scale
 
 -- Scale class instances
 
@@ -201,16 +202,29 @@ instance scaleOrdinal :: Scale OrdinalScale where
   copy = unsafeCopy
   toFunction = unsafeToFunction
 
+unsafeInvert :: forall t. t
 unsafeInvert = ffi ["scale", ""] "scale.copy().invert"
+
+unsafeRangeRound :: forall t. t
 unsafeRangeRound = ffi ["values", "scale", ""] "scale.rangeRound(values)"
+
+unsafeInterpolate :: forall t. t
 unsafeInterpolate = ffi ["factory", "scale", ""] "scale.interpolate(factory)"
+
+unsafeClamp :: forall t. t
 unsafeClamp = ffi ["bool", "scale", ""] "scale.clamp(bool)"
+
+unsafeNice :: forall a b. Maybe b -> a
 unsafeNice count = case count of
   Nothing -> ffi ["scale", ""] "scale.nice()"
   Just c -> ffi ["count", "scale", ""] "scale.nice(count)" c
+
+unsafeTicks :: forall a b. Maybe b -> a
 unsafeTicks count = case count of
   Nothing -> ffi ["scale", ""] "scale.ticks()"
   Just c -> ffi ["count", "scale", ""] "scale.ticks(count)" c
+
+unsafeTickFormat :: forall a b c. c -> Maybe b -> a
 unsafeTickFormat count format = case format of
   Nothing -> ffi ["count", "scale", ""] "scale.tickFormat(count)" count
   Just f -> ffi ["count", "format", "scale", ""] "scale.tickFormat(count, format)" count f
