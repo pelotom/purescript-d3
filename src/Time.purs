@@ -3,7 +3,7 @@ module Graphics.D3.Time (
 	timeScale
   ) where
 import Data.Foreign.EasyFFI
-import Data.Date
+import Data.JSDate (JSDate)
 import Graphics.D3.Base
 import Graphics.D3.Scale
 import Graphics.D3.Unsafe

@@ -1,6 +1,6 @@
 module Graphics.D3.Scale
-  ( Scale
-  , Quantitative
+  ( class Scale
+  , class Quantitative
   , LinearScale()
   , PowerScale()
   , LogScale()
@@ -40,12 +40,13 @@ import Graphics.D3.Base
 import Graphics.D3.Interpolate
 import Graphics.D3.Unsafe
 
+import Control.Monad.Eff.Exception.Unsafe (unsafeThrow)
 import Data.Tuple
 import Data.Maybe
 
 import Data.Foreign.EasyFFI
 
-import Prelude ( ($), (>>=), return, bind )
+import Prelude ( ($), (>>=), pure, bind )
 
 ffi = unsafeForeignFunction
 
@@ -127,8 +128,10 @@ rangeBand = ffi ["scale"] "scale.rangeBand"
 
 rangeExtent :: forall d r. OrdinalScale d Number -> D3Eff (Tuple Number Number)
 rangeExtent scale = do
-  [min, max] <- ffi ["scale"] "scale.rangeExtent" scale
-  return $ Tuple min max
+  rng <- ffi ["scale"] "scale.rangeExtent" scale
+  case rng of
+       [min, max] -> pure $ Tuple min max
+       _          -> unsafeThrow "scale function returned more or less than 2 elements"
 
 -- Scale class instances
 
