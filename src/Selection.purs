@@ -5,10 +5,10 @@ module Graphics.D3.Selection
   , Exit()
   , Transition()
   , Void()
-  , AttrValue
-  , Existing
-  , Appendable
-  , Clickable
+  , class AttrValue
+  , class Existing
+  , class Appendable
+  , class Clickable
   , rootSelect
   , rootSelectAll
   , select
