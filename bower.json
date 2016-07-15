@@ -10,7 +10,6 @@
   ],
   "dependencies": {
     "d3": "^3.4.9",
-    "purescript-datetime": "^1.0.0",
     "purescript-easy-ffi": "^2.0.0",
     "purescript-foreign": "^1.0.0",
     "purescript-js-date": "^1.1.0"

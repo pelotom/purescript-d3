@@ -36,15 +36,15 @@ module Graphics.D3.Scale
   , rangeExtent
   ) where
 
-import Graphics.D3.Base
-import Graphics.D3.Interpolate
-import Graphics.D3.Unsafe
+import Graphics.D3.Base (D3Eff)
+import Graphics.D3.Interpolate (Interpolator)
+import Graphics.D3.Unsafe (unsafeToFunction, unsafeCopy, unsafeRange, unsafeDomain)
 
 import Control.Monad.Eff.Exception.Unsafe (unsafeThrow)
-import Data.Tuple
-import Data.Maybe
+import Data.Tuple (Tuple(..))
+import Data.Maybe (Maybe(..))
 
-import Data.Foreign.EasyFFI
+import Data.Foreign.EasyFFI (unsafeForeignFunction)
 
 import Prelude ( ($), (>>=), pure, bind )
 
@@ -123,10 +123,10 @@ rangeRoundBands = ffi
   ["min", "max", "padding", "outerPadding", "scale", ""]
   "scale.rangeRoundBands([min, max], padding, outerPadding)"
 
-rangeBand :: forall d r. OrdinalScale d Number -> D3Eff Number
+rangeBand :: forall d. OrdinalScale d Number -> D3Eff Number
 rangeBand = ffi ["scale"] "scale.rangeBand"
 
-rangeExtent :: forall d r. OrdinalScale d Number -> D3Eff (Tuple Number Number)
+rangeExtent :: forall d. OrdinalScale d Number -> D3Eff (Tuple Number Number)
 rangeExtent scale = do
   rng <- ffi ["scale"] "scale.rangeExtent" scale
   case rng of

@@ -30,7 +30,7 @@ max' = unsafeForeignFunction ["fn", "data"] "d3.max(data, fn)"
 min :: forall m. (Magnitude m) => Array m -> m
 min = unsafeForeignFunction ["data"] "d3.min(data)"
 
-max :: forall d m. (Magnitude m) => Array m -> m
+max :: forall m. (Magnitude m) => Array m -> m
 max = unsafeForeignFunction ["data"] "d3.max(data)"
 
 -- extent takes a data array and returns [min,max]
