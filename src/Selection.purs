@@ -5,10 +5,10 @@ module Graphics.D3.Selection
   , Exit()
   , Transition()
   , Void()
-  , AttrValue
-  , Existing
-  , Appendable
-  , Clickable
+  , class AttrValue
+  , class Existing
+  , class Appendable
+  , class Clickable
   , rootSelect
   , rootSelectAll
   , select
@@ -38,11 +38,11 @@ module Graphics.D3.Selection
   , onDoubleClick
   ) where
 
-import Graphics.D3.Base
-import Control.Monad.Eff
+import Graphics.D3.Base (D3Eff)
+import Control.Monad.Eff (Eff)
 
-import Data.Foreign
-import Data.Foreign.EasyFFI
+import Data.Foreign (Foreign)
+import Data.Foreign.EasyFFI (unsafeForeignFunction)
 
 import Prelude ( Unit() )
 
@@ -96,7 +96,7 @@ unsafeAppend = ffi ["tag", "selection", ""] "selection.append(tag)"
 unsafeRemove :: forall s. s -> D3Eff Unit
 unsafeRemove = ffi ["selection", ""] "selection.remove()"
 
-unsafeAttr :: forall d v s. (AttrValue v) => String -> v -> s -> D3Eff s
+unsafeAttr :: forall v s. (AttrValue v) => String -> v -> s -> D3Eff s
 unsafeAttr = ffi ["key", "val", "selection", ""] "selection.attr(key, val)"
 
 unsafeAttr' :: forall d v s. (AttrValue v) => String -> (d -> v) -> s -> D3Eff s
@@ -107,7 +107,7 @@ unsafeAttr'' = ffi
   ["key", "val", "selection", ""]
   "selection.attr(key, function (d, i) { return val(d)(i); })"
 
-unsafeStyle :: forall d s. String -> String -> s -> D3Eff s
+unsafeStyle :: forall s. String -> String -> s -> D3Eff s
 unsafeStyle = ffi ["key", "val", "selection", ""] "selection.style(key, val)"
 
 unsafeStyle' :: forall d s. String -> (d -> String) -> s -> D3Eff s
@@ -118,7 +118,7 @@ unsafeStyle'' = ffi
   ["key", "val", "selection", ""]
   "selection.style(key, function (d, i) { return val(d)(i); })"
 
-unsafeText :: forall d s. String -> s -> D3Eff s
+unsafeText :: forall s. String -> s -> D3Eff s
 unsafeText = ffi ["text", "selection", ""] "selection.text(text)"
 
 unsafeText' :: forall d s. (d -> String) -> s -> D3Eff s

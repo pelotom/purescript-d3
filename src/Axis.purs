@@ -8,11 +8,11 @@ module Graphics.D3.SVG.Axis
   , renderAxis
   ) where
 
-import Graphics.D3.Base
-import Graphics.D3.Selection
-import Graphics.D3.Scale
+import Graphics.D3.Base (D3Eff)
+import Graphics.D3.Selection (class Existing, Selection)
+import Graphics.D3.Scale (class Scale)
 
-import Data.Foreign.EasyFFI
+import Data.Foreign.EasyFFI (unsafeForeignFunction)
 
 ffi = unsafeForeignFunction
 

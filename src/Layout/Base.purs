@@ -1,5 +1,5 @@
 module Graphics.D3.Layout.Base
-  ( GraphLayout
+  ( class GraphLayout
   , size
   , nodes
   , links
