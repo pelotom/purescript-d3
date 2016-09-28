@@ -1,6 +1,10 @@
 {
   "name": "purescript-d3",
   "description": "PureScript bindings for D3",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pelotom/purescript-d3.git"
+  },
   "license": "MIT",
   "ignore": [
     "**/.*",
