@@ -116,7 +116,7 @@ data ForceLayout :: *
 
 ##### Instances
 ``` purescript
-instance forceGraphLayout :: GraphLayout ForceLayout
+GraphLayout ForceLayout
 ```
 
 #### `forceLayout`
@@ -263,13 +263,13 @@ class Scale s where
 
 ##### Instances
 ``` purescript
-instance scaleLinear :: Scale LinearScale
-instance scalePower :: Scale PowerScale
-instance scaleLog :: Scale LogScale
-instance scaleQuantize :: Scale QuantizeScale
-instance scaleQuantile :: Scale QuantileScale
-instance scaleThreshold :: Scale ThresholdScale
-instance scaleOrdinal :: Scale OrdinalScale
+Scale LinearScale
+Scale PowerScale
+Scale LogScale
+Scale QuantizeScale
+Scale QuantileScale
+Scale ThresholdScale
+Scale OrdinalScale
 ```
 
 #### `Quantitative`
@@ -287,9 +287,9 @@ class Quantitative s where
 
 ##### Instances
 ``` purescript
-instance quantitativeLinear :: Quantitative LinearScale
-instance quantitativePower :: Quantitative PowerScale
-instance quantitativeLog :: Quantitative LogScale
+Quantitative LinearScale
+Quantitative PowerScale
+Quantitative LogScale
 ```
 
 #### `LinearScale`
@@ -300,8 +300,8 @@ data LinearScale :: * -> * -> *
 
 ##### Instances
 ``` purescript
-instance scaleLinear :: Scale LinearScale
-instance quantitativeLinear :: Quantitative LinearScale
+Scale LinearScale
+Quantitative LinearScale
 ```
 
 #### `PowerScale`
@@ -312,8 +312,8 @@ data PowerScale :: * -> * -> *
 
 ##### Instances
 ``` purescript
-instance scalePower :: Scale PowerScale
-instance quantitativePower :: Quantitative PowerScale
+Scale PowerScale
+Quantitative PowerScale
 ```
 
 #### `LogScale`
@@ -324,8 +324,8 @@ data LogScale :: * -> * -> *
 
 ##### Instances
 ``` purescript
-instance scaleLog :: Scale LogScale
-instance quantitativeLog :: Quantitative LogScale
+Scale LogScale
+Quantitative LogScale
 ```
 
 #### `QuantizeScale`
@@ -336,7 +336,7 @@ data QuantizeScale :: * -> * -> *
 
 ##### Instances
 ``` purescript
-instance scaleQuantize :: Scale QuantizeScale
+Scale QuantizeScale
 ```
 
 #### `QuantileScale`
@@ -347,7 +347,7 @@ data QuantileScale :: * -> * -> *
 
 ##### Instances
 ``` purescript
-instance scaleQuantile :: Scale QuantileScale
+Scale QuantileScale
 ```
 
 #### `ThresholdScale`
@@ -358,7 +358,7 @@ data ThresholdScale :: * -> * -> *
 
 ##### Instances
 ``` purescript
-instance scaleThreshold :: Scale ThresholdScale
+Scale ThresholdScale
 ```
 
 #### `OrdinalScale`
@@ -369,7 +369,7 @@ data OrdinalScale :: * -> * -> *
 
 ##### Instances
 ``` purescript
-instance scaleOrdinal :: Scale OrdinalScale
+Scale OrdinalScale
 ```
 
 #### `linearScale`
@@ -453,13 +453,13 @@ rangeRoundBands :: forall d. Number -> Number -> Number -> Number -> OrdinalScal
 #### `rangeBand`
 
 ``` purescript
-rangeBand :: forall d r. OrdinalScale d Number -> D3Eff Number
+rangeBand :: forall d. OrdinalScale d Number -> D3Eff Number
 ```
 
 #### `rangeExtent`
 
 ``` purescript
-rangeExtent :: forall d r. OrdinalScale d Number -> D3Eff (Tuple Number Number)
+rangeExtent :: forall d. OrdinalScale d Number -> D3Eff (Tuple Number Number)
 ```
 
 
@@ -473,9 +473,9 @@ data Selection :: * -> *
 
 ##### Instances
 ``` purescript
-instance appendableSelection :: Appendable Selection
-instance existingSelection :: Existing Selection
-instance clickableSelection :: Clickable (Selection a)
+Appendable Selection
+Existing Selection
+Clickable (Selection a)
 ```
 
 #### `Update`
@@ -486,8 +486,8 @@ data Update :: * -> *
 
 ##### Instances
 ``` purescript
-instance appendableUpdate :: Appendable Update
-instance existingUpdate :: Existing Update
+Appendable Update
+Existing Update
 ```
 
 #### `Enter`
@@ -498,7 +498,7 @@ data Enter :: * -> *
 
 ##### Instances
 ``` purescript
-instance appendableEnter :: Appendable Enter
+Appendable Enter
 ```
 
 #### `Transition`
@@ -509,7 +509,7 @@ data Transition :: * -> *
 
 ##### Instances
 ``` purescript
-instance existingTransition :: Existing Transition
+Existing Transition
 ```
 
 #### `Exit`
@@ -532,8 +532,8 @@ class AttrValue a
 
 ##### Instances
 ``` purescript
-instance attrValNumber :: AttrValue Number
-instance attrValString :: AttrValue String
+AttrValue Number
+AttrValue String
 ```
 
 #### `rootSelect`
@@ -581,7 +581,7 @@ exit :: forall d. Update d -> D3Eff (Exit d)
 #### `transition`
 
 ``` purescript
-transition :: forall s d. (Existing s) => s d -> D3Eff (Transition d)
+transition :: forall s d. Existing s => s d -> D3Eff (Transition d)
 ```
 
 #### `delay`
@@ -629,18 +629,18 @@ class Appendable s where
 
 ##### Instances
 ``` purescript
-instance appendableSelection :: Appendable Selection
-instance appendableUpdate :: Appendable Update
-instance appendableEnter :: Appendable Enter
+Appendable Selection
+Appendable Update
+Appendable Enter
 ```
 
 #### `Existing`
 
 ``` purescript
 class Existing s where
-  attr :: forall d v. (AttrValue v) => String -> v -> s d -> D3Eff (s d)
-  attr' :: forall d v. (AttrValue v) => String -> (d -> v) -> s d -> D3Eff (s d)
-  attr'' :: forall d v. (AttrValue v) => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
+  attr :: forall d v. AttrValue v => String -> v -> s d -> D3Eff (s d)
+  attr' :: forall d v. AttrValue v => String -> (d -> v) -> s d -> D3Eff (s d)
+  attr'' :: forall d v. AttrValue v => String -> (d -> Number -> v) -> s d -> D3Eff (s d)
   style :: forall d. String -> String -> s d -> D3Eff (s d)
   style' :: forall d. String -> (d -> String) -> s d -> D3Eff (s d)
   style'' :: forall d. String -> (d -> Number -> String) -> s d -> D3Eff (s d)
@@ -652,9 +652,9 @@ class Existing s where
 
 ##### Instances
 ``` purescript
-instance existingSelection :: Existing Selection
-instance existingUpdate :: Existing Update
-instance existingTransition :: Existing Transition
+Existing Selection
+Existing Update
+Existing Transition
 ```
 
 #### `Clickable`
@@ -667,7 +667,7 @@ class Clickable c where
 
 ##### Instances
 ``` purescript
-instance clickableSelection :: Clickable (Selection a)
+Clickable (Selection a)
 ```
 
 
@@ -688,7 +688,7 @@ axis :: D3Eff Axis
 #### `scale`
 
 ``` purescript
-scale :: forall s d. (Scale s) => s d Number -> Axis -> D3Eff Axis
+scale :: forall s d. Scale s => s d Number -> Axis -> D3Eff Axis
 ```
 
 #### `orient`
@@ -712,7 +712,7 @@ tickFormat :: String -> Axis -> D3Eff Axis
 #### `renderAxis`
 
 ``` purescript
-renderAxis :: forall s d. (Existing s) => Axis -> s d -> D3Eff (Selection d)
+renderAxis :: forall s d. Existing s => Axis -> s d -> D3Eff (Selection d)
 ```
 
 
@@ -726,7 +726,7 @@ data TimeScale :: * -> * -> *
 
 ##### Instances
 ``` purescript
-instance scaleTime :: Scale TimeScale
+Scale TimeScale
 ```
 
 #### `timeScale`
@@ -746,44 +746,56 @@ class Magnitude n
 
 ##### Instances
 ``` purescript
-instance numberMagnitude :: Magnitude Number
-instance dateMagnitude :: Magnitude JSDate
+Magnitude Number
+Magnitude JSDate
 ```
 
 #### `min'`
 
 ``` purescript
-min' :: forall d m. (Magnitude m) => (d -> m) -> Array d -> m
+min' :: forall d m. Magnitude m => (d -> m) -> Array d -> m
 ```
 
 #### `max'`
 
 ``` purescript
-max' :: forall d m. (Magnitude m) => (d -> m) -> Array d -> m
+max' :: forall d m. Magnitude m => (d -> m) -> Array d -> m
 ```
 
 #### `min`
 
 ``` purescript
-min :: forall m. (Magnitude m) => Array m -> m
+min :: forall m. Magnitude m => Array m -> m
 ```
 
 #### `max`
 
 ``` purescript
-max :: forall d m. (Magnitude m) => Array m -> m
+max :: forall m. Magnitude m => Array m -> m
 ```
 
 #### `extent`
 
 ``` purescript
-extent :: forall m. (Magnitude m) => Array m -> Array m
+extent :: forall m. Magnitude m => Array m -> Array m
 ```
 
 #### `extent'`
 
 ``` purescript
-extent' :: forall d m. (Magnitude m) => (d -> m) -> Array d -> Array m
+extent' :: forall d m. Magnitude m => (d -> m) -> Array d -> Array m
+```
+
+#### `(..)`
+
+``` purescript
+infixl 4 Control.Bind.bind as ..
+```
+
+#### `(...)`
+
+``` purescript
+infixl 4 Data.Function.applyFlipped as ...
 ```
 
 
