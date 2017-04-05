@@ -46,6 +46,7 @@ import Data.Foreign.EasyFFI (unsafeForeignFunction)
 
 import Prelude ( Unit() )
 
+ffi :: forall a. Array String -> String -> a
 ffi = unsafeForeignFunction
 
 -- The "selection-y" types, parameterized by the type of their bound data
