@@ -14,6 +14,7 @@ import Graphics.D3.Scale (class Scale)
 
 import Data.Foreign.EasyFFI (unsafeForeignFunction)
 
+ffi :: forall a. Array String -> String -> a
 ffi = unsafeForeignFunction
 
 foreign import data Axis :: *
