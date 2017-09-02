@@ -7,7 +7,7 @@ import Data.Foreign.EasyFFI
 
 ffi = unsafeForeignFunction
 
-foreign import data Interpolator :: * -> *
+foreign import data Interpolator :: Type -> Type
 
 makeInterpolator :: forall a. (a -> a -> Number -> a) -> Interpolator a
 makeInterpolator = ffi ["f"] "function (x, y) { return f(x)(y); }"

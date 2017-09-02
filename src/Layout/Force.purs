@@ -30,7 +30,7 @@ import Graphics.D3.Layout.Base
 ffi :: forall a. Array String -> String -> a
 ffi = unsafeForeignFunction
 
-foreign import data ForceLayout :: *
+foreign import data ForceLayout :: Type
 
 foreign import forceLayout :: D3Eff ForceLayout
 

@@ -5,6 +5,6 @@ module Graphics.D3.Base
 
 import Control.Monad.Eff
 
-foreign import data D3 :: !
+foreign import data D3 :: Effect
 
 type D3Eff a = forall e. Eff (d3 :: D3 | e) a
