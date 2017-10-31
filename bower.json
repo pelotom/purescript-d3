@@ -14,9 +14,9 @@
   ],
   "dependencies": {
     "d3": "^3.4.9",
-    "purescript-easy-ffi": "^2.0.0",
-    "purescript-foreign": "^1.0.0",
-    "purescript-js-date": "^1.1.0"
+    "purescript-foreign": "^4.0.1",
+    "purescript-easy-ffi": "^2.1.2",
+    "purescript-js-date": "^5.1.0"
   },
   "main": "src/**/*.purs",
   "private": false
