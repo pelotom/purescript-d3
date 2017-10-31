@@ -17,7 +17,7 @@ import Data.Foreign.EasyFFI (unsafeForeignFunction)
 ffi :: forall a. Array String -> String -> a
 ffi = unsafeForeignFunction
 
-foreign import data Axis :: *
+foreign import data Axis :: Type
 
 foreign import axis :: D3Eff Axis
 
