@@ -7,7 +7,7 @@ import Graphics.D3.Base (D3Eff)
 import Graphics.D3.Scale (class Scale)
 import Graphics.D3.Unsafe
 
-foreign import data TimeScale :: * -> * -> *
+foreign import data TimeScale :: Type -> Type -> Type
 foreign import timeScale :: forall r. D3Eff (TimeScale JSDate r)
 
 instance scaleTime :: Scale TimeScale where

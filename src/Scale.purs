@@ -71,14 +71,14 @@ class Quantitative s where
 
 -- Scale types
 
-foreign import data LinearScale :: * -> * -> *
-foreign import data IdentityScale :: * -> * -> *
-foreign import data PowerScale :: * -> * -> *
-foreign import data LogScale :: * -> * -> *
-foreign import data QuantizeScale :: * -> * -> *
-foreign import data QuantileScale :: * -> * -> *
-foreign import data ThresholdScale :: * -> * -> *
-foreign import data OrdinalScale :: * -> * -> *
+foreign import data LinearScale :: Type -> Type -> Type
+foreign import data IdentityScale :: Type -> Type -> Type
+foreign import data PowerScale :: Type -> Type -> Type
+foreign import data LogScale :: Type -> Type -> Type
+foreign import data QuantizeScale :: Type -> Type -> Type
+foreign import data QuantileScale :: Type -> Type -> Type
+foreign import data ThresholdScale :: Type -> Type -> Type
+foreign import data OrdinalScale :: Type -> Type -> Type
 
 -- Scale constructors
 

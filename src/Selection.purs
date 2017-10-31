@@ -50,10 +50,10 @@ ffi :: forall a. Array String -> String -> a
 ffi = unsafeForeignFunction
 
 -- The "selection-y" types, parameterized by the type of their bound data
-foreign import data Selection :: * -> *
-foreign import data Update :: * -> *
-foreign import data Enter :: * -> *
-foreign import data Transition :: * -> *
+foreign import data Selection :: Type -> Type
+foreign import data Update :: Type -> Type
+foreign import data Enter :: Type -> Type
+foreign import data Transition :: Type -> Type
 
 -- Exit selections have the same semantics as regular selections
 type Exit d = Selection d
