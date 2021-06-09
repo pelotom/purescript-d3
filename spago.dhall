@@ -11,16 +11,19 @@ When creating a new Spago project, you can use
 to generate this file without the comments in this block.
 -}
 { name = "purescript-d3"
-, dependencies = [ "easy-ffi"
-                 , "effect"
-                 , "either"
-                 , "exceptions"
-                 , "foreign"
-                 , "js-date"
-                 , "maybe"
-                 , "prelude"
-                 , "psci-support"
-                 , "tuples" ]
+, dependencies =
+  [ "easy-ffi"
+  , "effect"
+  , "either"
+  , "exceptions"
+  , "foreign"
+  , "functions"
+  , "js-date"
+  , "maybe"
+  , "prelude"
+  , "psci-support"
+  , "tuples"
+  ]
 , packages = ./packages.dhall
-, sources = [ "src/**/*.purs", "test/**/*.purs" ]
+, sources = [ "src/**/*.purs" ]
 }

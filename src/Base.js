@@ -1,5 +1,6 @@
 'use strict';
 
+var window = window || undefined;
 var d3 = require('d3/dist/d3.js');
 
 if (window !== undefined) {

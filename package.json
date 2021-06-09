@@ -5,8 +5,9 @@
   "license": "MIT",
   "scripts": {
     "bower": "bower",
-    "build": "pulp build",
+    "build": "spago build",
     "install": "bower install",
+    "test": "spago -x test.dhall test",
     "pulp": "pulp"
   },
   "devDependencies": {
