@@ -11,11 +11,7 @@ module Graphics.D3.SVG.Axis
 import Graphics.D3.Base (D3Eff)
 import Graphics.D3.Selection (class Existing, Selection)
 import Graphics.D3.Scale (class Scale)
-
-import Data.Foreign.EasyFFI (unsafeForeignFunction)
-
-ffi :: forall a. Array String -> String -> a
-ffi = unsafeForeignFunction
+import Graphics.D3.Util (ffi)
 
 foreign import data Axis :: Type
 

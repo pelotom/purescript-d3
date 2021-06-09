@@ -36,7 +36,6 @@ module Graphics.D3.Scale
   , rangeExtent
   ) where
 
-import Data.Foreign.EasyFFI (unsafeForeignFunction)
 import Data.Function.Uncurried (Fn1, runFn1)
 import Data.Tuple (Tuple(..))
 import Data.Maybe (Maybe(..))
@@ -49,8 +48,7 @@ import Prelude ( ($), (>>=), pure, bind )
 import Graphics.D3.Base (d3, D3, D3Eff)
 import Graphics.D3.Interpolate (Interpolator)
 import Graphics.D3.Unsafe (unsafeToFunction, unsafeCopy, unsafeRange, unsafeDomain)
-
-ffi = unsafeForeignFunction
+import Graphics.D3.Util (ffi)
 
 -- A base class for all scale types
 

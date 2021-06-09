@@ -38,16 +38,13 @@ module Graphics.D3.Selection
   , onDoubleClick
   ) where
 
-import Graphics.D3.Base (D3Eff)
-
-import Data.Foreign.EasyFFI (unsafeForeignFunction)
 import Effect (Effect)
 import Foreign (Foreign)
 
 import Prelude ( Unit() )
 
-ffi :: forall a. Array String -> String -> a
-ffi = unsafeForeignFunction
+import Graphics.D3.Base (D3Eff)
+import Graphics.D3.Util (ffi, ffiD3)
 
 -- The "selection-y" types, parameterized by the type of their bound data
 foreign import data Selection :: Type -> Type
@@ -68,10 +65,10 @@ instance attrValNumber :: AttrValue Number
 instance attrValString :: AttrValue String
 
 rootSelect :: String -> D3Eff (Selection Void)
-rootSelect = ffi ["selector", ""] "d3.select(selector)"
+rootSelect = ffiD3 ["selector", ""] "d3.select(selector)"
 
 rootSelectAll :: String -> D3Eff (Selection Void)
-rootSelectAll = ffi ["selector", ""] "d3.selectAll(selector)"
+rootSelectAll = ffiD3 ["selector", ""] "d3.selectAll(selector)"
 
 select :: forall d. String -> Selection d -> D3Eff (Selection d)
 select = ffi ["selector", "selection", ""] "selection.select(selector)"

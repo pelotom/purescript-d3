@@ -19,16 +19,13 @@ module Graphics.D3.Layout.Force
   , createDrag
   ) where
 
-import Data.Foreign.EasyFFI (unsafeForeignFunction)
 import Effect (Effect)
 import Foreign (Foreign)
 
 import Graphics.D3.Base (D3Eff)
 import Graphics.D3.Selection (Selection)
 import Graphics.D3.Layout.Base
-
-ffi :: forall a. Array String -> String -> a
-ffi = unsafeForeignFunction
+import Graphics.D3.Util (ffi)
 
 foreign import data ForceLayout :: Type
 
