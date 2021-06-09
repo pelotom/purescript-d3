@@ -39,10 +39,10 @@ module Graphics.D3.Selection
   ) where
 
 import Graphics.D3.Base (D3Eff)
-import Control.Monad.Eff (Eff)
 
-import Data.Foreign (Foreign)
 import Data.Foreign.EasyFFI (unsafeForeignFunction)
+import Effect (Effect)
+import Foreign (Foreign)
 
 import Prelude ( Unit() )
 
@@ -130,10 +130,10 @@ unsafeText'' = ffi
   ["text", "selection", ""]
   "selection.text(function (d, i) { return text(d)(i); })"
 
-unsafeOnClick :: forall eff c i r. (Clickable c) => (i -> Eff eff r) -> c -> D3Eff c
+unsafeOnClick :: forall c i r. (Clickable c) => (i -> Effect r) -> c -> D3Eff c
 unsafeOnClick = ffi ["callback", "clickable", ""] "clickable.on('click', function(data) { callback(data)(); })"
 
-unsafeOnDoubleClick :: forall eff c i r. (Clickable c) => (i -> Eff eff r) -> c -> D3Eff c
+unsafeOnDoubleClick :: forall c i r. (Clickable c) => (i -> Effect r) -> c -> D3Eff c
 unsafeOnDoubleClick = ffi ["callback", "clickable", ""] "clickable.on('dblclick', function (data) { callback(data)(); })"
 
 -- Transition-only stuff
@@ -222,8 +222,8 @@ instance existingTransition :: Existing Transition where
   remove = unsafeRemove
 
 class Clickable c where
-  onClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
-  onDoubleClick :: forall eff r. (Foreign -> Eff eff r) -> c -> D3Eff c
+  onClick :: forall r. (Foreign -> Effect r) -> c -> D3Eff c
+  onDoubleClick :: forall r. (Foreign -> Effect r) -> c -> D3Eff c
 
 instance clickableSelection :: Clickable (Selection a) where
   -- NOTE: psc complains about cycles unless onclick/onDoubleClick are inlined

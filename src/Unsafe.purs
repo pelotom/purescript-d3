@@ -1,8 +1,8 @@
 module Graphics.D3.Unsafe (
-	unsafeDomain,
-	unsafeRange,
-	unsafeCopy,
-	unsafeToFunction
+    unsafeDomain,
+    unsafeRange,
+    unsafeCopy,
+    unsafeToFunction
   ) where
 
 import Data.Foreign.EasyFFI

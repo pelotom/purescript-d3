@@ -1,6 +1,6 @@
 module Graphics.D3.Time (
-	TimeScale(),
-	timeScale
+    TimeScale(),
+    timeScale
   ) where
 import Data.JSDate (JSDate)
 import Graphics.D3.Base (D3Eff)
