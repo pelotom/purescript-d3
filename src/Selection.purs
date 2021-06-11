@@ -61,6 +61,7 @@ data Void
 -- The class of types which element attribute values can have (numbers and strings)
 class AttrValue a
 
+instance attrValInt :: AttrValue Int
 instance attrValNumber :: AttrValue Number
 instance attrValString :: AttrValue String
 

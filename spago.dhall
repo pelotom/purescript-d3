@@ -12,7 +12,8 @@ to generate this file without the comments in this block.
 -}
 { name = "purescript-d3"
 , dependencies =
-  [ "easy-ffi"
+  [ "aff-promise"
+  , "easy-ffi"
   , "effect"
   , "either"
   , "exceptions"
