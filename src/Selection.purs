@@ -8,6 +8,8 @@ module Graphics.D3.Selection
   , class AttrValue
   , class Existing
   , class Appendable
+  , class Joinable
+  , class Classed
   , class Clickable
   , rootSelect
   , rootSelectAll
@@ -18,6 +20,8 @@ module Graphics.D3.Selection
   , exit
   , transition
   , append
+  , join
+  , classed
   , remove
   , attr
   , attr'
@@ -91,6 +95,12 @@ transition = ffi ["selection", ""] "selection.transition()"
 
 unsafeAppend :: forall x y. String -> x -> D3Eff y
 unsafeAppend = ffi ["tag", "selection", ""] "selection.append(tag)"
+
+unsafeJoin :: forall x y. String -> x -> D3Eff y
+unsafeJoin = ffi ["tag", "selection", ""] "selection.join(tag)"
+
+unsafeClassed :: forall x y. String -> Boolean -> x -> D3Eff y
+unsafeClassed = ffi ["tag", "value", "selection", ""] "selection.classed(tag, value)"
 
 unsafeRemove :: forall s. s -> D3Eff Unit
 unsafeRemove = ffi ["selection", ""] "selection.remove()"
@@ -169,6 +179,32 @@ instance appendableUpdate     :: Appendable Update where
 
 instance appendableEnter      :: Appendable Enter where
   append = unsafeAppend
+
+-- Selection-y things which can be joined
+class Joinable s where
+  join :: forall d. String -> s d -> D3Eff (Selection d)
+
+instance joinableSelection  :: Joinable Selection where
+  join = unsafeJoin
+
+instance joinableUpdate     :: Joinable Update where
+  join = unsafeJoin
+
+instance joinableEnter      :: Joinable Enter where
+  join = unsafeJoin
+
+-- Selection-y things which can be classed
+class Classed s where
+  classed :: forall d. String -> Boolean -> s d -> D3Eff (Selection d)
+
+instance classedSelection  :: Classed Selection where
+  classed = unsafeClassed
+
+instance classedUpdate     :: Classed Update where
+  classed = unsafeClassed
+
+instance classedEnter      :: Classed Enter where
+  classed = unsafeClassed
 
 -- Selection-y things that contain existing DOM elements
 class Existing s where
