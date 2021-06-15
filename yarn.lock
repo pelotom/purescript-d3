@@ -1728,7 +1728,7 @@ public-encrypt@^4.0.0:
     parse-asn1 "^5.0.0"
     randombytes "^2.0.1"
 
-pulp@^15.0.1:
+pulp@^15.0.0:
   version "15.0.0"
   resolved "https://registry.yarnpkg.com/pulp/-/pulp-15.0.0.tgz#9ceac1dd6e438ccd42133c84396b76ee22ae454f"
   integrity sha512-JPzDiSjxwySAFOFnpevZO7YzzDgGdJP/SQap1UJbK0rsrfUVQC+zOHDkm7A8T3gR/0el4ft6KwB6fcDl2bTzVw==
@@ -1812,7 +1812,7 @@ purescript-installer@^0.2.0:
     which "^1.3.1"
     zen-observable "^0.8.14"
 
-purescript@^0.14.1:
+purescript@^0.14.2:
   version "0.14.2"
   resolved "https://registry.yarnpkg.com/purescript/-/purescript-0.14.2.tgz#6c42c941c014c23991d7782bbaa71f1ee73aa290"
   integrity sha512-kEXY5yUaG8a1FNN/IdtfNl4gcql7p76CPqnanMZ37GdtBZTcFK/SB24bp2rOAT1/N9qU8/corlra6uNf4+5pgQ==
