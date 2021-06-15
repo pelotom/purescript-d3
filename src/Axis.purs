@@ -11,7 +11,6 @@ module Graphics.D3.SVG.Axis
 import Prelude (($), pure)
 
 import Data.Function.Uncurried (Fn1, runFn1, Fn2, runFn2)
-import FFI.Simple ((..))
 import Effect.Uncurried (EffectFn1, runEffectFn1, EffectFn2, runEffectFn2)
 
 import Graphics.D3.Base (d3, D3, D3Eff)
