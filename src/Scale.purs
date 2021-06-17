@@ -39,11 +39,9 @@ module Graphics.D3.Scale
 import Data.Function.Uncurried (Fn1, runFn1)
 import Data.Tuple (Tuple(..))
 import Data.Maybe (Maybe(..))
-import Effect (Effect)
 import Effect.Exception.Unsafe (unsafeThrow)
-import Effect.Uncurried (EffectFn1, runEffectFn1)
 
-import Prelude ( ($), (>>=), pure, bind )
+import Prelude (bind, pure, ($))
 
 import Graphics.D3.Base (d3, D3, D3Eff)
 import Graphics.D3.Interpolate (Interpolator)
@@ -221,16 +219,23 @@ instance scaleOrdinal :: Scale OrdinalScale where
   copy = unsafeCopy
   toFunction = unsafeToFunction
 
+unsafeInvert :: forall t101. t101
 unsafeInvert = ffi ["scale", ""] "scale.copy().invert"
+unsafeRangeRound :: forall t91. t91
 unsafeRangeRound = ffi ["values", "scale", ""] "scale.rangeRound(values)"
+unsafeInterpolate :: forall t103. t103
 unsafeInterpolate = ffi ["factory", "scale", ""] "scale.interpolate(factory)"
+unsafeClamp :: forall t105. t105
 unsafeClamp = ffi ["bool", "scale", ""] "scale.clamp(bool)"
+unsafeNice :: forall t94 t95. Maybe t95 -> t94
 unsafeNice count = case count of
   Nothing -> ffi ["scale", ""] "scale.nice()"
   Just c -> ffi ["count", "scale", ""] "scale.nice(count)" c
+unsafeTicks :: forall t73 t74. Maybe t74 -> t73
 unsafeTicks count = case count of
   Nothing -> ffi ["scale", ""] "scale.ticks()"
   Just c -> ffi ["count", "scale", ""] "scale.ticks(count)" c
+unsafeTickFormat :: forall t80 t82 t83. t80 -> Maybe t83 -> t82
 unsafeTickFormat count format = case format of
   Nothing -> ffi ["count", "scale", ""] "scale.tickFormat(count)" count
   Just f -> ffi ["count", "format", "scale", ""] "scale.tickFormat(count, format)" count f
