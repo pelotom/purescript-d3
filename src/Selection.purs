@@ -7,6 +7,7 @@ module Graphics.D3.Selection
   , Void()
   , class AttrValue
   , class Existing
+  , class Callable
   , class Appendable
   , class Joinable
   , class Classed
@@ -19,11 +20,18 @@ module Graphics.D3.Selection
   , enter
   , exit
   , transition
+  , call
   , append
+  , combineAppend
+  , (>=>++)
   , join
   , classed
   , remove
   , attr
+  , combineAttr
+  , (>=>)
+  , combineAttr'
+  , (>=>-)
   , attr'
   , attr''
   , style
@@ -42,10 +50,11 @@ module Graphics.D3.Selection
   , onDoubleClick
   ) where
 
+import Data.Tuple (Tuple(..))
 import Effect (Effect)
 import Foreign (Foreign)
 
-import Prelude ( Unit() )
+import Prelude ( Unit(), (>>=) )
 
 import Graphics.D3.Base (D3Eff)
 import Graphics.D3.Util (ffi, ffiD3)
@@ -63,6 +72,7 @@ type Exit d = Selection d
 data Void
 
 -- The class of types which element attribute values can have (numbers and strings)
+class AttrValue :: forall k. k -> Constraint
 class AttrValue a
 
 instance attrValInt :: AttrValue Int
@@ -92,6 +102,9 @@ exit = ffi ["update", ""] "update.exit()"
 
 transition :: forall s d. (Existing s) => s d -> D3Eff (Transition d)
 transition = ffi ["selection", ""] "selection.transition()"
+
+unsafeCall :: forall a b x y. a -> b -> x -> D3Eff y
+unsafeCall = ffi ["what", "func", "selection", ""] "selection.call(what, func)"
 
 unsafeAppend :: forall x y. String -> x -> D3Eff y
 unsafeAppend = ffi ["tag", "selection", ""] "selection.append(tag)"
@@ -167,6 +180,20 @@ duration'' = ffi
   ["duration", "transition", ""]
   "transition.duration(function (d, i) { return duration(d)(i); })"
 
+-- Callable
+
+class Callable s where
+  call :: forall a b d. a -> b -> s d -> D3Eff (Selection d)
+
+instance callableSelection  :: Callable Selection where
+  call = unsafeCall
+
+instance callableUpdate     :: Callable Update where
+  call = unsafeCall
+
+instance callableEnter      :: Callable Enter where
+  call = unsafeCall
+
 -- Selection-y things which can be appended to / inserted into
 class Appendable s where
   append :: forall d. String -> s d -> D3Eff (Selection d)
@@ -179,6 +206,10 @@ instance appendableUpdate     :: Appendable Update where
 
 instance appendableEnter      :: Appendable Enter where
   append = unsafeAppend
+
+combineAppend m g = m >>= append g
+
+infixl 1 combineAppend as >=>++
 
 -- Selection-y things which can be joined
 class Joinable s where
@@ -218,6 +249,14 @@ class Existing s where
   text' :: forall d. (d -> String) -> s d -> D3Eff (s d)
   text'' :: forall d. (d -> Number -> String) -> s d -> D3Eff (s d)
   remove :: forall d. s d -> D3Eff Unit
+
+combineAttr :: forall s k v. Existing s => AttrValue v => D3Eff (s k) -> Tuple String v -> D3Eff (s k)
+combineAttr m (Tuple k v) = m >>= attr k v
+
+combineAttr' m (Tuple k v') = m >>= attr' k v'
+
+infixl 1 combineAttr as >=>
+infixl 1 combineAttr' as >=>-
 
 instance existingSelection :: Existing Selection where
   attr = unsafeAttr
