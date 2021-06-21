@@ -10,9 +10,11 @@ module Graphics.D3.Zoom
   , renderZoom
   ) where
 
-import Effect.Uncurried (EffectFn3, runEffectFn3)
+import Data.Function.Uncurried (Fn2, runFn2)
+import Effect (Effect)
+import Effect.Uncurried (EffectFn1, runEffectFn1, EffectFn2, runEffectFn2, EffectFn3, runEffectFn3)
 
-import Graphics.D3.Base (D3Eff)
+import Graphics.D3.Base (d3, D3, D3Eff)
 import Graphics.D3.Selection as Selection
 import Graphics.D3.Util (ffi, ffiD3)
 
@@ -31,19 +33,25 @@ instance Transformable ZoomE where
 instance Transformable Zoom where
   transform = unsafeTransform
 
+foreign import zoomImpl :: EffectFn1 D3 Zoom
+
 zoom :: D3Eff Zoom
-zoom = ffiD3 [""] "d3.zoom()"
+zoom = runEffectFn1 zoomImpl d3
+-- zoom = ffiD3 [""] "d3.zoom()"
 
 zoomIdentity :: Zoom
 zoomIdentity = ffiD3 [""] "d3.zoomIdentity"
 
-foreign import onImpl :: forall e. EffectFn3 String (ZoomE -> e) Zoom Zoom
+foreign import onImpl :: forall e. EffectFn3 String (ZoomE -> Effect e) Zoom Zoom
 
-on :: forall e. String -> (ZoomE -> e) -> Zoom -> D3Eff Zoom
+on :: forall e. String -> (ZoomE -> Effect e) -> Zoom -> D3Eff Zoom
 on = runEffectFn3 onImpl
 
+foreign import renderZoomImpl :: forall s d. EffectFn2 Zoom (s d) (Selection.Selection d)
+
 renderZoom :: forall s d. (Selection.Existing s) => Zoom -> s d -> D3Eff (Selection.Selection d)
-renderZoom = ffi ["zoom", "selection", ""] "selection.call(zoom)"
+renderZoom = runEffectFn2 renderZoomImpl
+-- renderZoom = ffi ["selection", "zoom", ""] "selection.call(zoom)"
 
 unsafeTransform :: forall a. a -> Transform
 unsafeTransform = ffi ["obj"] "obj.transform"

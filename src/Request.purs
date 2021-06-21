@@ -3,19 +3,18 @@ module Graphics.D3.Request
   , csv
   , tsv
   , json
+  , xml
   ) where
 
 import Control.Promise
-import Data.Either (Either(..))
-import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Uncurried (EffectFn2, runEffectFn2, EffectFn3, runEffectFn3)
 import Foreign (Foreign)
+import Web.DOM.Document (Document)
 
-import Graphics.D3.Base (d3, D3Eff, D3)
-import Graphics.D3.Util (ffiD3)
+import Graphics.D3.Base (D3, d3)
 
-import Prelude ( Unit(), ($), (>>>) )
+import Prelude (($))
 
 type RequestError = { status :: Number, statusText :: String }
 
@@ -44,3 +43,16 @@ foreign import jsonImpl :: forall a. EffectFn2
 
 json :: forall a. String -> Aff a
 json url = toAffE $ runEffectFn2 jsonImpl d3 url
+
+-- foreign import xmlImpl :: forall a. EffectFn2
+--                                 D3
+--                                 String
+--                                 (Promise a)
+foreign import xmlImpl :: EffectFn2
+                           D3
+                           String
+                           (Promise Document)
+
+-- xml :: forall a. String -> Aff a
+xml :: String -> Aff Document
+xml url = toAffE $ runEffectFn2 xmlImpl d3 url

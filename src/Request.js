@@ -15,3 +15,7 @@ exports.tsvImpl = function(d3, url, handle) {
 exports.jsonImpl = function(d3, url) {
   return d3.json(url);
 };
+
+exports.xmlImpl = function(d3, url) {
+  return d3.xml(url);
+};
