@@ -36,19 +36,17 @@ module Graphics.D3.Scale
   , rangeExtent
   ) where
 
-import Graphics.D3.Base (D3Eff)
-import Graphics.D3.Interpolate (Interpolator)
-import Graphics.D3.Unsafe (unsafeToFunction, unsafeCopy, unsafeRange, unsafeDomain)
-
-import Control.Monad.Eff.Exception.Unsafe (unsafeThrow)
+import Data.Function.Uncurried (Fn1, runFn1)
 import Data.Tuple (Tuple(..))
 import Data.Maybe (Maybe(..))
+import Effect.Exception.Unsafe (unsafeThrow)
 
-import Data.Foreign.EasyFFI (unsafeForeignFunction)
+import Prelude (bind, pure, ($))
 
-import Prelude ( ($), (>>=), pure, bind )
-
-ffi = unsafeForeignFunction
+import Graphics.D3.Base (d3, D3, D3Eff)
+import Graphics.D3.Interpolate (Interpolator)
+import Graphics.D3.Unsafe (unsafeToFunction, unsafeCopy, unsafeRange, unsafeDomain)
+import Graphics.D3.Util (ffi)
 
 -- A base class for all scale types
 
@@ -82,14 +80,31 @@ foreign import data OrdinalScale :: Type -> Type -> Type
 
 -- Scale constructors
 
-foreign import linearScale :: forall r. D3Eff (LinearScale Number r)
-foreign import powerScale :: forall r. D3Eff (PowerScale Number r)
-foreign import sqrtScale :: forall r. D3Eff (PowerScale Number r)
-foreign import logScale :: forall r. D3Eff (LogScale Number r)
-foreign import quantizeScale :: forall r. D3Eff (QuantizeScale Number r)
-foreign import quantileScale :: forall r. D3Eff (QuantileScale Number r)
-foreign import thresholdScale :: forall r. D3Eff (ThresholdScale Number r)
-foreign import ordinalScale :: forall d r. D3Eff (OrdinalScale d r)
+foreign import linearScaleImpl    :: forall r. Fn1 D3 (D3Eff (LinearScale Number r))
+foreign import powerScaleImpl     :: forall r. Fn1 D3 (D3Eff (PowerScale Number r))
+foreign import sqrtScaleImpl      :: forall r. Fn1 D3 (D3Eff (PowerScale Number r))
+foreign import logScaleImpl       :: forall r. Fn1 D3 (D3Eff (LogScale Number r))
+foreign import quantizeScaleImpl  :: forall r. Fn1 D3 (D3Eff (QuantizeScale Number r))
+foreign import quantileScaleImpl  :: forall r. Fn1 D3 (D3Eff (QuantileScale Number r))
+foreign import thresholdScaleImpl :: forall r. Fn1 D3 (D3Eff (ThresholdScale Number r))
+foreign import ordinalScaleImpl   :: forall d r. Fn1 D3 (D3Eff (OrdinalScale d r))
+
+linearScale    :: forall r. D3Eff (LinearScale Number r)
+linearScale    = runFn1 linearScaleImpl d3
+powerScale     :: forall r. D3Eff (PowerScale Number r)
+powerScale     = runFn1 powerScaleImpl d3
+sqrtScale      :: forall r. D3Eff (PowerScale Number r)
+sqrtScale      = runFn1 sqrtScaleImpl d3
+logScale       :: forall r. D3Eff (LogScale Number r)
+logScale       = runFn1 logScaleImpl d3
+quantizeScale  :: forall r. D3Eff (QuantizeScale Number r)
+quantizeScale  = runFn1 quantizeScaleImpl d3
+quantileScale  :: forall r. D3Eff (QuantileScale Number r)
+quantileScale  = runFn1 quantileScaleImpl d3
+thresholdScale :: forall r. D3Eff (ThresholdScale Number r)
+thresholdScale = runFn1 thresholdScaleImpl d3
+ordinalScale   :: forall d r. D3Eff (OrdinalScale d r)
+ordinalScale   = runFn1 ordinalScaleImpl d3
 
 -- Power scale methods
 
@@ -204,16 +219,23 @@ instance scaleOrdinal :: Scale OrdinalScale where
   copy = unsafeCopy
   toFunction = unsafeToFunction
 
+unsafeInvert :: forall t101. t101
 unsafeInvert = ffi ["scale", ""] "scale.copy().invert"
+unsafeRangeRound :: forall t91. t91
 unsafeRangeRound = ffi ["values", "scale", ""] "scale.rangeRound(values)"
+unsafeInterpolate :: forall t103. t103
 unsafeInterpolate = ffi ["factory", "scale", ""] "scale.interpolate(factory)"
+unsafeClamp :: forall t105. t105
 unsafeClamp = ffi ["bool", "scale", ""] "scale.clamp(bool)"
+unsafeNice :: forall t94 t95. Maybe t95 -> t94
 unsafeNice count = case count of
   Nothing -> ffi ["scale", ""] "scale.nice()"
   Just c -> ffi ["count", "scale", ""] "scale.nice(count)" c
+unsafeTicks :: forall t73 t74. Maybe t74 -> t73
 unsafeTicks count = case count of
   Nothing -> ffi ["scale", ""] "scale.ticks()"
   Just c -> ffi ["count", "scale", ""] "scale.ticks(count)" c
+unsafeTickFormat :: forall t80 t82 t83. t80 -> Maybe t83 -> t82
 unsafeTickFormat count format = case format of
   Nothing -> ffi ["count", "scale", ""] "scale.tickFormat(count)" count
   Just f -> ffi ["count", "format", "scale", ""] "scale.tickFormat(count, format)" count f

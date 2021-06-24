@@ -1,13 +1,11 @@
 module Graphics.D3.Unsafe (
-	unsafeDomain,
-	unsafeRange,
-	unsafeCopy,
-	unsafeToFunction
+    unsafeDomain,
+    unsafeRange,
+    unsafeCopy,
+    unsafeToFunction
   ) where
 
-import Data.Foreign.EasyFFI
-
-ffi = unsafeForeignFunction
+import Graphics.D3.Util (ffi)
 
 unsafeDomain = ffi ["domain", "scale", ""] "scale.domain(domain)"
 unsafeRange = ffi ["values", "scale", ""] "scale.range(values)"
