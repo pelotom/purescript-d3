@@ -15,6 +15,7 @@ module Graphics.D3.Selection
   , rootSelect
   , rootSelectAll
   , select
+  , selectEl
   , selectAll
   , bindData
   , enter
