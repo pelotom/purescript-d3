@@ -51,6 +51,7 @@ module Graphics.D3.Selection
   ) where
 
 import Data.Tuple (Tuple(..))
+import DOM.Simple (Element)
 import Effect (Effect)
 import Foreign (Foreign)
 
@@ -87,6 +88,9 @@ rootSelectAll = ffiD3 ["selector", ""] "d3.selectAll(selector)"
 
 select :: forall d. String -> Selection d -> D3Eff (Selection d)
 select = ffi ["selector", "selection", ""] "selection.select(selector)"
+
+selectEl :: forall d. Element -> Selection d -> D3Eff (Selection d)
+selectEl = ffi ["node", "selection", ""] "selection.select(node)"
 
 selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
 selectAll = ffi ["selector", "selection", ""] "selection.selectAll(selector)"

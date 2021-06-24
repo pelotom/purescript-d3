@@ -2,9 +2,9 @@
 , dependencies =
   [ "aff"
   , "aff-promise"
+  , "dom-simple"
   , "easy-ffi"
   , "effect"
-  , "either"
   , "exceptions"
   , "foreign"
   , "functions"
@@ -13,7 +13,7 @@
   , "prelude"
   , "psci-support"
   , "tuples"
-  , "typelevel-prelude"
+  , "web-dom"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs" ]
