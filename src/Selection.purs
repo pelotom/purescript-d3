@@ -14,8 +14,8 @@ module Graphics.D3.Selection
   , class Clickable
   , rootSelect
   , rootSelectAll
+  , rootSelectEl
   , select
-  , selectEl
   , selectAll
   , bindData
   , enter
@@ -87,11 +87,11 @@ rootSelect = ffiD3 ["selector", ""] "d3.select(selector)"
 rootSelectAll :: String -> D3Eff (Selection Void)
 rootSelectAll = ffiD3 ["selector", ""] "d3.selectAll(selector)"
 
+rootSelectEl :: Element -> D3Eff (Selection Void)
+rootSelectEl = ffi ["node", ""] "d3.select(node)"
+
 select :: forall d. String -> Selection d -> D3Eff (Selection d)
 select = ffi ["selector", "selection", ""] "selection.select(selector)"
-
-selectEl :: forall d. Element -> Selection d -> D3Eff (Selection d)
-selectEl = ffi ["node", "selection", ""] "selection.select(node)"
 
 selectAll :: forall d. String -> Selection d -> D3Eff (Selection Void)
 selectAll = ffi ["selector", "selection", ""] "selection.selectAll(selector)"
