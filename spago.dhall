@@ -3,7 +3,6 @@
   [ "aff"
   , "aff-promise"
   , "dom-simple"
-  , "easy-ffi"
   , "effect"
   , "exceptions"
   , "foreign"
@@ -11,7 +10,8 @@
   , "js-date"
   , "maybe"
   , "prelude"
-  , "psci-support"
+  --, "psci-support"
+  , "small-ffi"
   , "tuples"
   , "web-dom"
   ]

@@ -23,7 +23,7 @@ foreign import axisBottomImpl :: EffectFn1 D3 Axis
 axisBottom :: forall s d. (Scale s) => s d Number -> D3Eff Axis
 axisBottom = ffiD3 ["scale", ""] "d3.axisBottom(scale)"
 
-foreign import scaleImpl :: forall s d. (Scale s) => EffectFn2 (s d Number) Axis Axis
+foreign import scaleImpl :: forall s d. EffectFn2 (s d Number) Axis Axis
 
 scale :: forall s d. (Scale s) => s d Number -> Axis -> D3Eff Axis
 scale = runEffectFn2 scaleImpl

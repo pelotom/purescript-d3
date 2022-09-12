@@ -1,5 +1,5 @@
 let upstream =
-      https://github.com/purescript/package-sets/releases/download/psc-0.14.2/packages.dhall sha256:64d7b5a1921e8458589add8a1499a1c82168e726a87fc4f958b3f8760cca2efe
+      https://github.com/purescript/package-sets/releases/download/psc-0.15.4-20220901/packages.dhall sha256:f1531b29c21ac437ffe5666c1b6cc76f0a9c29d3c9d107ff047aa2567744994f
 
 let additions =
   { dom-simple =
@@ -12,7 +12,7 @@ let additions =
       , "nullable"
       , "prelude"
       , "spec"
-      , "spec-mocha"
+      --, "spec-mocha"
       , "unsafe-coerce"
       ]
     , repo = "https://github.com/poorscript/purescript-dom-simple"
@@ -28,7 +28,7 @@ let additions =
       , "unsafe-coerce"
       ]
     , repo = "https://github.com/poorscript/purescript-ffi-simple"
-    , version = "v0.2.10"
+    , version = "v0.4.0"
     }
   }
 

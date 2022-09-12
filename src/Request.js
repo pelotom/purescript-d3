@@ -1,21 +1,21 @@
 'use strict';
 
-exports.csvImpl = function(d3, url, handle) {
+export function csvImpl(d3, url, handle) {
   return d3.csv(url, function(row) {
     return handle(row);
   });
 };
 
-exports.tsvImpl = function(d3, url, handle) {
+export function tsvImpl(d3, url, handle) {
   return d3.tsv(url, function(row) {
     return handle(row);
   });
 };
 
-exports.jsonImpl = function(d3, url) {
+export function jsonImpl(d3, url) {
   return d3.json(url);
 };
 
-exports.xmlImpl = function(d3, url) {
+export function xmlImpl(d3, url) {
   return d3.xml(url);
 };

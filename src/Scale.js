@@ -3,18 +3,18 @@
 
 // module Graphics.D3.Scale
 
-exports.linearScaleImpl = function(d3) { return d3.scaleLinear; };
+export function linearScaleImpl(d3) { return d3.scaleLinear; };
 
-exports.powerScaleImpl = function(d3) { return d3.scalePow; };
+export function powerScaleImpl(d3) { return d3.scalePow; };
 
-exports.sqrtScaleImpl = function(d3) { return d3.scaleSqrt; };
+export function sqrtScaleImpl(d3) { return d3.scaleSqrt; };
 
-exports.logScaleImpl = function(d3) { return d3.scaleLog; };
+export function logScaleImpl(d3) { return d3.scaleLog; };
 
-exports.quantizeScaleImpl = function(d3) { return d3.scaleQuantize; };
+export function quantizeScaleImpl(d3) { return d3.scaleQuantize; };
 
-exports.quantileScaleImpl = function(d3) { return d3.scaleQuantile; };
+export function quantileScaleImpl(d3) { return d3.scaleQuantile; };
 
-exports.thresholdScaleImpl = function(d3) { return d3.scaleThreshold; };
+export function thresholdScaleImpl(d3) { return d3.scaleThreshold; };
 
-exports.ordinalScaleImpl = function(d3) { return d3.scaleOrdinal; };
+export function ordinalScaleImpl(d3) { return d3.scaleOrdinal; };

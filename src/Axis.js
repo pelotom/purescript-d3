@@ -3,6 +3,6 @@
 
 // module Graphics.D3.SVG.Axis
 
-exports.axisBottomImpl = function(d3) { return d3.axisBottom(); };
+export function axisBottomImpl(d3) { return d3.axisBottom(); };
 
-exports.scaleImpl = function(scale, axis) { return axis.scale(scale); }
+export function scaleImpl(scale, axis) { return axis.scale(scale); }

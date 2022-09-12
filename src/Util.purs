@@ -14,7 +14,7 @@ module Graphics.D3.Util
 
 import Prelude
 
-import Data.Foreign.EasyFFI
+import Data.Foreign.SmallFFI
 import Data.JSDate (JSDate)
 
 import Control.Bind (bind)
@@ -63,4 +63,3 @@ infixl 4 bind as ..
 -- Reversed function application, useful for applying extended monadic chains
 -- to already-obtained values
 infixl 4 applyFlipped as ...
-
