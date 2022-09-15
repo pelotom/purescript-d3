@@ -19,16 +19,13 @@ module Graphics.D3.Layout.Force
   , createDrag
   ) where
 
-import Control.Monad.Eff (Eff)
-import Data.Foreign (Foreign)
-import Data.Foreign.EasyFFI (unsafeForeignFunction)
+import Effect (Effect)
+import Foreign (Foreign)
 
 import Graphics.D3.Base (D3Eff)
 import Graphics.D3.Selection (Selection)
 import Graphics.D3.Layout.Base
-
-ffi :: forall a. Array String -> String -> a
-ffi = unsafeForeignFunction
+import Graphics.D3.Util (ffi)
 
 foreign import data ForceLayout :: Type
 
@@ -75,12 +72,12 @@ stop = ffi ["force", ""] "force.stop()"
 tick :: ForceLayout -> D3Eff ForceLayout
 tick = ffi ["force", ""] "force.tick()"
 
-onTick :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
+onTick :: forall r. (Foreign -> Effect r) -> ForceLayout -> D3Eff ForceLayout
 onTick = ffi
   ["callback", "force", ""]
   "force.on('tick', function (d) { return callback(d)(); })"
 
-onDragStart :: forall e r. (Foreign -> Eff e r) -> ForceLayout -> D3Eff ForceLayout
+onDragStart :: forall r. (Foreign -> Effect r) -> ForceLayout -> D3Eff ForceLayout
 onDragStart = ffi ["callback", "force", ""] "force.on('dragstart', callback)"
 
 drag :: ForceLayout -> D3Eff ForceLayout

@@ -1,6 +1,6 @@
 module Graphics.D3.SVG.Axis
   ( Axis()
-  , axis
+  , axisBottom
   , scale
   , orient
   , ticks
@@ -8,21 +8,26 @@ module Graphics.D3.SVG.Axis
   , renderAxis
   ) where
 
-import Graphics.D3.Base (D3Eff)
+
+import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn2)
+
+import Graphics.D3.Base (D3, D3Eff)
 import Graphics.D3.Selection (class Existing, Selection)
 import Graphics.D3.Scale (class Scale)
-
-import Data.Foreign.EasyFFI (unsafeForeignFunction)
-
-ffi :: forall a. Array String -> String -> a
-ffi = unsafeForeignFunction
+import Graphics.D3.Util (ffi, ffiD3)
 
 foreign import data Axis :: Type
 
-foreign import axis :: D3Eff Axis
+foreign import axisBottomImpl :: EffectFn1 D3 Axis
+
+axisBottom :: forall s d. (Scale s) => s d Number -> D3Eff Axis
+axisBottom = ffiD3 ["scale", ""] "d3.axisBottom(scale)"
+
+foreign import scaleImpl :: forall s d. EffectFn2 (s d Number) Axis Axis
 
 scale :: forall s d. (Scale s) => s d Number -> Axis -> D3Eff Axis
-scale = ffi ["scale", "axis", ""] "axis.scale(scale)"
+scale = runEffectFn2 scaleImpl
+
 
 orient :: String -> Axis -> D3Eff Axis
 orient = ffi ["orientation", "axis", ""] "axis.orient(orientation)"

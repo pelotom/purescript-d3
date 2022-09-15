@@ -3,36 +3,56 @@ module Graphics.D3.Request
   , csv
   , tsv
   , json
+  , xml
   ) where
 
-import Data.Either (Either(..))
-import Data.Foreign (Foreign)
-import Data.Foreign.EasyFFI (unsafeForeignFunction)
-import Control.Monad.Eff (Eff)
+import Control.Promise
+import Effect.Aff (Aff)
+import Effect.Uncurried (EffectFn2, runEffectFn2, EffectFn3, runEffectFn3)
+import Foreign (Foreign)
+import Web.DOM.Document (Document)
 
-import Graphics.D3.Base (D3Eff, D3)
+import Graphics.D3.Base (D3, d3)
 
-import Prelude ( Unit() )
+import Prelude (($))
 
 type RequestError = { status :: Number, statusText :: String }
 
-csv :: forall e a. String -> (Either RequestError (Array Foreign) -> Eff (d3 :: D3 | e) a) -> D3Eff Unit
-csv = ff (\d -> d) Left Right
-  where
-  ff = unsafeForeignFunction
-    ["acc", "Left", "Right", "url", "handle", ""]
-    "d3.csv(url, acc, function(error, data) { if (error) handle(Left(error))(); else handle(Right(data))(); })"
+foreign import csvImpl :: forall newRow. EffectFn3
+                                    D3
+                                    String
+                                    (Foreign -> newRow)
+                                    (Promise (Array newRow))
 
-tsv :: forall e a. String -> (Either RequestError (Array Foreign) -> Eff (d3 :: D3 | e) a) -> D3Eff Unit
-tsv = ff (\d -> d) Left Right
-  where
-  ff = unsafeForeignFunction
-    ["acc", "Left", "Right", "url", "handle", ""]
-    "d3.tsv(url, acc, function(error, data) { if (error) handle(Left(error))(); else handle(Right(data))(); })"
+csv :: forall newRow. String -> (Foreign -> newRow) -> Aff (Array newRow)
+csv url handle = toAffE $ runEffectFn3 csvImpl d3 url handle
 
-json :: forall e a. String -> (Either RequestError Foreign -> Eff (d3 :: D3 | e) a) -> D3Eff Unit
-json = ff Left Right
-  where
-  ff = unsafeForeignFunction
-    ["Left", "Right", "url", "handle", ""]
-    "d3.json(url, function (error, data) { if (error) handle(Left(error))(); else handle(Right(data))(); })"
+foreign import tsvImpl :: forall newRow. EffectFn3
+                                    D3
+                                    String
+                                    (Foreign -> newRow)
+                                    (Promise (Array newRow))
+
+tsv :: forall newRow. String -> (Foreign -> newRow) -> Aff (Array newRow)
+tsv url handle = toAffE $ runEffectFn3 tsvImpl d3 url handle
+
+foreign import jsonImpl :: forall a. EffectFn2
+                                 D3
+                                 String
+                                 (Promise a)
+
+json :: forall a. String -> Aff a
+json url = toAffE $ runEffectFn2 jsonImpl d3 url
+
+-- foreign import xmlImpl :: forall a. EffectFn2
+--                                 D3
+--                                 String
+--                                 (Promise a)
+foreign import xmlImpl :: EffectFn2
+                           D3
+                           String
+                           (Promise Document)
+
+-- xml :: forall a. String -> Aff a
+xml :: String -> Aff Document
+xml url = toAffE $ runEffectFn2 xmlImpl d3 url

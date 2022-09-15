@@ -3,4 +3,4 @@
 
 // module Graphics.D3.Time
 
-exports.timeScale = d3.time.scale;
+export function scaleTimeImpl(d3) { return d3.scaleTime; };

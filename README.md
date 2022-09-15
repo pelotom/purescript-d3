@@ -52,4 +52,6 @@ You can find more examples [here](https://github.com/pelotom/purescript-d3-examp
 ```
 yarn          # install dependencies from package.json and bower.json
 yarn build    # compile the code
+
+yarn test     # testing
 ```

@@ -12,5 +12,5 @@ class GraphLayout l where
   links :: forall a. Array a -> l -> D3Eff l
   size :: forall d. { width :: Number, height :: Number | d } -> l -> D3Eff l
 
-class (GraphLayout l) <= HierarchyLayout l where
+-- class (GraphLayout l) <= HierarchyLayout l where
   -- TODO: children, sort, value, revalue
